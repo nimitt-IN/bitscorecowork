@@ -1,0 +1,22 @@
+{
+  "name": "bitscorecowork",
+  "version": "0.1.1",
+  "description": "BitScoreCoWork — pull and analyze Bitsight Security Ratings inside Claude Cowork, then produce executive-ready reporting and scoped, authorization-gated security-testing plans. An asset by BitScore Cybertech LLP.",
+  "author": {
+    "name": "BitScore Cybertech LLP",
+    "url": "https://bitscore.in"
+  },
+  "homepage": "https://bitscore.in",
+  "license": "MIT",
+  "keywords": [
+    "bitsight",
+    "security-ratings",
+    "vendor-risk",
+    "third-party-risk",
+    "vapt",
+    "board-pack",
+    "cybersecurity",
+    "bitscore",
+    "india"
+  ]
+}
