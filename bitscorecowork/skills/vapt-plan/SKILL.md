@@ -8,7 +8,7 @@ description: >
   findings report", or wants a scoped VA plan and findings mapped to Bitsight risk
   vectors. Planning/reporting only — it never scans or exploits anything.
 metadata:
-  version: "0.1.1"
+  version: "0.2.0"
 ---
 
 # vapt-plan — vulnerability-assessment plan & findings (identification only)

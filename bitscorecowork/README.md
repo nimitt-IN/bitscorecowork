@@ -8,8 +8,9 @@ them into executive-ready reporting and **scoped, authorization-gated** security
 without leaving Claude.
 
 Built for BitScore's enterprise customers who are Bitsight subscribers: quick rating lookups for
-your own organization, portfolio-wide vendor/third-party monitoring, board briefings, and VAPT/BAS
-*planning* artifacts your licensed testers execute manually.
+your own organization, portfolio-wide vendor/third-party monitoring, vendor due-diligence briefs,
+remediation roadmaps, CVE exposure sweeps, framework evidence packs, indicative financial exposure
+estimates, board briefings, and VAPT/BAS *planning* artifacts your licensed testers execute manually.
 
 ---
 
@@ -29,6 +30,10 @@ Security Ratings REST API (`https://api.bitsighttech.com/ratings`) as read-only 
 | `bitsight_get_portfolio` | List/filter monitored companies (paginated) |
 | `bitsight_get_alerts` | Recent rating changes and risk events |
 | `bitsight_get_rating_change_insights` | What drove a significant rating change |
+| `bitsight_get_industry_benchmark` | Industry ratings, or one industry's 1-year history with percentile bands |
+| `bitsight_list_threats` | Bitsight's threat catalog — resolve a CVE to its threat GUID |
+| `bitsight_get_threat_companies` | Which portfolio companies are observably affected by a threat |
+| `bitsight_get_threat_evidence` | The observed assets behind one threat-company pairing |
 
 Everything is **read-only** — nothing here can modify your Bitsight portfolio or run an active scan.
 
@@ -39,6 +44,11 @@ Everything is **read-only** — nothing here can modify your Bitsight portfolio 
 | **mycompany** | "check *our* Bitsight rating" | Your organization's rating, tier band, risk vectors |
 | **myportfolio** | "pull all our vendors' ratings" | Portfolio-wide ratings, color-banded, high-risk flagged |
 | **boardpack** | "build a board pack on our ratings" | Executive slide deck (+ optional 1-page brief) |
+| **vendor-brief** | "should we onboard this vendor?" | Due-diligence brief, go/no-go call, contract clauses, re-review date |
+| **remediation-roadmap** | "how do we get from 690 to 740?" | Prioritized 30/60/90-day fix plan with owners and effort |
+| **cve-sweep** | "who's exposed to CVE-XXXX?" | Portfolio exposure list, evidence, triage order, outreach drafts |
+| **regmap** | "map this to NIST CSF / ISO 27001" | Framework evidence pack — evidenced / partially / not evidenced |
+| **quantify** | "what's our exposure in rupees?" | Indicative financial exposure range with every assumption shown |
 | **vapt-plan** | "build a VAPT / vulnerability-assessment plan" | Findings report + assessment plan (identification only) |
 | **security-test-plan** | "create a VAPT/BAS engagement plan" | Full test plan, RoE, ATT&CK scenarios, report scaffold |
 
@@ -118,9 +128,24 @@ out separately by BitScore's licensed testers under the signed RoE.
   security posture. These skills summarize in-conversation and avoid writing data to files or sharing
   it unless you ask.
 - **India-specific obligations** (CERT-In 6-hour incident reporting and log retention; DPDP Act, 2023
-  for personal data; RBI/SEBI/IRDAI third-party risk norms) are surfaced where relevant, but this
-  plugin does **not** perform compliance mapping or give legal advice — loop in your compliance/legal
-  team.
+  for personal data; RBI/SEBI/IRDAI third-party risk norms) are surfaced where relevant. The
+  `regmap` skill organizes observed evidence against framework control areas, but it does **not**
+  determine compliance or give legal advice — loop in your compliance/legal team.
+
+### Two things worth knowing before you rely on an output
+
+- **`regmap` produces an evidence pack, not an assessment.** It says what is *evidenced*, *partially
+  evidenced*, or *not evidenced by this data* — never "compliant". Framework references are
+  indicative and must be confirmed against the current published text by your compliance team.
+  Bitsight sees the external surface of a control, never its design or operation.
+- **`quantify` is not Bitsight Financial Quantification.** Bitsight sells an FQ product with its own
+  loss dataset and Monte Carlo model; **this plugin has no access to it**. `quantify` produces an
+  indicative, fully transparent estimate from your posture plus figures you supply. If you license
+  FQ, the authoritative number is in the Bitsight platform — use that one for insurers and
+  regulators.
+- **No rating-point forecasts.** `remediation-roadmap` sequences work and explains expected direction
+  and relative magnitude. It will not tell you that a fix is worth *N* points, because Bitsight's
+  algorithm is neither public nor linear and nobody can honestly claim that.
 
 ---
 

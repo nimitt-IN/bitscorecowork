@@ -1,6 +1,6 @@
 # BitScoreCoWork — Global Rules (apply to every skill)
 
-These rules are binding for **all five** BitScoreCoWork skills. Each `SKILL.md` links here
+These rules are binding for **all ten** BitScoreCoWork skills. Each `SKILL.md` links here
 instead of repeating them. If anything in a skill appears to conflict with a rule below,
 the rule below wins.
 
@@ -75,7 +75,14 @@ The MCP server already maps HTTP status codes to plain-language messages. Handle
 
 Never invent Bitsight data to fill a gap. "No data returned" is a valid, correct answer.
 
-## 5. Authorization gate (testing skills only — `vapt-plan`, `security-test-plan`)
+## 5. Authorization gate (testing skills only — `vapt-plan`, `security-test-plan`, and any exposure output)
+
+`cve-sweep` reports **externally observed** exposure from Bitsight's threat catalog. It performs no
+scan and needs no authorization gate — but it is still bound by the no-exploitation rule below: it
+must never produce proof-of-concept code, exploitation steps, or instructions for verifying an
+exposure by attempting it.
+
+The full gate applies to the planning skills:
 
 Any skill that plans security testing must, before producing asset-specific testing content:
 
@@ -112,6 +119,20 @@ specific duty on the user's behalf:
 Always add: this determination belongs to the user's compliance/legal team; BitScoreCoWork
 supports the evidence trail, it does not certify compliance.
 
+**Framework mapping — permitted as evidence, never as a conclusion.** The `regmap` skill may map
+observed risk vectors to control areas in NIST CSF 2.0, ISO/IEC 27001:2022 and Indian regulatory
+obligation areas, using [`regulatory-map.md`](regulatory-map.md). That is an **evidence-organizing**
+activity and is allowed. What remains prohibited across every skill:
+
+- calling any organization **compliant**, **non-compliant**, or **certified**, or saying a control
+  is **met** or **satisfied**;
+- ruling on whether a regime **applies** to an entity;
+- inventing a control identifier or clause number that isn't in the mapping reference;
+- presenting a mapping as an audit, an assessment of record, or legal advice.
+
+Say what is **evidenced**, **partially evidenced**, or **not evidenced by this data** — and state
+that framework references are indicative and must be confirmed by the user's compliance team.
+
 ## 8. Data handling
 
 Bitsight data is confidential under Bitsight's Terms of Service and often concerns third parties'
@@ -125,6 +146,26 @@ signals only** — one input into risk management, never a substitute for full d
 - What is a rating — https://help.bitsighttech.com/hc/en-us/articles/231352528-What-is-a-Bitsight-Security-Rating
 - How ratings are calculated — https://help.bitsighttech.com/hc/en-us/articles/231950968-How-are-Bitsight-Security-Ratings-Calculated
 - API Token Management — https://help.bitsighttech.com/hc/en-us/articles/115014888388-API-Token-Management
+
+## 10. Modelled estimates and forward-looking statements
+
+Some skills (`quantify`, `remediation-roadmap`) produce numbers Bitsight did not supply. Those are
+**models**, and they must be visibly labelled as such — never blended into Bitsight-sourced figures
+so a reader can't tell which is which.
+
+- **Show every assumption and every input**, with its source: a Bitsight data point, a figure the
+  user supplied, or a stated assumption. If the reader can't change an input and see what moves,
+  the output isn't finished.
+- **Ranges, not point estimates**, wherever the underlying uncertainty is real. No false precision.
+- **Never attribute a modelled number to Bitsight.** In particular, Bitsight sells a **Financial
+  Quantification (FQ)** product; this plugin has **no access to it** and nothing produced here may
+  be called FQ, labelled a Bitsight figure, or presented as vendor-produced.
+- **No rating-point forecasts.** Bitsight's algorithm is not public and not linear, and findings age
+  out on their own schedule. Never promise that a given remediation yields a given number of points,
+  or that a target score will be reached by a given date. Express expected impact as direction and
+  relative magnitude, and say what that judgement rests on.
+- **Not advice.** Modelled financial output is not investment, insurance, or actuarial advice; point
+  the user to their broker, actuary or insurer where decisions turn on it.
 
 ---
 
@@ -143,6 +184,10 @@ signals only** — one input into risk management, never a substitute for full d
 | `bitsight_get_portfolio` | List/filter monitored companies by rating, tier, or industry. `GET /ratings/v2/portfolio` (paginated). |
 | `bitsight_get_alerts` | Recent rating changes and risk events across the portfolio. |
 | `bitsight_get_rating_change_insights` | Explanation of what drove a significant rating change. |
+| `bitsight_get_industry_benchmark` | Industry ratings — all industries, or one industry's 1-year history with percentile bands. `GET /ratings/v1/industries[/{slug}]`. |
+| `bitsight_list_threats` | Bitsight's catalog of threats (CVEs and vulnerability groups); resolve a CVE to its threat GUID. `GET /ratings/v2/threats`. |
+| `bitsight_get_threat_companies` | Portfolio companies observably affected by a given threat. `GET /ratings/v2/threats/{threat_guid}/companies`. |
+| `bitsight_get_threat_evidence` | The observed assets/evidence behind one threat-company pairing. `GET /ratings/v2/threats/{threat_guid}/companies/{company_guid}/evidence`. |
 
 All tools are **read-only** — nothing in this plugin can modify a Bitsight portfolio, tiers, or
 subscriptions, and nothing performs an active scan.

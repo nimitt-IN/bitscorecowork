@@ -7,7 +7,7 @@ description: >
   rating", or wants a single organization's current Bitsight rating and risk-vector
   breakdown (as opposed to a whole-portfolio pull or a board deck).
 metadata:
-  version: "0.1.1"
+  version: "0.2.0"
 ---
 
 # MyCompany — your organization's Bitsight security rating
