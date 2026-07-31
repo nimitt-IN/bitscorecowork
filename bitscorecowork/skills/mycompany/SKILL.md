@@ -7,7 +7,7 @@ description: >
   rating", or wants a single organization's current Bitsight rating and risk-vector
   breakdown (as opposed to a whole-portfolio pull or a board deck).
 metadata:
-  version: "0.1.1"
+  version: "0.2.0"
 ---
 
 # MyCompany — your organization's Bitsight security rating
@@ -28,9 +28,13 @@ handling, no discrimination, India context). The steps below assume those rules 
 
 2. **Get the Company GUID.**
    - If the user gave a GUID, use it.
-   - Otherwise prompt for the Company GUID, or offer to resolve it from the company name/domain
-     via `bitsight_search_portfolio_company`. On multiple matches, list them (name, domain, rating)
-     and ask which. On zero matches, say the company isn't in this token's portfolio — don't guess.
+   - **Otherwise resolve "our company" automatically first.** Call `bitsight_get_portfolio` and read
+     `summaries["my-company"]` from the response — Bitsight returns the token owner's own
+     organization GUID there. Use it, and say which company you resolved to so the user can correct
+     you. This is almost always what "check *our* rating" means, and it saves asking for a GUID.
+   - Only if that isn't present, prompt for the Company GUID or resolve a name/domain via
+     `bitsight_search_portfolio_company`. On multiple matches, list them (name, domain, rating) and
+     ask which. On zero matches, say the company isn't in this token's portfolio — don't guess.
 
 3. **Ask about extra context to cross-reference.** Ask whether the user wants to inject additional
    context for cross-reference — internal audit notes, prior assessment reports, web links, or
@@ -69,6 +73,6 @@ handling, no discrimination, India context). The steps below assume those rules 
 
 ## Error handling
 
-Follow the shared table in the global rules: 401/403 → re-prompt for the token and stop;
+Follow the shared table in the global rules: 401 → re-prompt for the token and stop; **403 → valid token, unentitled endpoint: continue without that source and say what's missing** (never re-prompt);
 404 → bad GUID, ask the user to re-confirm; 429 → back off and retry; empty result → say so plainly
 and do not fabricate.

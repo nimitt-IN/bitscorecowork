@@ -8,7 +8,7 @@ description: >
   findings report", or wants a scoped VA plan and findings mapped to Bitsight risk
   vectors. Planning/reporting only — it never scans or exploits anything.
 metadata:
-  version: "0.1.1"
+  version: "0.2.0"
 ---
 
 # vapt-plan — vulnerability-assessment plan & findings (identification only)
@@ -76,6 +76,6 @@ Section 5 (the **authorization gate**) and Section 7 (IT Act, 2000) are mandator
 
 ## Error handling
 
-Per the global-rules table: 401/403 → re-prompt for the token and stop; 404 → bad GUID, re-confirm;
+Per the global-rules table: 401 → re-prompt for the token and stop; **403 → valid token, unentitled endpoint: continue without that source and say what's missing** (never re-prompt); 404 → bad GUID, re-confirm;
 429 → back off and retry (mind pagination over large finding sets); empty result → state there are
 no matching findings/assets and do not fabricate any.

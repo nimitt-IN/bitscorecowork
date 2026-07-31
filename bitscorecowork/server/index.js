@@ -4,7 +4,11 @@
  *
  * Wraps the Bitsight Security Ratings REST API (https://api.bitsighttech.com/ratings)
  * as MCP tools so Claude can look up company ratings, findings, portfolio data,
- * attack-surface assets, alerts, and rating-change insights.
+ * attack-surface assets, alerts, rating-change insights, industry benchmarks, and
+ * threat (CVE) exposure across the portfolio.
+ *
+ * Every tool is read-only: this server issues GET requests only and cannot modify
+ * a Bitsight portfolio, and nothing here performs an active scan.
  *
  * Zero runtime dependencies by design: implements the MCP stdio JSON-RPC protocol
  * directly with only Node.js built-ins, so the plugin ships without a bundled
@@ -61,10 +65,22 @@ function authHeader() {
 }
 
 // Map raw HTTP status codes to the standard, user-facing guidance the
-// BitScoreCoWork skills expect (401/403 -> key, 404 -> id, 429 -> backoff).
+// BitScoreCoWork skills expect (401 -> key, 403 -> entitlement, 404 -> id,
+// 429 -> backoff).
+//
+// 401 and 403 mean genuinely different things here and must not be collapsed:
+// Bitsight returns 401 for an invalid/expired token on ANY endpoint, and 403
+// for a VALID token whose subscription does not include that particular
+// endpoint (e.g. findings/summaries, assets and insights are commonly gated
+// while portfolio, companies, findings, alerts, industries and threats are
+// not). Telling a user to re-paste their token on a 403 sends them rotating a
+// perfectly good credential, so the two cases carry different instructions.
 function classifyStatus(status) {
-  if (status === 401 || status === 403) {
-    return "Authentication failed (invalid, expired, or under-privileged Bitsight API token). Ask the user to paste a valid token and call bitsight_set_token again.";
+  if (status === 401) {
+    return "Authentication failed — the Bitsight API token is invalid, expired, or revoked. Ask the user to paste a valid token and call bitsight_set_token again.";
+  }
+  if (status === 403) {
+    return "This Bitsight endpoint is not available to this token's subscription (HTTP 403). The token is VALID — do NOT ask the user to re-paste it. Continue the workflow without this data source and tell the user which part of the analysis is unavailable.";
   }
   if (status === 404) {
     return "Not found — the GUID / portfolio ID does not exist or is not in this token's portfolio.";
@@ -160,9 +176,13 @@ const TOOLS = [
         const res = await fetch(`${BASE_URL}/v2/portfolio?limit=1`, {
           headers: { Authorization: basicFor(candidate), Accept: "application/json" },
         });
-        if (res.status === 401 || res.status === 403) {
+        // Only a 401 means the token itself is bad. A 403 on the probe endpoint
+        // means the token is valid but this subscription doesn't include the
+        // portfolio endpoint — that token can still be used for everything it
+        // IS entitled to, so store it rather than sending the user away.
+        if (res.status === 401) {
           return errorResult(
-            `That Bitsight API token was rejected (HTTP ${res.status}) and was NOT stored. Ask the user to re-check the token and paste it again.`
+            "That Bitsight API token was rejected as invalid or expired (HTTP 401) and was NOT stored. Ask the user to re-check the token and paste it again."
           );
         }
         // Store on success; also store on a non-auth error (token may be valid but
@@ -229,7 +249,7 @@ const TOOLS = [
   {
     name: "bitsight_get_company_details",
     description:
-      "Get full Bitsight details for a company by GUID: current security rating, 1 year of daily rating history, risk vector grades (the categories that make up the rating), industry, and subscription info. Optionally include the company's industry average rating and percentile rank. Backs the MyCompany skill (GET /ratings/v1/companies/{company_guid}).",
+      "Get full Bitsight details for a company by GUID: rating history, risk vector grades (the categories that make up the rating), industry, and subscription info. Optionally include the company's industry average rating and percentile rank. Backs the MyCompany skill (GET /ratings/v1/companies/{company_guid}).\n\nReading the response correctly:\n- There is NO top-level `rating` scalar. The current rating is the FIRST entry of the `ratings` array (newest-first daily history), e.g. ratings[0].rating with ratings[0].rating_date, which also carries `range` (the tier name) and `rating_color`.\n- `industry` is a display string (e.g. 'Media/Entertainment'); the slug for other calls is the separate top-level `industry_slug` field (e.g. 'mediaentertainment'). Same pattern for sub_industry / sub_industry_slug.\n- `rating_details` (the per-risk-vector grades) is null when the token's subscription does not include it. That is an entitlement gap, NOT an error and NOT a bad token — continue without vector grades and say they're unavailable.\n- If `ratings` is empty or absent, fall back to the rating on the company's row from bitsight_get_portfolio, which is reliably populated.",
     inputSchema: {
       type: "object",
       properties: {
@@ -366,7 +386,7 @@ const TOOLS = [
   {
     name: "bitsight_get_portfolio",
     description:
-      "List companies in the Bitsight portfolio (vendors, subsidiaries, or monitored third parties), optionally filtered by rating range, industry, or tier. Handles pagination via limit/offset. Backs the MyPortfolio skill (GET /ratings/v2/portfolio). Use this for vendor/third-party risk monitoring across many companies at once, e.g. 'which vendors have a rating below 640'.",
+      "List companies in the Bitsight portfolio (vendors, subsidiaries, or monitored third parties), optionally filtered by rating range, industry, or tier. Handles pagination via limit/offset. Backs the MyPortfolio skill (GET /ratings/v2/portfolio). Use this for vendor/third-party risk monitoring across many companies at once, e.g. 'which vendors have a rating below 640'.\n\nTwo useful properties of this response: each row's `rating` is reliably populated (making it the fallback when the company object's ratings history is unavailable), and the top-level `summaries` object carries `summaries['my-company']` — the GUID of the token owner's OWN organization. Use that to resolve 'our company' without asking the user for a GUID.",
     inputSchema: {
       type: "object",
       properties: {
@@ -434,6 +454,116 @@ const TOOLS = [
       return textResult(data);
     },
   },
+  {
+    name: "bitsight_get_industry_benchmark",
+    description:
+      "Get Bitsight industry rating benchmarks. With no arguments, lists every industry Bitsight categorizes with its current industry rating. With `industry_slug`, returns that industry's 1-year rating history plus its 10th/90th percentile bands and company distribution — the reference set for saying where a company sits against its sector. Backs the remediation-roadmap, vendor-brief and quantify skills (GET /ratings/v1/industries and /ratings/v1/industries/{industry_slug}).",
+    inputSchema: {
+      type: "object",
+      properties: {
+        industry_slug: {
+          type: "string",
+          description:
+            "Industry slug, e.g. 'technology' or 'finance'. Omit to list all industries and their current ratings. A company's slug is the top-level `industry_slug` field returned by bitsight_get_company_details (NOT the `industry` display string).",
+        },
+        add_sub_industries: {
+          type: "boolean",
+          description: "When listing all industries, also include sub-industries. Ignored when industry_slug is given.",
+        },
+        show_all: {
+          type: "boolean",
+          description: "When listing all industries, include industries outside the token's subscription. Ignored when industry_slug is given.",
+        },
+      },
+    },
+    handler: async ({ industry_slug, add_sub_industries, show_all }) => {
+      if (industry_slug) {
+        const data = await bitsightGet(`/v1/industries/${encodeURIComponent(industry_slug)}`);
+        return textResult(data);
+      }
+      const data = await bitsightGet("/v1/industries", {
+        add_sub_industries: add_sub_industries === undefined ? undefined : add_sub_industries ? "true" : "false",
+        show_all: show_all === undefined ? undefined : show_all ? "true" : "false",
+      });
+      return textResult(data);
+    },
+  },
+  {
+    name: "bitsight_list_threats",
+    description:
+      "List threats Bitsight catalogs — vulnerabilities (CVEs) and vulnerability groups — newest first by default. Use this to find the Bitsight threat GUID for a named CVE or campaign before checking which portfolio companies are exposed. Backs the cve-sweep skill (GET /ratings/v2/threats). Read-only catalog data: it reports what Bitsight already observed from the outside, and performs no scan.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        q: { type: "string", description: "Free-text search over threat names/identifiers, e.g. 'CVE-2024-3400' or 'Log4Shell'." },
+        category_slug: {
+          type: "string",
+          description: "Threat category to filter by. Use 'vulnerability' for CVE-level threats (the usual choice for a CVE sweep).",
+        },
+        first_seen_date_gte: {
+          type: "string",
+          description: "Only threats first seen on or after this date, YYYY-MM-DD. Use for 'what's new since our last sweep'.",
+        },
+        sort: { type: "string", description: "Sort field, e.g. 'first_seen_date' or '-first_seen_date' for newest first." },
+        limit: { type: "integer", minimum: 1, maximum: 100, description: "Max results per page (default 100)." },
+        offset: { type: "integer", description: "Pagination offset for subsequent pages." },
+      },
+    },
+    handler: async ({ q, category_slug, first_seen_date_gte, sort, limit, offset }) => {
+      const data = await bitsightGet("/v2/threats", {
+        q,
+        category_slug,
+        first_seen_date_gte,
+        sort,
+        limit: limit ?? 100,
+        offset,
+      });
+      return textResult(data);
+    },
+  },
+  {
+    name: "bitsight_get_threat_companies",
+    description:
+      "List the companies in the portfolio that Bitsight observes as affected by a given threat (CVE or vulnerability group), identified by its threat GUID from bitsight_list_threats. This is the core of a CVE exposure sweep: one call answers 'which of our vendors is exposed to this?'. Backs the cve-sweep skill (GET /ratings/v2/threats/{threat_guid}/companies).",
+    inputSchema: {
+      type: "object",
+      properties: {
+        threat_guid: { type: "string", description: "The Bitsight threat GUID, from bitsight_list_threats." },
+        limit: { type: "integer", minimum: 1, maximum: 100, description: "Max results per page (default 100)." },
+        offset: { type: "integer", description: "Pagination offset for subsequent pages." },
+      },
+      required: ["threat_guid"],
+    },
+    handler: async ({ threat_guid, limit, offset }) => {
+      const data = await bitsightGet(`/v2/threats/${encodeURIComponent(threat_guid)}/companies`, {
+        limit: limit ?? 100,
+        offset,
+      });
+      return textResult(data);
+    },
+  },
+  {
+    name: "bitsight_get_threat_evidence",
+    description:
+      "Get the evidence behind a threat/company pairing — the specific observed assets and detection detail that led Bitsight to mark this company as affected by this threat. Use after bitsight_get_threat_companies to show a vendor exactly why they are flagged, or to scope remediation. Backs the cve-sweep skill (GET /ratings/v2/threats/{threat_guid}/companies/{company_guid}/evidence). Externally observed evidence only — no scanning is performed.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        threat_guid: { type: "string", description: "The Bitsight threat GUID." },
+        company_guid: { type: "string", description: "The Bitsight company GUID of the affected company." },
+        limit: { type: "integer", minimum: 1, maximum: 100, description: "Max results per page (default 100)." },
+        offset: { type: "integer", description: "Pagination offset for subsequent pages." },
+      },
+      required: ["threat_guid", "company_guid"],
+    },
+    handler: async ({ threat_guid, company_guid, limit, offset }) => {
+      const data = await bitsightGet(
+        `/v2/threats/${encodeURIComponent(threat_guid)}/companies/${encodeURIComponent(company_guid)}/evidence`,
+        { limit: limit ?? 100, offset }
+      );
+      return textResult(data);
+    },
+  },
 ];
 
 const TOOLS_BY_NAME = new Map(TOOLS.map((t) => [t.name, t]));
@@ -463,7 +593,7 @@ async function handleRequest(req) {
         sendResult(id, {
           protocolVersion: "2024-11-05",
           capabilities: { tools: {} },
-          serverInfo: { name: "bitsight", version: "0.1.1" },
+          serverInfo: { name: "bitsight", version: "0.2.0" },
         });
         return;
 

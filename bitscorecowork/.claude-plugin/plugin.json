@@ -1,7 +1,7 @@
 {
   "name": "bitscorecowork",
-  "version": "0.1.1",
-  "description": "BitScoreCoWork — pull and analyze Bitsight Security Ratings inside Claude Cowork, then produce executive-ready reporting and scoped, authorization-gated security-testing plans. An asset by BitScore Cybertech LLP.",
+  "version": "0.2.0",
+  "description": "BitScoreCoWork — pull and analyze Bitsight Security Ratings inside Claude Cowork, then produce executive reporting, vendor due-diligence briefs, remediation roadmaps, CVE exposure sweeps, framework evidence packs, financial exposure estimates, and scoped, authorization-gated security-testing plans. An asset by BitScore Cybertech LLP.",
   "author": {
     "name": "BitScore Cybertech LLP",
     "url": "https://bitscore.in"
@@ -15,6 +15,12 @@
     "third-party-risk",
     "vapt",
     "board-pack",
+    "due-diligence",
+    "remediation",
+    "cve",
+    "nist-csf",
+    "iso-27001",
+    "cyber-risk-quantification",
     "cybersecurity",
     "bitscore",
     "india"

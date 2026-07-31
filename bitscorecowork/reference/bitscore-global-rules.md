@@ -1,6 +1,6 @@
 # BitScoreCoWork — Global Rules (apply to every skill)
 
-These rules are binding for **all five** BitScoreCoWork skills. Each `SKILL.md` links here
+These rules are binding for **all ten** BitScoreCoWork skills. Each `SKILL.md` links here
 instead of repeating them. If anything in a skill appears to conflict with a rule below,
 the rule below wins.
 
@@ -59,6 +59,15 @@ these buckets:
 
 - Always show the band and color alongside a raw number — a bare score is not a finished answer.
 - Never invent a score, a band, or a trend. If the API doesn't return it, say so.
+
+**Where the rating actually lives (verified against the live API).** The company object from
+`bitsight_get_company_details` has **no top-level `rating` scalar** — reading one gives you
+`undefined`, not a score. The current rating is the **first entry of the `ratings` array**
+(newest-first daily history): `ratings[0].rating`, with `ratings[0].rating_date`, plus `range` (the
+tier name) and `rating_color` already supplied by Bitsight. If `ratings` is empty, fall back to the
+company's row from `bitsight_get_portfolio`, where `rating` is reliably populated. And note that
+`rating_details` — the per-risk-vector grades — comes back **null** on subscriptions that don't
+include it: report the vectors as unavailable rather than as absent or as zero.
 - Read the number **with** trend and findings: a 760 (Advanced) that just fell 40 points still
   warrants a flag.
 
@@ -68,14 +77,50 @@ The MCP server already maps HTTP status codes to plain-language messages. Handle
 
 | Signal | Meaning | What to do |
 | --- | --- | --- |
-| **401 / 403** | Invalid, expired, or under-privileged token | Tell the user; re-prompt for a valid `BITSIGHT_API_TOKEN`; stop. |
+| **401** | Invalid, expired, or revoked token | Tell the user; re-prompt for a valid token; stop. |
+| **403** | **Token is valid**; this endpoint isn't in its subscription | **Do not re-prompt for a token and do not stop.** Carry on without that data source and name the gap. See below. |
 | **404** | Bad GUID / portfolio ID, or not in this token's portfolio | Tell the user the identifier wasn't found; ask them to re-confirm it. |
 | **429** | Rate limited | Back off briefly and retry; if it persists, tell the user to try again shortly. |
 | **Empty result** | No matching data | State plainly that nothing was returned. **Do not fabricate** ratings, findings, or assets. |
 
 Never invent Bitsight data to fill a gap. "No data returned" is a valid, correct answer.
 
-## 5. Authorization gate (testing skills only — `vapt-plan`, `security-test-plan`)
+### 403 is an entitlement signal, not an auth failure
+
+Bitsight gates endpoints by subscription. A token that works perfectly for `/v2/portfolio`,
+`/v1/companies/{guid}`, `/v1/companies/{guid}/findings`, `/v2/alerts`, `/v1/industries` and
+`/v2/threats` may still return **403** on `findings/summaries`, `assets`, or `insights`. This is
+observed behaviour on real subscriptions, not an edge case.
+
+Treating that as an authentication failure is a bug: it sends the user off to rotate a credential
+that was never the problem, and abandons a workflow that could have completed. So when a single
+call 403s:
+
+1. **Keep going.** Complete every part of the skill that doesn't depend on that call.
+2. **Say what's missing and why**, once, in plain language — *"finding summaries aren't included in
+   this Bitsight subscription, so severity is counted from the individual findings instead"* — not
+   as an error dump.
+3. **Substitute where an honest substitute exists.** `bitsight_get_findings` can be aggregated when
+   `bitsight_get_findings_summary` is unavailable; company details carry rating history when
+   `bitsight_get_rating_change_insights` is not entitled.
+4. **Reduce confidence, and say so.** If the missing source materially weakens a recommendation
+   (an asset inventory for a test plan, for instance), state that the output is scoped to what was
+   available.
+5. **Never fabricate** the unavailable data, and never silently present a degraded analysis as a
+   complete one.
+
+Only escalate to "ask for a different token" if the user's own goal genuinely requires the gated
+endpoint — and then say it's a **subscription entitlement** question for their Bitsight account
+team, not a bad token.
+
+## 5. Authorization gate (testing skills only — `vapt-plan`, `security-test-plan`, and any exposure output)
+
+`cve-sweep` reports **externally observed** exposure from Bitsight's threat catalog. It performs no
+scan and needs no authorization gate — but it is still bound by the no-exploitation rule below: it
+must never produce proof-of-concept code, exploitation steps, or instructions for verifying an
+exposure by attempting it.
+
+The full gate applies to the planning skills:
 
 Any skill that plans security testing must, before producing asset-specific testing content:
 
@@ -112,6 +157,20 @@ specific duty on the user's behalf:
 Always add: this determination belongs to the user's compliance/legal team; BitScoreCoWork
 supports the evidence trail, it does not certify compliance.
 
+**Framework mapping — permitted as evidence, never as a conclusion.** The `regmap` skill may map
+observed risk vectors to control areas in NIST CSF 2.0, ISO/IEC 27001:2022 and Indian regulatory
+obligation areas, using [`regulatory-map.md`](regulatory-map.md). That is an **evidence-organizing**
+activity and is allowed. What remains prohibited across every skill:
+
+- calling any organization **compliant**, **non-compliant**, or **certified**, or saying a control
+  is **met** or **satisfied**;
+- ruling on whether a regime **applies** to an entity;
+- inventing a control identifier or clause number that isn't in the mapping reference;
+- presenting a mapping as an audit, an assessment of record, or legal advice.
+
+Say what is **evidenced**, **partially evidenced**, or **not evidenced by this data** — and state
+that framework references are indicative and must be confirmed by the user's compliance team.
+
 ## 8. Data handling
 
 Bitsight data is confidential under Bitsight's Terms of Service and often concerns third parties'
@@ -125,6 +184,26 @@ signals only** — one input into risk management, never a substitute for full d
 - What is a rating — https://help.bitsighttech.com/hc/en-us/articles/231352528-What-is-a-Bitsight-Security-Rating
 - How ratings are calculated — https://help.bitsighttech.com/hc/en-us/articles/231950968-How-are-Bitsight-Security-Ratings-Calculated
 - API Token Management — https://help.bitsighttech.com/hc/en-us/articles/115014888388-API-Token-Management
+
+## 10. Modelled estimates and forward-looking statements
+
+Some skills (`quantify`, `remediation-roadmap`) produce numbers Bitsight did not supply. Those are
+**models**, and they must be visibly labelled as such — never blended into Bitsight-sourced figures
+so a reader can't tell which is which.
+
+- **Show every assumption and every input**, with its source: a Bitsight data point, a figure the
+  user supplied, or a stated assumption. If the reader can't change an input and see what moves,
+  the output isn't finished.
+- **Ranges, not point estimates**, wherever the underlying uncertainty is real. No false precision.
+- **Never attribute a modelled number to Bitsight.** In particular, Bitsight sells a **Financial
+  Quantification (FQ)** product; this plugin has **no access to it** and nothing produced here may
+  be called FQ, labelled a Bitsight figure, or presented as vendor-produced.
+- **No rating-point forecasts.** Bitsight's algorithm is not public and not linear, and findings age
+  out on their own schedule. Never promise that a given remediation yields a given number of points,
+  or that a target score will be reached by a given date. Express expected impact as direction and
+  relative magnitude, and say what that judgement rests on.
+- **Not advice.** Modelled financial output is not investment, insurance, or actuarial advice; point
+  the user to their broker, actuary or insurer where decisions turn on it.
 
 ---
 
@@ -143,6 +222,10 @@ signals only** — one input into risk management, never a substitute for full d
 | `bitsight_get_portfolio` | List/filter monitored companies by rating, tier, or industry. `GET /ratings/v2/portfolio` (paginated). |
 | `bitsight_get_alerts` | Recent rating changes and risk events across the portfolio. |
 | `bitsight_get_rating_change_insights` | Explanation of what drove a significant rating change. |
+| `bitsight_get_industry_benchmark` | Industry ratings — all industries, or one industry's 1-year history with percentile bands. `GET /ratings/v1/industries[/{slug}]`. |
+| `bitsight_list_threats` | Bitsight's catalog of threats (CVEs and vulnerability groups); resolve a CVE to its threat GUID. `GET /ratings/v2/threats`. |
+| `bitsight_get_threat_companies` | Portfolio companies observably affected by a given threat. `GET /ratings/v2/threats/{threat_guid}/companies`. |
+| `bitsight_get_threat_evidence` | The observed assets/evidence behind one threat-company pairing. `GET /ratings/v2/threats/{threat_guid}/companies/{company_guid}/evidence`. |
 
 All tools are **read-only** — nothing in this plugin can modify a Bitsight portfolio, tiers, or
 subscriptions, and nothing performs an active scan.

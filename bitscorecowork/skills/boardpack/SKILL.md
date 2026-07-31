@@ -7,7 +7,7 @@ description: >
   deck about our Bitsight score", "quarterly cyber risk deck for leadership", or
   wants Bitsight data turned into a leadership/board presentation (not a raw pull).
 metadata:
-  version: "0.1.1"
+  version: "0.2.0"
 ---
 
 # BoardPack — executive briefing from Bitsight data
@@ -84,6 +84,6 @@ framework you're following:
 
 ## Error handling & data care
 
-Follow the global-rules error table (401/403 stop; 404 re-confirm id; 429 back off; empty → say so,
+Follow the global-rules error table (401 stop; 403 → valid token but unentitled endpoint, continue without it and name the gap; 404 re-confirm id; 429 back off; empty → say so,
 don't fabricate). The finished deck will contain sensitive third-party data — never persist the API
 token into it, and don't share/email the deck anywhere the user hasn't asked.
