@@ -112,6 +112,6 @@ honest one isn't available, and give them the sequence and the reasoning instead
 
 ## Error handling
 
-Follow the shared table in the global rules: 401/403 → re-prompt and stop; 404 → re-confirm the
+Follow the shared table in the global rules: 401 → re-prompt and stop; **403 → the token is valid but the endpoint isn't in this subscription: carry on without it and name the gap** (never re-prompt for a token); 404 → re-confirm the
 GUID; 429 → back off and retry (be mindful when paging large findings sets); empty result → say so
 and do not invent work items.

@@ -242,7 +242,8 @@ hard-refused.
 | What you see | HTTP | Meaning | What to do |
 | --- | --- | --- | --- |
 | "No Bitsight API token is set…" | — | You haven't provided a token yet this session | Paste your Bitsight token when prompted; Claude stores it via `bitsight_set_token`. |
-| "…token was rejected (401/403)…" | **401 / 403** | The pasted token is invalid, expired, revoked, or under-privileged | Get a valid token (Bitsight → Settings → Account → User Preferences) and paste it again when asked. |
+| "…token was rejected as invalid or expired…" | **401** | The pasted token is invalid, expired, or revoked | Get a valid token (Bitsight → Settings → Account → User Preferences) and paste it again when asked. |
+| "…not available to this token's subscription…" | **403** | **Your token is valid** — that endpoint just isn't in your Bitsight subscription. Finding summaries, assets and insights are the ones most often gated | Nothing to fix. The skill continues without that source and tells you what's missing. Don't re-paste the token; if you need the data, ask your Bitsight account team about entitlement. |
 | "Not found…" | **404** | Bad GUID / portfolio ID, or not in this token's portfolio | Re-confirm the identifier. Use `bitsight_search_portfolio_company` to look up a GUID; companies outside your portfolio must be added in the Bitsight platform first. |
 | "Rate limited…" | **429** | Too many requests too quickly | The skills back off and retry automatically; if it persists, wait ~a minute and retry. |
 | "No data returned" | — | Nothing matched your query/filter | Accepted as-is — the skills will **not** invent data. Broaden the filter or re-check the scope. |

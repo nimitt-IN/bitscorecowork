@@ -65,10 +65,22 @@ function authHeader() {
 }
 
 // Map raw HTTP status codes to the standard, user-facing guidance the
-// BitScoreCoWork skills expect (401/403 -> key, 404 -> id, 429 -> backoff).
+// BitScoreCoWork skills expect (401 -> key, 403 -> entitlement, 404 -> id,
+// 429 -> backoff).
+//
+// 401 and 403 mean genuinely different things here and must not be collapsed:
+// Bitsight returns 401 for an invalid/expired token on ANY endpoint, and 403
+// for a VALID token whose subscription does not include that particular
+// endpoint (e.g. findings/summaries, assets and insights are commonly gated
+// while portfolio, companies, findings, alerts, industries and threats are
+// not). Telling a user to re-paste their token on a 403 sends them rotating a
+// perfectly good credential, so the two cases carry different instructions.
 function classifyStatus(status) {
-  if (status === 401 || status === 403) {
-    return "Authentication failed (invalid, expired, or under-privileged Bitsight API token). Ask the user to paste a valid token and call bitsight_set_token again.";
+  if (status === 401) {
+    return "Authentication failed — the Bitsight API token is invalid, expired, or revoked. Ask the user to paste a valid token and call bitsight_set_token again.";
+  }
+  if (status === 403) {
+    return "This Bitsight endpoint is not available to this token's subscription (HTTP 403). The token is VALID — do NOT ask the user to re-paste it. Continue the workflow without this data source and tell the user which part of the analysis is unavailable.";
   }
   if (status === 404) {
     return "Not found — the GUID / portfolio ID does not exist or is not in this token's portfolio.";
@@ -164,9 +176,13 @@ const TOOLS = [
         const res = await fetch(`${BASE_URL}/v2/portfolio?limit=1`, {
           headers: { Authorization: basicFor(candidate), Accept: "application/json" },
         });
-        if (res.status === 401 || res.status === 403) {
+        // Only a 401 means the token itself is bad. A 403 on the probe endpoint
+        // means the token is valid but this subscription doesn't include the
+        // portfolio endpoint — that token can still be used for everything it
+        // IS entitled to, so store it rather than sending the user away.
+        if (res.status === 401) {
           return errorResult(
-            `That Bitsight API token was rejected (HTTP ${res.status}) and was NOT stored. Ask the user to re-check the token and paste it again.`
+            "That Bitsight API token was rejected as invalid or expired (HTTP 401) and was NOT stored. Ask the user to re-check the token and paste it again."
           );
         }
         // Store on success; also store on a non-auth error (token may be valid but
@@ -233,7 +249,7 @@ const TOOLS = [
   {
     name: "bitsight_get_company_details",
     description:
-      "Get full Bitsight details for a company by GUID: current security rating, 1 year of daily rating history, risk vector grades (the categories that make up the rating), industry, and subscription info. Optionally include the company's industry average rating and percentile rank. Backs the MyCompany skill (GET /ratings/v1/companies/{company_guid}).",
+      "Get full Bitsight details for a company by GUID: rating history, risk vector grades (the categories that make up the rating), industry, and subscription info. Optionally include the company's industry average rating and percentile rank. Backs the MyCompany skill (GET /ratings/v1/companies/{company_guid}).\n\nReading the response correctly:\n- There is NO top-level `rating` scalar. The current rating is the FIRST entry of the `ratings` array (newest-first daily history), e.g. ratings[0].rating with ratings[0].rating_date, which also carries `range` (the tier name) and `rating_color`.\n- `industry` is a display string (e.g. 'Media/Entertainment'); the slug for other calls is the separate top-level `industry_slug` field (e.g. 'mediaentertainment'). Same pattern for sub_industry / sub_industry_slug.\n- `rating_details` (the per-risk-vector grades) is null when the token's subscription does not include it. That is an entitlement gap, NOT an error and NOT a bad token — continue without vector grades and say they're unavailable.\n- If `ratings` is empty or absent, fall back to the rating on the company's row from bitsight_get_portfolio, which is reliably populated.",
     inputSchema: {
       type: "object",
       properties: {
@@ -370,7 +386,7 @@ const TOOLS = [
   {
     name: "bitsight_get_portfolio",
     description:
-      "List companies in the Bitsight portfolio (vendors, subsidiaries, or monitored third parties), optionally filtered by rating range, industry, or tier. Handles pagination via limit/offset. Backs the MyPortfolio skill (GET /ratings/v2/portfolio). Use this for vendor/third-party risk monitoring across many companies at once, e.g. 'which vendors have a rating below 640'.",
+      "List companies in the Bitsight portfolio (vendors, subsidiaries, or monitored third parties), optionally filtered by rating range, industry, or tier. Handles pagination via limit/offset. Backs the MyPortfolio skill (GET /ratings/v2/portfolio). Use this for vendor/third-party risk monitoring across many companies at once, e.g. 'which vendors have a rating below 640'.\n\nTwo useful properties of this response: each row's `rating` is reliably populated (making it the fallback when the company object's ratings history is unavailable), and the top-level `summaries` object carries `summaries['my-company']` — the GUID of the token owner's OWN organization. Use that to resolve 'our company' without asking the user for a GUID.",
     inputSchema: {
       type: "object",
       properties: {
@@ -448,7 +464,7 @@ const TOOLS = [
         industry_slug: {
           type: "string",
           description:
-            "Industry slug, e.g. 'technology' or 'finance'. Omit to list all industries and their current ratings; the slug for a company appears in its industry field from bitsight_get_company_details.",
+            "Industry slug, e.g. 'technology' or 'finance'. Omit to list all industries and their current ratings. A company's slug is the top-level `industry_slug` field returned by bitsight_get_company_details (NOT the `industry` display string).",
         },
         add_sub_industries: {
           type: "boolean",

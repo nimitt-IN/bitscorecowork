@@ -59,6 +59,15 @@ these buckets:
 
 - Always show the band and color alongside a raw number — a bare score is not a finished answer.
 - Never invent a score, a band, or a trend. If the API doesn't return it, say so.
+
+**Where the rating actually lives (verified against the live API).** The company object from
+`bitsight_get_company_details` has **no top-level `rating` scalar** — reading one gives you
+`undefined`, not a score. The current rating is the **first entry of the `ratings` array**
+(newest-first daily history): `ratings[0].rating`, with `ratings[0].rating_date`, plus `range` (the
+tier name) and `rating_color` already supplied by Bitsight. If `ratings` is empty, fall back to the
+company's row from `bitsight_get_portfolio`, where `rating` is reliably populated. And note that
+`rating_details` — the per-risk-vector grades — comes back **null** on subscriptions that don't
+include it: report the vectors as unavailable rather than as absent or as zero.
 - Read the number **with** trend and findings: a 760 (Advanced) that just fell 40 points still
   warrants a flag.
 
@@ -68,12 +77,41 @@ The MCP server already maps HTTP status codes to plain-language messages. Handle
 
 | Signal | Meaning | What to do |
 | --- | --- | --- |
-| **401 / 403** | Invalid, expired, or under-privileged token | Tell the user; re-prompt for a valid `BITSIGHT_API_TOKEN`; stop. |
+| **401** | Invalid, expired, or revoked token | Tell the user; re-prompt for a valid token; stop. |
+| **403** | **Token is valid**; this endpoint isn't in its subscription | **Do not re-prompt for a token and do not stop.** Carry on without that data source and name the gap. See below. |
 | **404** | Bad GUID / portfolio ID, or not in this token's portfolio | Tell the user the identifier wasn't found; ask them to re-confirm it. |
 | **429** | Rate limited | Back off briefly and retry; if it persists, tell the user to try again shortly. |
 | **Empty result** | No matching data | State plainly that nothing was returned. **Do not fabricate** ratings, findings, or assets. |
 
 Never invent Bitsight data to fill a gap. "No data returned" is a valid, correct answer.
+
+### 403 is an entitlement signal, not an auth failure
+
+Bitsight gates endpoints by subscription. A token that works perfectly for `/v2/portfolio`,
+`/v1/companies/{guid}`, `/v1/companies/{guid}/findings`, `/v2/alerts`, `/v1/industries` and
+`/v2/threats` may still return **403** on `findings/summaries`, `assets`, or `insights`. This is
+observed behaviour on real subscriptions, not an edge case.
+
+Treating that as an authentication failure is a bug: it sends the user off to rotate a credential
+that was never the problem, and abandons a workflow that could have completed. So when a single
+call 403s:
+
+1. **Keep going.** Complete every part of the skill that doesn't depend on that call.
+2. **Say what's missing and why**, once, in plain language — *"finding summaries aren't included in
+   this Bitsight subscription, so severity is counted from the individual findings instead"* — not
+   as an error dump.
+3. **Substitute where an honest substitute exists.** `bitsight_get_findings` can be aggregated when
+   `bitsight_get_findings_summary` is unavailable; company details carry rating history when
+   `bitsight_get_rating_change_insights` is not entitled.
+4. **Reduce confidence, and say so.** If the missing source materially weakens a recommendation
+   (an asset inventory for a test plan, for instance), state that the output is scoped to what was
+   available.
+5. **Never fabricate** the unavailable data, and never silently present a degraded analysis as a
+   complete one.
+
+Only escalate to "ask for a different token" if the user's own goal genuinely requires the gated
+endpoint — and then say it's a **subscription entitlement** question for their Bitsight account
+team, not a bad token.
 
 ## 5. Authorization gate (testing skills only — `vapt-plan`, `security-test-plan`, and any exposure output)
 

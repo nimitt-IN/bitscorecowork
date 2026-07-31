@@ -111,6 +111,6 @@ contractual and financial due diligence).
 
 ## Error handling
 
-Follow the shared table in the global rules: 401/403 → re-prompt for the token and stop; 404 → the
+Follow the shared table in the global rules: 401 → re-prompt for the token and stop; **403 → valid token, unentitled endpoint: continue without that source and say what's missing** (never re-prompt); 404 → the
 GUID isn't in this token's portfolio, re-confirm it; 429 → back off and retry; empty result → say so
 plainly and do not fabricate.

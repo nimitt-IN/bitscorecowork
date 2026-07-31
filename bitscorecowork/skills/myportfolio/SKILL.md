@@ -61,7 +61,7 @@ handling, no discrimination, India context).
 
 ## Error handling
 
-Follow the shared table in the global rules: 401/403 → re-prompt for the token and stop;
+Follow the shared table in the global rules: 401 → re-prompt for the token and stop; **403 → valid token, unentitled endpoint: continue without that source and say what's missing** (never re-prompt);
 404 → bad portfolio ID, ask the user to re-confirm; 429 → back off and retry (be mindful when
 paginating large portfolios); empty result → say the portfolio returned no companies and do not
 fabricate any.

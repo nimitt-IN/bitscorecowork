@@ -31,14 +31,27 @@ usage and troubleshooting).
 | Path | What it is |
 | --- | --- |
 | [`bitscorecowork/`](bitscorecowork/) | The plugin source tree — edit here |
-| `bitscorecowork-0.2.0.plugin` | The built, installable plugin (a zip of `bitscorecowork/`) |
+| `bitscorecowork-0.2.0.plugin` | **Current** built, installable plugin (a zip of `bitscorecowork/`) |
+| `bitscorecowork-0.1.1.plugin` | Previous release, kept for anyone still on it |
 | [`LICENSE`](LICENSE) | MIT License |
 
 ## Install
 
-Install the built plugin file (`bitscorecowork-0.2.0.plugin`) in Claude, or add the
+Install the current plugin file (`bitscorecowork-0.2.0.plugin`) in Claude, or add the
 `bitscorecowork/` directory as a local plugin. The `bitsight` MCP server starts automatically — no
 `npm install` and no configuration required.
+
+`bitscorecowork-0.1.1.plugin` is retained so existing installs aren't stranded, but it lacks the
+five newer skills and — more importantly — treats an HTTP 403 as an authentication failure, which
+sends you rotating a valid token when Bitsight is really telling you an endpoint isn't in your
+subscription. Upgrade when you can.
+
+## Versions
+
+| Version | Skills | Notes |
+| --- | --- | --- |
+| **0.2.0** | 10 | Adds `vendor-brief`, `remediation-roadmap`, `cve-sweep`, `regmap`, `quantify` and four read-only Bitsight tools. Separates 401 (bad token) from 403 (endpoint not in subscription) so a gated endpoint degrades gracefully instead of aborting the workflow. |
+| 0.1.1 | 5 | Initial release: `mycompany`, `myportfolio`, `boardpack`, `vapt-plan`, `security-test-plan`. |
 
 ## Building the `.plugin` from source
 

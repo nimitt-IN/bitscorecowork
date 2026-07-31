@@ -155,7 +155,8 @@ out separately by BitScore's licensed testers under the signed RoE.
 | --- | --- |
 | **It keeps asking for my token** | Expected — the token is held in memory only and requested once per session (each time the plugin starts). For unattended runs, use the `BITSIGHT_ALLOW_ENV_TOKEN` mode in Setup. |
 | **"No Bitsight API token is set"** | Paste your token when asked; Claude stores it via `bitsight_set_token`. If it was rejected, the token is invalid/expired — get a fresh one from Bitsight. |
-| **Authentication error (401/403)** | The token is invalid, expired, revoked, or lacks permission. Paste a valid token when prompted (re-check it in Bitsight → Settings → Account → User Preferences). |
+| **Authentication error (401)** | The token is invalid, expired, or revoked. Paste a valid token when prompted (re-check it in Bitsight → Settings → Account → User Preferences). |
+| **"Not available to this token's subscription" (403)** | **Your token is fine.** That endpoint isn't included in your Bitsight subscription — commonly `findings/summaries`, `assets` or `insights`. The skills carry on without it and tell you which part of the analysis is unavailable; re-pasting the token will not help. If you need that data, it's an entitlement question for your Bitsight account team. |
 | **Company / GUID not found (404)** | The GUID/portfolio ID is wrong or not in this token's portfolio. `bitsight_search_portfolio_company` only finds companies already monitored — add others via the Bitsight platform first. |
 | **Rate limited (429)** | Too many calls too fast. The skills back off and retry; if it persists, wait a minute and retry. |
 | **Empty result** | No matching data — the skills say so rather than inventing numbers. |
