@@ -1,4 +1,4 @@
-# BitScoreCoWork
+# BitScoreCoWork — v0.2.0
 
 An asset by **BitScore Cybertech LLP** — [bitscore.in](https://bitscore.in), authorised India
 partner for [Bitsight](https://www.bitsight.com/).
@@ -53,6 +53,33 @@ Everything is **read-only** — nothing here can modify your Bitsight portfolio 
 | **security-test-plan** | "create a VAPT/BAS engagement plan" | Full test plan, RoE, ATT&CK scenarios, report scaffold |
 
 See [`HELP_GUIDE.md`](HELP_GUIDE.md) for example prompts, expected inputs, and troubleshooting.
+
+---
+
+## What's new in 0.2.0
+
+**Five new skills** — `vendor-brief`, `remediation-roadmap`, `cve-sweep`, `regmap` and `quantify`
+cover the ground between pulling a rating and planning a pentest: the vendor decision, the fix list,
+the CVE exposure question, the audit evidence, and the money.
+
+**Four new read-only tools** — an industry-benchmark tool so a score is reported against its sector
+rather than in a vacuum, plus the three threat tools that make CVE sweeps possible
+(`/v2/threats` → affected companies → per-company evidence).
+
+**403 no longer misreported as a bad token.** Bitsight returns 401 for an invalid token but 403 for
+a *valid* token whose subscription doesn't include an endpoint — `findings/summaries`, `assets` and
+`insights` are commonly gated. 0.1.1 collapsed the two, so a 403 told you to re-paste a credential
+that was never the problem and abandoned the workflow. The skills now continue without that source,
+name the gap, and substitute where an honest substitute exists.
+
+**Response shapes corrected against the live API.** There is no top-level `rating` scalar on the
+company object (the current rating is `ratings[0].rating`); `industry` is a display string while the
+slug lives in `industry_slug`; `rating_details` returns null rather than 403 when unentitled; and
+`mycompany` now resolves your own organization from the portfolio response instead of asking you for
+a GUID.
+
+Every tool in this release was exercised against a live Bitsight subscription: 18 checks passed,
+0 failed, 3 gated by entitlement.
 
 ---
 
