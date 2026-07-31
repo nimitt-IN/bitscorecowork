@@ -4,6 +4,10 @@ A Claude Cowork plugin for **Bitsight Security Ratings**, by
 **BitScore Cybertech LLP** — [bitscore.in](https://bitscore.in), authorised India partner for
 [Bitsight](https://www.bitsight.com/).
 
+**Latest release: [v0.2.0](https://github.com/nimitt-IN/bitscorecowork/releases/tag/v0.2.0)** —
+ten skills, 15 read-only tools, verified against the live Bitsight API.
+[All releases →](https://github.com/nimitt-IN/bitscorecowork/releases)
+
 Pull and analyze Bitsight Security Ratings from inside Claude, then turn them into executive-ready
 reporting, vendor decisions, remediation plans, audit evidence, and scoped, authorization-gated
 security-testing plans. It ships a zero-dependency MCP server (Node.js 18+) wrapping the Bitsight
@@ -37,9 +41,10 @@ usage and troubleshooting).
 
 ## Install
 
-Install the current plugin file (`bitscorecowork-0.2.0.plugin`) in Claude, or add the
-`bitscorecowork/` directory as a local plugin. The `bitsight` MCP server starts automatically — no
-`npm install` and no configuration required.
+Download **[`bitscorecowork-0.2.0.plugin` from the v0.2.0 release](https://github.com/nimitt-IN/bitscorecowork/releases/tag/v0.2.0)**
+(it's also committed at the repo root) and add it in Claude, or point at the `bitscorecowork/`
+directory as a local plugin. The `bitsight` MCP server starts automatically — no `npm install` and
+no configuration required.
 
 `bitscorecowork-0.1.1.plugin` is retained so existing installs aren't stranded, but it lacks the
 five newer skills and — more importantly — treats an HTTP 403 as an authentication failure, which
@@ -48,10 +53,10 @@ subscription. Upgrade when you can.
 
 ## Versions
 
-| Version | Skills | Notes |
-| --- | --- | --- |
-| **0.2.0** | 10 | Adds `vendor-brief`, `remediation-roadmap`, `cve-sweep`, `regmap`, `quantify` and four read-only Bitsight tools. Separates 401 (bad token) from 403 (endpoint not in subscription) so a gated endpoint degrades gracefully instead of aborting the workflow. |
-| 0.1.1 | 5 | Initial release: `mycompany`, `myportfolio`, `boardpack`, `vapt-plan`, `security-test-plan`. |
+| Version | Skills | Tools | Notes |
+| --- | --- | --- | --- |
+| **[0.2.0](https://github.com/nimitt-IN/bitscorecowork/releases/tag/v0.2.0)** — current | 10 | 15 | Adds `vendor-brief`, `remediation-roadmap`, `cve-sweep`, `regmap`, `quantify`, plus industry-benchmark and threat/CVE tools. Separates 401 (bad token) from 403 (endpoint not in subscription) so a gated endpoint degrades gracefully instead of aborting the workflow. Response shapes corrected against the live API. |
+| [0.1.1](https://github.com/nimitt-IN/bitscorecowork/releases/tag/v0.1.1) | 5 | 11 | Initial release: `mycompany`, `myportfolio`, `boardpack`, `vapt-plan`, `security-test-plan`. |
 
 ## Building the `.plugin` from source
 
