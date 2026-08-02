@@ -8,7 +8,7 @@ description: >
   "assess this third party before we sign", or wants one vendor assessed for an
   onboarding or renewal decision (as opposed to a whole-portfolio pull).
 metadata:
-  version: "0.2.0"
+  version: "0.2.1"
 ---
 
 # vendor-brief — pre-contract due-diligence brief on one vendor
@@ -67,9 +67,10 @@ contractual and financial due diligence).
    - **No-go (as things stand)** — Basic tier (250–630), *or* a sharp recent drop, *or* unresolved
      high-severity findings directly on the risk vectors this engagement depends on.
 
-   Weight the vectors by what the vendor will actually do: exposed credentials and patching cadence
-   matter more for a vendor with production access; TLS and web-application headers matter more for
-   one hosting a customer-facing portal. Say which vectors you weighted and why.
+   Weight the vectors by what the vendor will actually do: exposed credentials and Critical
+   Vulnerability Management matter more for a vendor with production access; TLS and web-application
+   headers matter more for one hosting a customer-facing portal. Say which vectors you weighted and
+   why.
 
 6. **Write the brief.** Keep it to one or two pages — this gets read by a procurement or business
    owner, not an analyst:

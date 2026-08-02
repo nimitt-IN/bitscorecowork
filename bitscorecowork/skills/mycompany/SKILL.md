@@ -7,7 +7,7 @@ description: >
   rating", or wants a single organization's current Bitsight rating and risk-vector
   breakdown (as opposed to a whole-portfolio pull or a board deck).
 metadata:
-  version: "0.2.0"
+  version: "0.2.1"
 ---
 
 # MyCompany — your organization's Bitsight security rating
@@ -39,8 +39,8 @@ handling, no discrimination, India context). The steps below assume those rules 
 3. **Ask about extra context to cross-reference.** Ask whether the user wants to inject additional
    context for cross-reference — internal audit notes, prior assessment reports, web links, or
    uploaded documents. If they provide some, use it to enrich interpretation (e.g. "your Q2 audit
-   flagged patching — Bitsight's Patching Cadence grade agrees"). Do not let uploaded context
-   override the actual API numbers.
+   flagged patching — Bitsight's Critical Vulnerability Management grade agrees"). Do not let
+   uploaded context override the actual API numbers.
 
 4. **Ask the preferred layout** (pick one; default to Executive Summary if they don't care):
    - **Executive Summary** — a short narrative for leadership.

@@ -1,4 +1,4 @@
-# BitScoreCoWork — v0.2.0
+# BitScoreCoWork — v0.2.1
 
 An asset by **BitScore Cybertech LLP** — [bitscore.in](https://bitscore.in), authorised India
 partner for [Bitsight](https://www.bitsight.com/).
@@ -53,6 +53,27 @@ Everything is **read-only** — nothing here can modify your Bitsight portfolio 
 | **security-test-plan** | "create a VAPT/BAS engagement plan" | Full test plan, RoE, ATT&CK scenarios, report scaffold |
 
 See [`HELP_GUIDE.md`](HELP_GUIDE.md) for example prompts, expected inputs, and troubleshooting.
+
+---
+
+## What's new in 0.2.1
+
+**Critical Vulnerability Management replaces Patching Cadence.** Bitsight retired the Patching
+Cadence risk vector on 16 July 2026 and replaced it with Critical Vulnerability Management at the
+same 20% weight. This is a methodology change, not a rename: the grade is now a **severity-weighted
+average time-to-remediate**, and findings live 90 days.
+
+That inverts one piece of advice the plugin used to give. `remediation-roadmap` treated patching as
+slow process work and sequenced it into days 61–90; under CVM, promptly remediating a Material or
+Severe vulnerability is among the fastest ways to move a rating, so those findings now belong in the
+first 30 days. The roadmap skill says so explicitly, and the slow-programme-work bucket is now
+software currency and asset inventory hygiene, which genuinely do move slowly.
+
+`regmap`'s framework mapping table, and the vector references in `mycompany` and `vendor-brief`, use
+the new name. The `bitsight_get_findings` `risk_vector` parameter documents both the new
+`critical_vulnerability_management` slug and the legacy `patching_cadence` one, and tells the model
+to retry with the other rather than report zero findings if one comes back empty — Bitsight's public
+API reference doesn't state which the endpoint accepts, so this is deliberately tolerant of either.
 
 ---
 

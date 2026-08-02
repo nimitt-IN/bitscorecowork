@@ -8,7 +8,7 @@ description: >
   against the SEBI/RBI framework", "control mapping", or wants ratings evidence
   organized for an audit, assessment or supervisory review.
 metadata:
-  version: "0.2.0"
+  version: "0.2.1"
 ---
 
 # regmap — framework evidence pack from Bitsight data
