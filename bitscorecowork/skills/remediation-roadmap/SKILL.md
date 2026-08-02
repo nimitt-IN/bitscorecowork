@@ -7,7 +7,7 @@ description: >
   at 690, how do we get to 740", "what should we fix first", "rating improvement
   plan", or wants findings turned into a prioritized, ownable work plan.
 metadata:
-  version: "0.2.0"
+  version: "0.2.1"
 ---
 
 # remediation-roadmap — a sequenced plan to improve a rating
@@ -66,21 +66,30 @@ honest one isn't available, and give them the sequence and the reasoning instead
    - **Gap size** — how far below the industry benchmark this vector sits.
    - **Volume × severity** — how many findings, how bad, and on how important an asset.
    - **Effort** — from configuration changes (certificates, TLS settings, security headers, closing
-     an exposed service) through to programme work (patching cadence, which is a process problem and
-     moves slowly).
+     an exposed service) through to programme work (server and endpoint software currency, asset
+     inventory hygiene — process problems that move slowly).
    - **Durability** — whether the fix holds. Closing one exposed port is a task; fixing the process
      that opened it is the improvement.
 
-   In general, configuration-class vectors move fastest and process-class vectors (patching cadence
-   above all) move slowest but matter most — sequence accordingly, and start the slow ones early
-   rather than saving them for last.
+   In general, configuration-class vectors move fastest and process-class vectors (software currency
+   and asset inventory hygiene above all) move slowest but matter most — sequence accordingly, and
+   start the slow ones early rather than saving them for last.
+
+   **Critical Vulnerability Management is the exception, and it is the important one.** Since
+   16 July 2026 this vector — 20% of the rating, and what used to be Patching Cadence — grades on a
+   **severity-weighted average time-to-remediate**, with findings living 90 days. A Material or
+   Severe vulnerability remediated promptly moves the grade substantially and quickly; a long tail
+   of Minor ones barely registers. Do not treat it as slow programme work to be deferred: the
+   highest-severity CVM findings belong in the first 30 days, ahead of almost everything else.
 
 5. **Build the roadmap** as 30 / 60 / 90 days (adjust to the user's actual deadline):
-   - **Days 0–30 — visible wins.** Configuration-class findings on high-importance assets. These
-     demonstrate movement and buy room for the slower work.
+   - **Days 0–30 — visible wins and the severe vulnerabilities.** Configuration-class findings on
+     high-importance assets, together with the Material and Severe Critical Vulnerability Management
+     findings. Both move the rating quickly, and they buy room for the slower work.
    - **Days 31–60 — the concentrated gaps.** The vectors furthest below the industry benchmark.
-   - **Days 61–90 — the process work.** Patching cadence, asset inventory hygiene, and whatever
-     keeps regenerating findings.
+   - **Days 61–90 — the process work.** Software currency, asset inventory hygiene, and whatever
+     keeps regenerating findings — including the remediation process itself, so that the acute CVM
+     findings closed in the first month do not simply come back.
    - Each item gets: the fix, the affected assets (count, and names where the user wants detail),
      the owning team, effort (S/M/L), expected direction of impact, and a verification step.
 

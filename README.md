@@ -4,7 +4,7 @@ A Claude Cowork plugin for **Bitsight Security Ratings**, by
 **BitScore Cybertech LLP** — [bitscore.in](https://bitscore.in), authorised India partner for
 [Bitsight](https://www.bitsight.com/).
 
-**Latest release: [v0.2.0](https://github.com/nimitt-IN/bitscorecowork/releases/tag/v0.2.0)** —
+**Latest release: [v0.2.1](https://github.com/nimitt-IN/bitscorecowork/releases/tag/v0.2.1)** —
 ten skills, 15 read-only tools, verified against the live Bitsight API.
 [All releases →](https://github.com/nimitt-IN/bitscorecowork/releases)
 
@@ -35,27 +35,30 @@ usage and troubleshooting).
 | Path | What it is |
 | --- | --- |
 | [`bitscorecowork/`](bitscorecowork/) | The plugin source tree — edit here |
-| `bitscorecowork-0.2.0.plugin` | **Current** built, installable plugin (a zip of `bitscorecowork/`) |
-| `bitscorecowork-0.1.1.plugin` | Previous release, kept for anyone still on it |
+| `bitscorecowork-0.2.1.plugin` | **Current** built, installable plugin (a zip of `bitscorecowork/`) |
+| `bitscorecowork-0.2.0.plugin` | Previous release, kept for anyone still on it |
+| `bitscorecowork-0.1.1.plugin` | Older release, kept for anyone still on it |
 | [`LICENSE`](LICENSE) | MIT License |
 
 ## Install
 
-Download **[`bitscorecowork-0.2.0.plugin` from the v0.2.0 release](https://github.com/nimitt-IN/bitscorecowork/releases/tag/v0.2.0)**
+Download **[`bitscorecowork-0.2.1.plugin` from the v0.2.1 release](https://github.com/nimitt-IN/bitscorecowork/releases/tag/v0.2.1)**
 (it's also committed at the repo root) and add it in Claude, or point at the `bitscorecowork/`
 directory as a local plugin. The `bitsight` MCP server starts automatically — no `npm install` and
 no configuration required.
 
-`bitscorecowork-0.1.1.plugin` is retained so existing installs aren't stranded, but it lacks the
-five newer skills and — more importantly — treats an HTTP 403 as an authentication failure, which
-sends you rotating a valid token when Bitsight is really telling you an endpoint isn't in your
-subscription. Upgrade when you can.
+Older bundles are retained so existing installs aren't stranded, but upgrade when you can. 0.2.0
+still describes the retired **Patching Cadence** risk vector and sequences it as slow programme
+work, which is now the wrong advice under Critical Vulnerability Management. 0.1.1 additionally
+lacks the five newer skills and treats an HTTP 403 as an authentication failure, which sends you
+rotating a valid token when Bitsight is really telling you an endpoint isn't in your subscription.
 
 ## Versions
 
 | Version | Skills | Tools | Notes |
 | --- | --- | --- | --- |
-| **[0.2.0](https://github.com/nimitt-IN/bitscorecowork/releases/tag/v0.2.0)** — current | 10 | 15 | Adds `vendor-brief`, `remediation-roadmap`, `cve-sweep`, `regmap`, `quantify`, plus industry-benchmark and threat/CVE tools. Separates 401 (bad token) from 403 (endpoint not in subscription) so a gated endpoint degrades gracefully instead of aborting the workflow. Response shapes corrected against the live API. |
+| **[0.2.1](https://github.com/nimitt-IN/bitscorecowork/releases/tag/v0.2.1)** — current | 10 | 15 | Tracks Bitsight's 16 July 2026 replacement of the **Patching Cadence** risk vector with **Critical Vulnerability Management**. More than a rename: CVM grades on a severity-weighted average time-to-remediate with a 90-day finding lifetime, so `remediation-roadmap` no longer defers it to days 61–90 as slow programme work and instead puts Material/Severe findings in the first 30 days. `regmap`'s framework table, the `mycompany` and `vendor-brief` copy, and the `bitsight_get_findings` risk-vector slug guidance all follow. |
+| [0.2.0](https://github.com/nimitt-IN/bitscorecowork/releases/tag/v0.2.0) | 10 | 15 | Adds `vendor-brief`, `remediation-roadmap`, `cve-sweep`, `regmap`, `quantify`, plus industry-benchmark and threat/CVE tools. Separates 401 (bad token) from 403 (endpoint not in subscription) so a gated endpoint degrades gracefully instead of aborting the workflow. Response shapes corrected against the live API. |
 | [0.1.1](https://github.com/nimitt-IN/bitscorecowork/releases/tag/v0.1.1) | 5 | 11 | Initial release: `mycompany`, `myportfolio`, `boardpack`, `vapt-plan`, `security-test-plan`. |
 
 ## Building the `.plugin` from source
@@ -64,8 +67,8 @@ The `.plugin` file is just a zip of the `bitscorecowork/` directory. After chang
 `bitscorecowork/`, rebuild it so the shipped artifact matches:
 
 ```bash
-rm -f bitscorecowork-0.2.0.plugin
-zip -r -X bitscorecowork-0.2.0.plugin bitscorecowork \
+rm -f bitscorecowork-0.2.1.plugin
+zip -r -X bitscorecowork-0.2.1.plugin bitscorecowork \
   -x '*/.DS_Store' -x '*/node_modules/*'
 ```
 

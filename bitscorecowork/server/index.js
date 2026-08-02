@@ -290,7 +290,7 @@ const TOOLS = [
   {
     name: "bitsight_get_findings_summary",
     description:
-      "Get a summarized count of a company's open security findings (e.g. exposed services, patching cadence issues, insecure systems), broken down by risk vector and severity. Use this to gauge how many and how severe a vendor's issues are without pulling every individual finding.",
+      "Get a summarized count of a company's open security findings (e.g. exposed services, unremediated critical vulnerabilities, insecure systems), broken down by risk vector and severity. Use this to gauge how many and how severe a vendor's issues are without pulling every individual finding.",
     inputSchema: {
       type: "object",
       properties: {
@@ -316,7 +316,7 @@ const TOOLS = [
         risk_vector: {
           type: "string",
           description:
-            "Filter to a single Bitsight risk vector slug, e.g. 'open_ports', 'patching_cadence', 'ssl_configurations', 'web_application_headers', 'botnet_infections'.",
+            "Filter to a single Bitsight risk vector slug, e.g. 'open_ports', 'ssl_configurations', 'web_application_headers', 'botnet_infections'. Note: Patching Cadence was replaced by Critical Vulnerability Management on 16 July 2026. Bitsight may accept 'critical_vulnerability_management', the legacy 'patching_cadence', or both — if one returns an empty set on a company that clearly has vulnerability findings, retry with the other rather than reporting zero.",
         },
         severity_gte: {
           type: "number",

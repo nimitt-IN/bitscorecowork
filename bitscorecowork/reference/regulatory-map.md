@@ -56,7 +56,7 @@ Evidence about configuration and maintenance of internet-facing systems.
 
 | Risk vector | What it evidences | NIST CSF 2.0 | ISO/IEC 27001:2022 | Indian regimes |
 | --- | --- | --- | --- | --- |
-| Patching Cadence | How quickly known vulnerabilities are remediated | ID.RA, PR.PS | A.8.8 | RBI/SEBI/IRDAI vulnerability-management expectations |
+| Critical Vulnerability Management | How quickly disclosed vulnerabilities are remediated, weighted by severity | ID.RA, PR.PS | A.8.8 | RBI/SEBI/IRDAI vulnerability-management expectations |
 | TLS/SSL Certificates | Certificate validity, expiry, and trust chain | PR.DS | A.8.24 | Sectoral data-in-transit protection expectations |
 | TLS/SSL Configurations | Protocol versions and cipher suites in use | PR.DS | A.8.24 | Sectoral data-in-transit protection expectations |
 | Open Ports | Services exposed to the internet | PR.IR, PR.AA | A.8.20, A.8.21 | Sectoral network-security expectations |
