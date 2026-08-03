@@ -71,6 +71,39 @@ include it: report the vectors as unavailable rather than as absent or as zero.
 - Read the number **with** trend and findings: a 760 (Advanced) that just fell 40 points still
   warrants a flag.
 
+## 3a. Risk vectors and severity filtering (one vocabulary, reused everywhere)
+
+**Critical Vulnerability Management is the only name.** Bitsight retired **Patching Cadence** on
+16 July 2026. Every skill, prompt, table and output uses `critical_vulnerability_management` /
+"Critical Vulnerability Management". The retired name must not appear in anything a user sees, and
+you never need to pass it — the `bitsight` server handles the wire-level slug difference itself and
+returns results tagged with the canonical name.
+
+Why this is a rule rather than a preference: an unrecognised `risk_vector` slug does **not** produce
+an error. Bitsight returns **HTTP 200 with an empty result set**, which is indistinguishable from a
+company having no findings. Verified on 3 August 2026 against a company graded **F** on that very
+vector with 210 open findings. If you ever hand-roll a vector filter and get zero back, treat it as
+suspect and cross-check against `bitsight_get_findings_summary` before reporting a clean result.
+
+**Filter severity with `severity_gte`, always.** It takes a **number**, not a category word — the
+API rejects `severity=severe` with HTTP 422. Verified thresholds:
+
+| To include | Pass | Note |
+| --- | --- | --- |
+| Severe only | `severity_gte: 9` | Matches the `severe` count exactly |
+| Material and above | `severity_gte: 8` | Material + severe |
+| Moderate and above | `severity_gte: 6` | Can differ by a few findings at the boundary |
+| Everything | `severity_gte: 1` | Matches the total exactly |
+
+Where a skill needs *categorical* counts, take them from `bitsight_get_findings_summary`, which is
+authoritative. Use `severity_gte` to fetch the individual findings behind those counts. Never filter
+severity client-side by pulling everything and discarding — on a large estate that is tens of
+thousands of findings, and it will time out or truncate before it is wrong.
+
+Pair `severity_gte` with `affects_rating: true` whenever the question is "what is holding the rating
+down", and leave it off when the question is "what is exposed" — findings that don't currently move
+the rating can still matter operationally.
+
 ## 4. Global error handling (one behavior, reused everywhere)
 
 The MCP server already maps HTTP status codes to plain-language messages. Handle them as:
@@ -152,7 +185,12 @@ specific duty on the user's behalf:
 - **DPDP Act, 2023** — if outputs touch personal data of data principals, handle it under the
   Digital Personal Data Protection Act (purpose limitation, minimisation, breach notification).
 - Sectoral third-party/vendor-risk regimes may also apply (e.g. **RBI** outsourcing/IT norms,
-  **SEBI** cybersecurity framework, **IRDAI** guidelines).
+  **SEBI** cybersecurity framework, **IRDAI** guidelines). For **commercial banks**, the RBI
+  (Commercial Banks – Cybersecurity, Technology: Risk, Resilience and Assurance Framework)
+  Directions, 2026 — RBI/DoS/2026-27/410, 31 July 2026, in force immediately — replace the earlier
+  cyber/IT-governance circulars. They do **not** extend to NBFCs, co-operative banks, SFBs, Payments
+  Banks or Local Area Banks. Which instrument applies is entity-specific; ask, and leave the call to
+  the user's compliance team.
 
 Always add: this determination belongs to the user's compliance/legal team; BitScoreCoWork
 supports the evidence trail, it does not certify compliance.
@@ -184,6 +222,8 @@ signals only** — one input into risk management, never a substitute for full d
 - What is a rating — https://help.bitsighttech.com/hc/en-us/articles/231352528-What-is-a-Bitsight-Security-Rating
 - How ratings are calculated — https://help.bitsighttech.com/hc/en-us/articles/231950968-How-are-Bitsight-Security-Ratings-Calculated
 - API Token Management — https://help.bitsighttech.com/hc/en-us/articles/115014888388-API-Token-Management
+- RBI (Commercial Banks – Cybersecurity, Technology: Risk, Resilience and Assurance Framework)
+  Directions, 2026 — https://rbi.org.in/scripts/NotificationUser.aspx?Mode=0&Id=13643
 
 ## 10. Modelled estimates and forward-looking statements
 

@@ -5,10 +5,11 @@ description: >
   findings to NIST CSF 2.0, ISO/IEC 27001:2022 and Indian regulatory obligation
   areas (RBI, SEBI, IRDAI, CERT-In, DPDP). Use when the user asks to "map our
   Bitsight data to NIST", "ISO 27001 evidence from our ratings", "show this
-  against the SEBI/RBI framework", "control mapping", or wants ratings evidence
-  organized for an audit, assessment or supervisory review.
+  against the SEBI/RBI framework", "control mapping", "map this to the RBI
+  Cybersecurity Directions 2026", or wants ratings evidence organized for an
+  audit, assessment or supervisory review.
 metadata:
-  version: "0.2.1"
+  version: "0.3.0"
 ---
 
 # regmap — framework evidence pack from Bitsight data
@@ -49,25 +50,86 @@ output — an auditor can work with it, and it doesn't assert something the data
      evidencing third-party monitoring as a control activity in its own right).
    - **Framework(s)** — NIST CSF 2.0, ISO/IEC 27001:2022, and/or an Indian regime (RBI, SEBI,
      IRDAI, CERT-In, DPDP). Mapping to two frameworks at once is normal; more than that produces an
-     unreadable table, so ask which matter.
+     unreadable table, so ask which matter. **If RBI is one of them, go to step 3 before pulling
+     any data.**
    - **The consumer** — an internal audit team, an external auditor, a customer's assessment
      questionnaire, or a regulator-facing file. This sets the tone and the level of hedging.
    - **Whether the user has their own control mapping already.** If they do, use theirs and map into
      it — an organization's existing control IDs beat a generic reference every time.
 
-3. **Pull the evidence.**
+3. **If RBI was chosen — establish which instrument, then ask for the supplementary material.**
+   This step runs **only** when the user picks RBI. Skip it entirely for NIST, ISO, SEBI, IRDAI,
+   CERT-In or DPDP-only packs.
+
+   **First, which RBI instrument.** The **Reserve Bank of India (Commercial Banks – Cybersecurity,
+   Technology: Risk, Resilience and Assurance Framework) Directions, 2026** (RBI/DoS/2026-27/410,
+   issued 31 July 2026, in force immediately —
+   [source](https://rbi.org.in/scripts/NotificationUser.aspx?Mode=0&Id=13643)) apply to commercial
+   banks other than SFBs, Payments Banks and Local Area Banks, and repeal the earlier cyber and
+   IT-governance instructions for those banks. Other regulated entities stay under the IT governance
+   Master Direction and the outsourcing norms. **Ask the user which applies to the subject entity —
+   never rule on it yourself** (global rules §7). If they don't know, map to the 2026 Directions,
+   label the assumption at the top of the pack, and tell them to have compliance confirm it.
+
+   **Then ask what else to fold in.** Bitsight covers a narrow slice of these Directions. Say so, and
+   ask — in one message, as an invitation rather than a form — for anything the user wants included:
+
+   > *Bitsight evidences the externally visible part of these Directions — roughly the internet-facing
+   > controls in Chapter V, the detection outcomes Chapter VI's CSOC exists to produce, and
+   > third-party monitoring under Chapter IV. Most of the rest sits in your own records. Anything you
+   > want folded into this pack? Paste it, attach it, or point me at it — or say "just the Bitsight
+   > data" and I'll build the pack on that alone and mark the rest as not evidenced.*
+
+   Offer the checklist below so they can see what would strengthen the pack, and against which
+   chapter each item lands. Never require any of it.
+
+   | Chapter | Material that would strengthen the pack |
+   | --- | --- |
+   | II — Role of the Board | Board-approved IT, cybersecurity and business continuity strategy; minutes or resolutions; IT Strategy Committee composition |
+   | III — IT Governance | IT Governance Framework; the standalone Cybersecurity Policy; IT Steering Committee terms of reference; CISO appointment and reporting line |
+   | IV — Risk Management | IT/IS risk register; information asset inventory with criticality classification; vendor risk assessments, outsourcing register and contract clauses on right-to-audit and RBI inspection access |
+   | V — Baseline Controls | VA reports (six-monthly, critical systems) and PT reports (annual); patch and configuration-management records; MFA coverage; DLP; anti-malware coverage; DR drill results with RTO/RPO |
+   | VI — CSOC | CSOC scope and staffing; SIEM log coverage; sample incident investigations; threat-intelligence sharing |
+   | Incident handling | Cyber incident response and recovery policy; DAKSH submissions and timestamps; CERT-In notifications; root-cause analyses |
+   | VII — IS Audit | IS Audit charter and plan; latest IS Audit report and open observations |
+   | Prior supervisory record | Previous RBI inspection findings, compliance submissions, and any existing internal control mapping |
+   | Metrics | KPIs already reported to the Board — patch latency, anti-malware coverage, training completion, IT maturity assessment |
+
+   **How to handle whatever comes back.**
+   - **Use their control IDs, not the reference's.** If they share an existing mapping or a policy
+     with numbered controls, map into it — an organization's own identifiers beat a generic table.
+   - **Label the source of every row**: *Bitsight-observed*, *client-supplied*, or *not evidenced*.
+     A reader must be able to tell the externally observed rows from the ones resting on a document
+     the user handed over. Never blend them.
+   - **Don't assess what they give you.** Record that a document exists and what it covers. Do not
+     conclude that it satisfies a chapter, and do not audit its contents against the Directions —
+     that is their compliance team's work, and the banned-words rule below applies to it too.
+   - **Don't quote paragraph numbers** out of the mapping reference into the pack. Chapter level
+     only, with the source URL, and a line telling them to confirm against the published text.
+   - **Handle it under global rules §8.** Material shared here may contain personal data or
+     third-party confidential information; apply DPDP minimisation and don't retain or forward it
+     beyond building this pack.
+   - If they decline, proceed on Bitsight data alone and make the coverage statement in step 6 do
+     the work. A Bitsight-only RBI pack is a legitimate output — it just has more "not evidenced"
+     rows, and it should say why.
+
+4. **Pull the evidence.**
    - `bitsight_get_company_details` with `include_industry_comparison: true` — rating, per-vector
      grades, trend. The per-vector grades are the backbone of the mapping.
    - `bitsight_get_findings_summary` — open issues per vector, which becomes the "gaps" column.
-   - `bitsight_get_findings` with `affects_rating: true` for the vectors in scope, where the pack
-     needs specifics rather than grades.
+     Quote its categorical counts rather than deriving your own.
+   - `bitsight_get_findings` with `affects_rating: true` and **`severity_gte: 8`** for the vectors in
+     scope, where the pack needs a named specific rather than a grade. An assessor wants the material
+     and severe rows evidenced by asset and date; a full pull buries them. Thresholds are in global
+     rules §3a. Where the pack covers vulnerability remediation, the vector is
+     `critical_vulnerability_management`.
    - `bitsight_get_industry_benchmark` — sector context, useful when the pack must show relative
      posture rather than an absolute claim.
    - For a **portfolio-scope** pack, `bitsight_get_portfolio` (paged fully) plus `bitsight_get_alerts`
      over the review period — together these evidence the *monitoring activity*, which is often the
      actual control being assessed.
 
-4. **Build the mapping table.** One row per risk vector in scope:
+5. **Build the mapping table.** One row per risk vector in scope:
 
    | Column | Content |
    | --- | --- |
@@ -82,24 +144,35 @@ output — an auditor can work with it, and it doesn't assert something the data
    sees the external surface of a control, not its design or operation. A pack where everything is
    "evidenced" is not credible and will not survive an auditor.
 
-5. **Write the coverage statement.** Every pack states, prominently and near the front:
+   **For an RBI pack**, add an **Evidence source** column — *Bitsight-observed* / *client-supplied* /
+   *not evidenced* — and map to the RBI 2026 chapters using the dedicated section of the mapping
+   reference. Where the user supplied material in step 3, add its own rows rather than upgrading a
+   Bitsight row's evidence strength on the strength of a document you have not assessed.
+
+6. **Write the coverage statement.** Every pack states, prominently and near the front:
    - Bitsight observes **externally visible signals only**. Internal controls, policies, governance,
      training, physical security, and internal segmentation are **outside** what this evidences.
    - Framework references are **indicative** and must be confirmed against the current published
      text by the user's compliance team.
    - The pack **supports** an evidence trail; it does not constitute an assessment or a compliance
      conclusion.
+   - **On an RBI pack**, also name the instrument and its citation, state that applicability was
+     confirmed by the user (or assumed, and flag it), and name the material they supplied in step 3
+     — or record that they chose to proceed on Bitsight data alone.
 
-6. **List what this data cannot evidence.** Do this explicitly rather than leaving it implied — a
+7. **List what this data cannot evidence.** Do this explicitly rather than leaving it implied — a
    short section naming the control families in the chosen framework that Bitsight says nothing
-   about. It's what makes the pack usable: the reader learns where to look for other evidence.
+   about. It's what makes the pack usable: the reader learns where to look for other evidence. On an
+   RBI pack this section is long by nature — Board composition, CISO reporting line, CSOC design and
+   staffing, DR drills and RTO/RPO, MFA enforcement, training, IS Audit, and whether incidents were
+   reported to DAKSH within six hours. Write it out; don't compress it into a disclaimer.
 
-7. **Offer the output format:** `.xlsx` via the `xlsx` skill for a mapping matrix an auditor will
+8. **Offer the output format:** `.xlsx` via the `xlsx` skill for a mapping matrix an auditor will
    work through (usually the right choice), `.docx` via the `docx` skill for a narrative pack, or
    Markdown for review. Save it and present it. Date every pack — evidence is a point-in-time
    observation and rating data changes daily.
 
-8. **Offer next steps:** `remediation-roadmap` for the gaps the pack surfaces, `vendor-brief` if a
+9. **Offer next steps:** `remediation-roadmap` for the gaps the pack surfaces, `vendor-brief` if a
    specific third party looks weak, or `boardpack` if the pack's conclusions need leadership airtime.
 
 ## Guardrails
@@ -109,7 +182,13 @@ output — an auditor can work with it, and it doesn't assert something the data
   should say so where it comes up.
 - **Never invent a control identifier or clause number.** If the mapping reference doesn't cover
   something, say the mapping is unavailable rather than producing a plausible-looking ID. A wrong
-  clause number in an audit file is worse than no clause number.
+  clause number in an audit file is worse than no clause number. For the RBI 2026 Directions this
+  means **chapter level only** — cite the chapter and the source URL, and leave paragraph numbers to
+  be read off the published text.
+- **Client-supplied material is recorded, not assessed.** Documents the user hands over in step 3
+  are logged as evidence that exists and cited by name and date. Reviewing them against the
+  Directions is a compliance-team activity and remains outside this skill — the banned words apply
+  to those rows exactly as they do to Bitsight rows.
 - **Never overstate the evidence** to make a pack look complete. The "not evidenced" rows are doing
   real work.
 - Where the pack covers a third party, it contains that party's confidential security posture under

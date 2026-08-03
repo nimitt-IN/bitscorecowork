@@ -134,6 +134,88 @@ function errorResult(message) {
   return { content: [{ type: "text", text: `Error: ${message}` }], isError: true };
 }
 
+// ---- Risk-vector slug compatibility -----------------------------------
+//
+// Bitsight retired the Patching Cadence risk vector on 16 July 2026 and
+// replaced it with Critical Vulnerability Management. The *product* renamed;
+// the *API* did not. Verified against the live API on 3 August 2026:
+//
+//   risk_vector=critical_vulnerability_management -> HTTP 200, count 0
+//   risk_vector=patching_cadence                  -> HTTP 200, count 210
+//   risk_vector=not_a_real_vector                 -> HTTP 200, count 0
+//
+// on a company whose rating_details grades that very vector an F. An
+// unrecognised slug is not rejected — it returns an empty set that is
+// indistinguishable from "this company is clean". That is the dangerous
+// failure: a skill would report no vulnerability findings for a company
+// with hundreds of them.
+//
+// So the wire slug stays `patching_cadence` until Bitsight moves, and this
+// layer owns the difference. Skills, prompts and outputs use exactly one
+// name — `critical_vulnerability_management` — and never see the legacy one.
+// When Bitsight does flip, CANONICAL_FIRST becomes true and nothing else
+// changes.
+
+const CVM = "critical_vulnerability_management";
+const CVM_LEGACY = "patching_cadence";
+
+/** Wire slugs to try, in order, for a caller-supplied risk vector. */
+function riskVectorWireCandidates(riskVector) {
+  if (!riskVector) return [undefined];
+  const v = String(riskVector).trim().toLowerCase();
+  if (v === CVM || v === CVM_LEGACY || v === "cvm") {
+    // Legacy first: it is the one the API currently answers. The canonical
+    // slug is still attempted so this self-heals the day Bitsight switches.
+    return [CVM_LEGACY, CVM];
+  }
+  return [v];
+}
+
+/**
+ * Rewrite the legacy slug to the canonical one anywhere it appears as a
+ * risk-vector identifier in a response, so no skill ever reads it.
+ * Mutates and returns `obj`.
+ */
+function normalizeRiskVectorSlugs(obj) {
+  if (!obj || typeof obj !== "object") return obj;
+
+  // rating_details is keyed by slug.
+  const rd = obj.rating_details;
+  if (rd && typeof rd === "object" && CVM_LEGACY in rd) {
+    const detail = rd[CVM_LEGACY];
+    if (detail && typeof detail === "object") detail.legacy_slug = CVM_LEGACY;
+    rd[CVM] = detail;
+    delete rd[CVM_LEGACY];
+  }
+
+  // findings_risk_vector_counts is a list of { risk_vector: { slug }, count }.
+  const counts = obj.findings_risk_vector_counts;
+  if (Array.isArray(counts)) {
+    for (const row of counts) {
+      if (row && row.risk_vector && row.risk_vector.slug === CVM_LEGACY) {
+        row.risk_vector.slug = CVM;
+        row.risk_vector.legacy_slug = CVM_LEGACY;
+      }
+    }
+  }
+
+  // Individual findings carry risk_vector / risk_vector_label.
+  const results = obj.results;
+  if (Array.isArray(results)) {
+    for (const f of results) {
+      if (f && f.risk_vector === CVM_LEGACY) {
+        f.risk_vector = CVM;
+        f.legacy_risk_vector = CVM_LEGACY;
+        if (typeof f.risk_vector_label === "string") {
+          f.risk_vector_label = "Critical Vulnerability Management";
+        }
+      }
+    }
+  }
+
+  return obj;
+}
+
 // ---- Tool definitions -------------------------------------------------
 
 const TOOLS = [
@@ -284,6 +366,7 @@ const TOOLS = [
           // rather than failing the whole request.
         }
       }
+      normalizeRiskVectorSlugs(data);
       return textResult(data);
     },
   },
@@ -302,6 +385,7 @@ const TOOLS = [
       const data = await bitsightGet(`/v1/companies/${encodeURIComponent(company_guid)}/findings/summaries`, {
         expand: "findings_severity_counts",
       });
+      normalizeRiskVectorSlugs(data);
       return textResult(data);
     },
   },
@@ -316,11 +400,12 @@ const TOOLS = [
         risk_vector: {
           type: "string",
           description:
-            "Filter to a single Bitsight risk vector slug, e.g. 'open_ports', 'ssl_configurations', 'web_application_headers', 'botnet_infections'. Note: Patching Cadence was replaced by Critical Vulnerability Management on 16 July 2026. Bitsight may accept 'critical_vulnerability_management', the legacy 'patching_cadence', or both — if one returns an empty set on a company that clearly has vulnerability findings, retry with the other rather than reporting zero.",
+            "Filter to a single Bitsight risk vector slug, e.g. 'open_ports', 'ssl_configurations', 'web_appsec', 'botnet_infections'. For vulnerability remediation always use 'critical_vulnerability_management' — the retired 'patching_cadence' name must not appear in any prompt or output. This server handles the wire-level slug difference itself and returns results tagged with the canonical name.",
         },
         severity_gte: {
           type: "number",
-          description: "Only include findings at or above this severity (Bitsight severity is roughly 1=minor to 10=severe).",
+          description:
+            "Only include findings at or above this numeric severity (1=minor … 10=severe). Use this rather than a category word — the API rejects 'severe'/'material' with HTTP 422. Verified thresholds: severity_gte 9 = severe, 8 = material and above, 6 = moderate and above, 1 = everything. Category counts from bitsight_get_findings_summary remain authoritative; this numeric filter can differ by a few findings at the moderate/material boundary.",
         },
         affects_rating: {
           type: "boolean",
@@ -332,14 +417,26 @@ const TOOLS = [
       required: ["company_guid"],
     },
     handler: async ({ company_guid, risk_vector, severity_gte, affects_rating, limit, offset }) => {
-      const data = await bitsightGet(`/v1/companies/${encodeURIComponent(company_guid)}/findings`, {
-        risk_vector: risk_vector,
+      const path = `/v1/companies/${encodeURIComponent(company_guid)}/findings`;
+      const base = {
         severity_gte: severity_gte,
         affects_rating: affects_rating === undefined ? undefined : affects_rating ? "true" : "false",
         limit: limit ?? 100,
         offset,
         expand: "attributed_companies",
-      });
+      };
+
+      // An unrecognised risk_vector returns 200 with an empty set rather than
+      // an error, so an empty first attempt is not proof of a clean company.
+      // Try each candidate wire slug and keep the first non-empty answer.
+      const candidates = riskVectorWireCandidates(risk_vector);
+      let data = null;
+      for (const slug of candidates) {
+        data = await bitsightGet(path, { ...base, risk_vector: slug });
+        if (!risk_vector || (data && data.count > 0)) break;
+      }
+
+      normalizeRiskVectorSlugs(data);
       return textResult(data);
     },
   },
@@ -593,7 +690,7 @@ async function handleRequest(req) {
         sendResult(id, {
           protocolVersion: "2024-11-05",
           capabilities: { tools: {} },
-          serverInfo: { name: "bitsight", version: "0.2.0" },
+          serverInfo: { name: "bitsight", version: "0.3.0" },
         });
         return;
 

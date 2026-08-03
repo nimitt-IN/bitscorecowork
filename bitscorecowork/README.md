@@ -1,4 +1,4 @@
-# BitScoreCoWork — v0.2.1
+# BitScoreCoWork — v0.3.0
 
 An asset by **BitScore Cybertech LLP** — [bitscore.in](https://bitscore.in), authorised India
 partner for [Bitsight](https://www.bitsight.com/).
@@ -47,12 +47,81 @@ Everything is **read-only** — nothing here can modify your Bitsight portfolio 
 | **vendor-brief** | "should we onboard this vendor?" | Due-diligence brief, go/no-go call, contract clauses, re-review date |
 | **remediation-roadmap** | "how do we get from 690 to 740?" | Prioritized 30/60/90-day fix plan with owners and effort |
 | **cve-sweep** | "who's exposed to CVE-XXXX?" | Portfolio exposure list, evidence, triage order, outreach drafts |
-| **regmap** | "map this to NIST CSF / ISO 27001" | Framework evidence pack — evidenced / partially / not evidenced |
+| **regmap** | "map this to NIST CSF / ISO 27001 / the RBI Directions" | Framework evidence pack — evidenced / partially / not evidenced |
 | **quantify** | "what's our exposure in rupees?" | Indicative financial exposure range with every assumption shown |
 | **vapt-plan** | "build a VAPT / vulnerability-assessment plan" | Findings report + assessment plan (identification only) |
 | **security-test-plan** | "create a VAPT/BAS engagement plan" | Full test plan, RoE, ATT&CK scenarios, report scaffold |
 
 See [`HELP_GUIDE.md`](HELP_GUIDE.md) for example prompts, expected inputs, and troubleshooting.
+
+---
+
+## What's new in 0.3.0
+
+**`regmap` maps to the RBI Directions, 2026.** The Reserve Bank of India issued the
+[Reserve Bank of India (Commercial Banks – Cybersecurity, Technology: Risk, Resilience and Assurance
+Framework) Directions, 2026](https://rbi.org.in/scripts/NotificationUser.aspx?Mode=0&Id=13643) on
+**31 July 2026** (RBI/DoS/2026-27/410), in force immediately. They apply to commercial banks other
+than Small Finance Banks, Payments Banks and Local Area Banks, and they **repeal** the earlier
+cybersecurity and IT-governance instructions for those banks. A pack that still cites the superseded
+circulars is citing the wrong instrument.
+
+The mapping reference now carries a dedicated, source-cited RBI section: which entities the
+Directions cover and which they don't, the eight chapters, a risk-vector → chapter table with an
+explicit *what this cannot show* column, and the portfolio and vendor activities that evidence
+Chapter IV third-party oversight. References are **chapter-level by design** — paragraph numbers are
+read off the published text, not out of this plugin.
+
+**`regmap` now asks for your own material when RBI is the framework.** Bitsight evidences the
+external surface of Chapter V, the detection outcomes Chapter VI's CSOC exists to produce, and
+third-party monitoring under Chapter IV. Most of these Directions — Board and IT Strategy Committee,
+CISO reporting line, CSOC staffing, VA/PT reports, DR drills and RTO/RPO, MFA enforcement, training,
+IS Audit, DAKSH incident submissions — sit in records only the bank has. So when RBI is chosen, and
+only then, the skill first asks **which RBI instrument applies** (it never rules on applicability
+itself), then invites you to hand over policies, VA/PT reports, audit findings, the outsourcing
+register, prior inspection findings, or an existing control mapping, with a chapter-by-chapter
+checklist of what would strengthen the pack.
+
+Nothing is required. Decline and you get a Bitsight-only pack with more "not evidenced" rows and a
+coverage statement that says why. What you do supply is **recorded, never assessed**: RBI rows carry
+an evidence-source column — *Bitsight-observed*, *client-supplied*, *not evidenced* — so a reader can
+always tell which is which, and a supplied document never upgrades a Bitsight row. Judging your
+documents against the Directions stays with your compliance team, where it belongs.
+
+Other frameworks are untouched: NIST, ISO, SEBI, IRDAI, CERT-In and DPDP packs behave exactly as
+they did in 0.2.1.
+
+### One risk-vector name, one severity filter
+
+**`critical_vulnerability_management` is now the only vector name in the plugin.** 0.2.1 documented
+both it and the retired `patching_cadence` slug and asked the model to retry with the other if one
+came back empty. Testing against the live API on 3 August 2026 showed why that was not good enough:
+
+| `risk_vector` sent | Result |
+| --- | --- |
+| `critical_vulnerability_management` | HTTP 200, **0 findings** |
+| `patching_cadence` | HTTP 200, **210 findings** |
+| `not_a_real_vector` | HTTP 200, **0 findings** |
+
+— on a company Bitsight grades **F** on that vector. The product renamed; the API did not. And an
+unrecognised slug isn't rejected, it returns an empty set that looks exactly like a clean company.
+Leaving that to a retry heuristic meant a skill could report "no vulnerability findings" for an
+estate with hundreds, and be believed.
+
+The MCP server now owns the difference. Skills, prompts and outputs use one name; the server tries
+the wire slug that actually answers, falls back automatically, and rewrites the legacy slug to the
+canonical one in `rating_details`, `findings_risk_vector_counts` and individual findings before any
+skill sees it. When Bitsight switches the API over, one constant changes and nothing else.
+
+**Severity is filtered with `severity_gte`, everywhere, as a number.** The API rejects
+`severity=severe` with HTTP 422 — a mistake that is easy to make and returns an error rather than a
+wrong answer, but only if you make it that way round. Thresholds are verified against the
+categorical counts: **9** = severe, **8** = material and above, **6** = moderate and above, **1** =
+everything. All ten skills now name an explicit floor appropriate to their output — 8 for
+vendor-brief, regmap, vapt-plan and security-test-plan, staged 8→6 for remediation-roadmap — instead
+of pulling everything and discarding client-side, which on a large estate truncates before it is
+useful. Categorical counts still come from `bitsight_get_findings_summary`, which stays
+authoritative.
 
 ---
 
@@ -176,9 +245,15 @@ out separately by BitScore's licensed testers under the signed RoE.
   security posture. These skills summarize in-conversation and avoid writing data to files or sharing
   it unless you ask.
 - **India-specific obligations** (CERT-In 6-hour incident reporting and log retention; DPDP Act, 2023
-  for personal data; RBI/SEBI/IRDAI third-party risk norms) are surfaced where relevant. The
-  `regmap` skill organizes observed evidence against framework control areas, but it does **not**
-  determine compliance or give legal advice — loop in your compliance/legal team.
+  for personal data; the RBI Cybersecurity, Technology: Risk, Resilience and Assurance Framework
+  Directions, 2026 for commercial banks; RBI/SEBI/IRDAI third-party risk norms) are surfaced where
+  relevant. The `regmap` skill organizes observed evidence against framework control areas, but it
+  does **not** determine compliance, rule on whether a regime applies to you, or give legal advice —
+  loop in your compliance/legal team.
+- **Anything you hand `regmap` stays with the pack.** If you supply policies, audit reports or an
+  existing control mapping for an RBI pack, that material is used to build the pack and nothing
+  else — it is not written anywhere you didn't ask for, and DPDP minimisation applies to it as it
+  does to findings data.
 
 ### Two things worth knowing before you rely on an output
 
@@ -208,6 +283,8 @@ out separately by BitScore's licensed testers under the signed RoE.
 | **Company / GUID not found (404)** | The GUID/portfolio ID is wrong or not in this token's portfolio. `bitsight_search_portfolio_company` only finds companies already monitored — add others via the Bitsight platform first. |
 | **Rate limited (429)** | Too many calls too fast. The skills back off and retry; if it persists, wait a minute and retry. |
 | **Empty result** | No matching data — the skills say so rather than inventing numbers. |
+| **A vector shows zero findings but a poor grade** | Shouldn't happen from 0.3.0 on: the server resolves the Critical Vulnerability Management slug against whichever name the API currently answers. If you see it on another vector, the slug is being rejected silently (Bitsight returns 200 with an empty set, not an error) — cross-check `bitsight_get_findings_summary`, which is authoritative. |
+| **"Input should be a valid number" (422)** | A severity category word was passed where a number belongs. Severity filters use `severity_gte`: 9 severe, 8 material and above, 6 moderate and above, 1 everything. |
 | **Server won't start** | Ensure Node.js 18+ is available. No `npm install` is required — the server uses only Node built-ins. |
 
 ---

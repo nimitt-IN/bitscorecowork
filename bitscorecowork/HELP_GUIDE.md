@@ -154,6 +154,7 @@ order, and draft vendor outreach — **drafts only, nothing is sent.**
 - "Map our Bitsight data to NIST CSF."
 - "ISO 27001 evidence from our ratings."
 - "Show this against the SEBI framework for our review."
+- "Map this to the RBI Cybersecurity Directions 2026."
 
 **Example prompt**
 > "Build a regmap evidence pack for our org against NIST CSF 2.0 and ISO 27001:2022, as an .xlsx —
@@ -163,9 +164,31 @@ order, and draft vendor outreach — **drafts only, nothing is sent.**
 and who's going to read it. If you already have an internal control mapping, share it — yours will
 be used instead of the generic reference.
 
+### Picking RBI
+
+Choosing RBI changes the flow. Before pulling any data, the skill asks **which RBI instrument
+applies** to the entity — the
+[Cybersecurity, Technology: Risk, Resilience and Assurance Framework Directions, 2026](https://rbi.org.in/scripts/NotificationUser.aspx?Mode=0&Id=13643)
+(RBI/DoS/2026-27/410, 31 July 2026, in force immediately) cover commercial banks other than SFBs,
+Payments Banks and Local Area Banks and repeal the earlier circulars for them; everyone else stays
+under the IT governance Master Direction and the outsourcing norms. It will ask rather than decide —
+applicability is your compliance team's call.
+
+It then **invites you to add your own material**, with a chapter-by-chapter checklist: Board-approved
+strategy and minutes, the Cybersecurity Policy and IT Governance Framework, CISO appointment, the
+IT/IS risk register and asset inventory, VA and PT reports, patch and MFA coverage, DR drill results
+with RTO/RPO, CSOC scope and SIEM coverage, incident-response policy and DAKSH submissions, IS Audit
+reports, prior RBI inspection findings, and any control mapping you already maintain.
+
+**None of it is required.** Say *"just the Bitsight data"* and you get a Bitsight-only pack — more
+"not evidenced" rows, and a coverage statement explaining why. What you do supply is **recorded, not
+assessed**: RBI rows carry an evidence-source column (*Bitsight-observed* / *client-supplied* /
+*not evidenced*) so the two never blur, and a supplied document never upgrades a Bitsight row.
+References are chapter-level; read paragraph numbers off the published text.
+
 > ⚖️ **This is an evidence pack, not an assessment.** It reports what is *evidenced*, *partially
-> evidenced*, or *not evidenced by this data* — never "compliant". Framework references are
-> indicative; your compliance team confirms them.
+> evidenced*, or *not evidenced by this data* — never "compliant". It does not rule on whether a
+> regime applies to you. Framework references are indicative; your compliance team confirms them.
 
 ---
 
@@ -247,6 +270,8 @@ hard-refused.
 | "Not found…" | **404** | Bad GUID / portfolio ID, or not in this token's portfolio | Re-confirm the identifier. Use `bitsight_search_portfolio_company` to look up a GUID; companies outside your portfolio must be added in the Bitsight platform first. |
 | "Rate limited…" | **429** | Too many requests too quickly | The skills back off and retry automatically; if it persists, wait ~a minute and retry. |
 | "No data returned" | — | Nothing matched your query/filter | Accepted as-is — the skills will **not** invent data. Broaden the filter or re-check the scope. |
+| "Input should be a valid number…" | **422** | A severity *category* was sent where a number belongs | Severity filters are numeric: `severity_gte` 9 = severe, 8 = material and above, 6 = moderate and above, 1 = everything. The skills do this for you. |
+| A risk vector reads zero findings but grades badly | **200** | A risk-vector slug Bitsight doesn't recognise returns an *empty set*, not an error — so it looks like a clean company | From 0.3.0 the server resolves the Critical Vulnerability Management slug automatically. If you hit it elsewhere, trust `bitsight_get_findings_summary` over a filtered pull. |
 | Server won't start | — | Node.js missing/old | Ensure Node.js 18+ is installed. No `npm install` needed. |
 
 ---

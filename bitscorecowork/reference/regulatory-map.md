@@ -30,6 +30,10 @@ against the control it speaks to.
 - **ISO/IEC 27001:2022** — Annex A control areas.
 - **Indian regimes** — the obligation *theme* most commonly engaged.
 
+For **RBI** subjects there is a dedicated, source-cited section further down — see
+[RBI Directions, 2026 (commercial banks)](#rbi-directions-2026--commercial-banks). The "Indian
+regimes" column below stays thematic; the RBI section is where chapter-level references live.
+
 ---
 
 ## Compromised Systems
@@ -109,6 +113,72 @@ Continuous third-party monitoring is itself a control activity, independent of a
 
 ---
 
+## RBI Directions, 2026 — commercial banks
+
+**Reserve Bank of India (Commercial Banks – Cybersecurity, Technology: Risk, Resilience and
+Assurance Framework) Directions, 2026**
+
+| | |
+| --- | --- |
+| **Reference** | RBI/DoS/2026-27/410 · DoS.CO.CSITEG.4/31.01.015/2026-27 |
+| **Issued** | 31 July 2026, Department of Supervision |
+| **In force** | Immediately upon issuance |
+| **Source** | https://rbi.org.in/scripts/NotificationUser.aspx?Mode=0&Id=13643 |
+
+**Who it covers.** Commercial banks under the Banking Regulation Act, 1949, **excluding** Small
+Finance Banks, Payments Banks and Local Area Banks. Foreign banks operating in branch mode follow a
+comply-or-explain approach on selected provisions. It **repeals** the previous cybersecurity and
+IT-governance instructions for the banks it covers — so for a covered bank this is the current
+instrument, and the older circulars are the wrong thing to cite.
+
+**Who it does not cover.** NBFCs, co-operative banks, SFBs, Payments Banks, Local Area Banks and
+payment system operators remain under their own RBI instruments — the IT Governance, Risk, Controls
+and Assurance Practices Master Direction and the applicable outsourcing norms. **Ask the user which
+RBI instrument set applies to them; never decide it for them.** Applicability is a determination for
+their compliance and legal team (global rules §7).
+
+**Chapters** — cite at this level. Chapter I Preliminary · II Role of the Board · III Information
+Technology Governance and Oversight · IV IT and Information Security Risk Management · V Baseline
+Cybersecurity and Resilience Requirements · VI Cyber Security Operations Centre · VII Information
+Systems Audit · VIII Repeal and Other Provisions.
+
+> **Chapter-level only.** Reference these Directions by chapter and obligation theme. Do **not**
+> quote paragraph numbers into an audit file from this reference — read them off the published text
+> at the source URL above and have the compliance team confirm them. A wrong paragraph number in a
+> supervisory response costs more than an absent one.
+
+### Risk vector → RBI 2026 obligation area
+
+| Risk vector | RBI 2026 chapter | Obligation area it speaks to | What it cannot show |
+| --- | --- | --- | --- |
+| Critical Vulnerability Management | V | Vulnerability management and remediation within defined timeframes; secure configuration and patch management | The VA/PT programme itself — six-monthly VA and annual PT on critical systems, by independent trained assessors, is an internal record |
+| TLS/SSL Certificates · TLS/SSL Configurations | V | Protection of data in transit | Data-at-rest and endpoint DLP, which are internal |
+| Open Ports · DNSSEC | V | Secure configuration; network security of internet-facing infrastructure | Internal segmentation and the internal network entirely |
+| Web Application Headers · Mobile Application Security | V | Application security controls on customer-facing channels | Application source, SDLC and pre-release testing |
+| Insecure Systems · Server Software · Desktop / Mobile Software | IV, V | Information asset inventory and criticality classification; software currency; unauthorised-software controls | Whether whitelisting or blocking of unauthorised installation is actually enforced |
+| Botnet Infections · Malware Servers · Potentially Exploited · Spam Propagation · Unsolicited Communications | VI | Continuous surveillance; detection capability of the Cyber Security Operations Centre | The CSOC's own design, staffing, SIEM coverage and L1/L2/L3 escalation |
+| Exposed Credentials | V | Multi-factor authentication and credential protection; customer and staff awareness | Whether MFA is enforced on privileged and critical systems — internal only |
+| Security Incidents (public disclosure) | V | Cyber incident response and recovery; reporting of incidents | Whether an incident was reported to DAKSH within six hours of detection, or notified to CERT-In |
+| Domain Squatting | V, VI | Brand-abuse and phishing monitoring; customer education on phishing | Take-down action actually taken |
+
+### Portfolio and vendor activity → RBI 2026 obligation area
+
+| Activity | RBI 2026 chapter | Obligation area it speaks to |
+| --- | --- | --- |
+| Continuous external monitoring of third parties | IV | Ongoing oversight of service providers, proportionate to materiality |
+| Pre-contract vendor due diligence (`vendor-brief`) | IV | Vendor risk assessment commensurate with materiality |
+| Retained, dated evidence packs for supervisory review | III, VII | IT governance oversight; risk-based Information Systems Audit |
+| Board-level reporting of external posture (`boardpack`) | II, III | Board approval and oversight of IT, cybersecurity and resilience strategy |
+
+**Care point.** These Directions are dense on things Bitsight cannot see — Board composition and the
+IT Strategy Committee, the CISO's reporting line, CSOC staffing, DR drills and RTO/RPO, training,
+IS Audit, DAKSH reporting. An RBI-scoped pack that does not say so plainly is misleading. Bitsight
+evidences the **external surface** of Chapter V and the **detection outcomes** relevant to Chapter VI,
+and it evidences third-party monitoring under Chapter IV as an activity in its own right. Nothing
+more.
+
+---
+
 ## Indian regimes — orientation notes
 
 Short, non-exhaustive context. Applicability is always entity-specific.
@@ -120,8 +190,13 @@ Short, non-exhaustive context. Applicability is always entity-specific.
 - **DPDP Act, 2023** — engaged wherever outputs touch personal data of data principals. Purpose
   limitation and minimisation apply to what you extract and retain from findings, especially
   exposed-credential data.
-- **RBI** — IT governance, risk, controls and assurance expectations, and outsourcing norms for
-  regulated entities, which include third-party risk assessment and ongoing monitoring.
+- **RBI** — for **commercial banks**, the Cybersecurity, Technology: Risk, Resilience and Assurance
+  Framework Directions, 2026 (31 July 2026) are the current instrument and supersede the earlier
+  cyber/IT-governance circulars; see the [dedicated section above](#rbi-directions-2026--commercial-banks).
+  For **other regulated entities** — NBFCs, co-operative banks, SFBs, Payments Banks, payment system
+  operators — the IT governance, risk, controls and assurance expectations and the outsourcing norms
+  continue to apply, including third-party risk assessment and ongoing monitoring. Which set applies
+  is entity-specific: ask, don't assume.
 - **SEBI** — the cybersecurity and cyber-resilience framework for regulated market entities,
   including third-party and vendor-risk provisions.
 - **IRDAI** — information and cybersecurity guidelines for insurers and intermediaries, including

@@ -7,7 +7,7 @@ description: >
   security rating", "portfolio-wide security ratings", or wants ratings across a
   whole monitored portfolio rather than a single company.
 metadata:
-  version: "0.2.1"
+  version: "0.3.0"
 ---
 
 # MyPortfolio — ratings across a managed portfolio

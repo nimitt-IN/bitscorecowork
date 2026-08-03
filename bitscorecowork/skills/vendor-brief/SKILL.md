@@ -8,7 +8,7 @@ description: >
   "assess this third party before we sign", or wants one vendor assessed for an
   onboarding or renewal decision (as opposed to a whole-portfolio pull).
 metadata:
-  version: "0.2.1"
+  version: "0.3.0"
 ---
 
 # vendor-brief — pre-contract due-diligence brief on one vendor
@@ -49,8 +49,12 @@ contractual and financial due diligence).
 4. **Pull the evidence.**
    - `bitsight_get_company_details` with `include_industry_comparison: true` — current rating, the
      1-year history (read the **trend**, not just today's number), risk-vector grades, percentile.
-   - `bitsight_get_findings_summary` — issue counts by risk vector and severity.
-   - `bitsight_get_findings` with `affects_rating: true` and a severity floor — the material issues.
+   - `bitsight_get_findings_summary` — issue counts by risk vector and severity, and the
+     authoritative source for the categorical counts you quote.
+   - `bitsight_get_findings` with `affects_rating: true` and **`severity_gte: 8`** — material and
+     severe only. A due-diligence brief is a decision document; the minor findings are noise in it,
+     and on a large vendor they are tens of thousands of rows. Drop to `severity_gte: 6` only if the
+     material-and-above set comes back thin. See global rules §3a for the thresholds.
      Page through rather than reporting only the first page.
    - `bitsight_get_alerts` for this company over the last 90 days — recent deterioration.
    - `bitsight_get_rating_change_insights` if the history shows a notable move, to explain the driver.

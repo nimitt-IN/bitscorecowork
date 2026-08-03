@@ -8,7 +8,7 @@ description: >
   findings report", or wants a scoped VA plan and findings mapped to Bitsight risk
   vectors. Planning/reporting only — it never scans or exploits anything.
 metadata:
-  version: "0.2.1"
+  version: "0.3.0"
 ---
 
 # vapt-plan — vulnerability-assessment plan & findings (identification only)
@@ -44,7 +44,11 @@ Section 5 (the **authorization gate**) and Section 7 (IT Act, 2000) are mandator
    - `bitsight_get_findings` — individual findings (exposed/insecure services, unpatched software,
      weak TLS, open ports, misconfigurations) with affected assets and evidence. Page through
      results; filter by `risk_vector`, `severity_gte`, or `affects_rating` as scope dictates.
-   - `bitsight_get_findings_summary` for the risk-vector/severity rollup.
+     **`severity_gte` takes a number, never a category word** — start at `severity_gte: 8` for the
+     material-and-severe worklist and widen only if it comes back thin. Global rules §3a has the
+     thresholds. For vulnerability findings the vector is `critical_vulnerability_management`.
+   - `bitsight_get_findings_summary` for the risk-vector/severity rollup — the authoritative
+     categorical counts, and the cross-check that a filtered pull didn't silently return nothing.
 
 4. **Confirm scope selection:** all IPs + domains, a selective subset, or **by Bitsight asset
    criticality** (`importance`). Restrict everything downstream to the authorized, in-scope set.
