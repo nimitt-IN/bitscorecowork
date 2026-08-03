@@ -7,7 +7,7 @@ description: >
   at 690, how do we get to 740", "what should we fix first", "rating improvement
   plan", or wants findings turned into a prioritized, ownable work plan.
 metadata:
-  version: "0.2.1"
+  version: "0.3.0"
 ---
 
 # remediation-roadmap — a sequenced plan to improve a rating
@@ -52,10 +52,15 @@ honest one isn't available, and give them the sequence and the reasoning instead
    - `bitsight_get_company_details` with `include_industry_comparison: true` — current rating, the
      12-month trajectory, per-vector grades, industry percentile.
    - `bitsight_get_findings_summary` — the distribution of open findings across vectors and severity.
-     This is the backbone of the prioritization.
+     This is the backbone of the prioritization, and the authoritative source for categorical counts.
    - `bitsight_get_findings` with `affects_rating: true`, paged through fully — the actual work items.
      Group them by risk vector and by affected asset; a single misconfigured host often generates
      several findings and is one fix.
+   - **Sequence the fetch by severity** (global rules §3a). Start with `severity_gte: 8` — material
+     and severe — because that is the roadmap's first 30 days; widen to `severity_gte: 6` for the
+     60/90-day tail. On a large estate a full `severity_gte: 1` pull is tens of thousands of findings
+     and will truncate before it is useful.
+   - For the vulnerability work specifically, use `risk_vector: "critical_vulnerability_management"`.
    - `bitsight_get_industry_benchmark` for the company's industry slug — to identify vectors where
      the company is *below* its sector, which is where the gap is both largest and most defensible
      to leadership.
@@ -76,7 +81,7 @@ honest one isn't available, and give them the sequence and the reasoning instead
    start the slow ones early rather than saving them for last.
 
    **Critical Vulnerability Management is the exception, and it is the important one.** Since
-   16 July 2026 this vector — 20% of the rating, and what used to be Patching Cadence — grades on a
+   16 July 2026 this vector — 20% of the rating — grades on a
    **severity-weighted average time-to-remediate**, with findings living 90 days. A Material or
    Severe vulnerability remediated promptly moves the grade substantially and quickly; a long tail
    of Minor ones barely registers. Do not treat it as slow programme work to be deferred: the

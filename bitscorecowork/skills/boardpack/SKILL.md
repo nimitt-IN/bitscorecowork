@@ -7,7 +7,7 @@ description: >
   deck about our Bitsight score", "quarterly cyber risk deck for leadership", or
   wants Bitsight data turned into a leadership/board presentation (not a raw pull).
 metadata:
-  version: "0.2.1"
+  version: "0.3.0"
 ---
 
 # BoardPack — executive briefing from Bitsight data
@@ -56,7 +56,9 @@ framework you're following:
    - `bitsight_get_alerts` for the period to surface what changed.
    - For each company below "needs attention" (rating < 640) or with a MATERIAL/DANGER alert:
      `bitsight_get_company_details` (with `include_industry_comparison: true`) and
-     `bitsight_get_findings_summary`.
+     `bitsight_get_findings_summary` — quote its categorical counts rather than deriving them. If a
+     slide needs the findings themselves, fetch with a numeric `severity_gte` (9 severe, 8 material
+     and above); a board slide never wants the minor tail. See global rules §3a.
    - `bitsight_get_rating_change_insights` for any company with a notable move, to explain the driver.
    - Cap the "top risks" detail section at the **5–8** highest-priority companies. Band everything
      with the exact tier colors from the global rules.

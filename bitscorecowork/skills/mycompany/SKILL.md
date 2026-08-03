@@ -7,7 +7,7 @@ description: >
   rating", or wants a single organization's current Bitsight rating and risk-vector
   breakdown (as opposed to a whole-portfolio pull or a board deck).
 metadata:
-  version: "0.2.1"
+  version: "0.3.0"
 ---
 
 # MyCompany — your organization's Bitsight security rating
@@ -49,7 +49,10 @@ handling, no discrimination, India context). The steps below assume those rules 
 
 5. **Pull the data:**
    - `bitsight_get_company_details` with `include_industry_comparison: true`.
-   - `bitsight_get_findings_summary` for the same GUID.
+   - `bitsight_get_findings_summary` for the same GUID — the authoritative categorical counts. If
+     the user wants the findings behind a category, fetch them with `bitsight_get_findings` and a
+     numeric `severity_gte` (9 severe, 8 material and above), never a category word: the API rejects
+     `severity=severe` outright. See global rules §3a.
    - If the 1-year history shows a notable recent move (~10+ points either way), also call
      `bitsight_get_rating_change_insights` to explain the driver.
 
