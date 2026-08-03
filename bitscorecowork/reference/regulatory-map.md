@@ -107,7 +107,7 @@ Continuous third-party monitoring is itself a control activity, independent of a
 
 | Activity | NIST CSF 2.0 | ISO/IEC 27001:2022 | Indian regimes |
 | --- | --- | --- | --- |
-| Continuous monitoring of third parties' external posture | GV.SC, ID.RA | A.5.19, A.5.20, A.5.21, A.5.22 | RBI outsourcing/IT governance; SEBI cybersecurity framework; IRDAI outsourcing & cyber guidelines |
+| Continuous monitoring of third parties' external posture | GV.SC, ID.RA | A.5.19, A.5.20, A.5.21, A.5.22 | RBI outsourcing Directions, 2025 (commercial banks; parallel NBFC instrument) and IT governance expectations; SEBI cybersecurity framework; IRDAI outsourcing & cyber guidelines |
 | Pre-contract due diligence on a vendor | GV.SC, ID.RA | A.5.19, A.5.20 | RBI/SEBI/IRDAI third-party due-diligence expectations |
 | Evidence retention for supervisory review | GV.OV, GV.SC | A.5.19, A.5.22 | CERT-In log-retention direction; sectoral record-keeping expectations |
 
@@ -136,6 +136,22 @@ payment system operators remain under their own RBI instruments — the IT Gover
 and Assurance Practices Master Direction and the applicable outsourcing norms. **Ask the user which
 RBI instrument set applies to them; never decide it for them.** Applicability is a determination for
 their compliance and legal team (global rules §7).
+
+**What it does *not* replace: outsourcing.** These Directions do not absorb outsourcing governance,
+and assuming they do is the easy mistake. Outsourcing for commercial banks sits in the **Reserve
+Bank of India (Commercial Banks – Managing Risks in Outsourcing) Directions, 2025** —
+RBI/DOR/2025-26/171, issued 28 November 2025, existing IT outsourcing agreements to comply by
+10 April 2026 — which themselves repealed the 2023 Master Direction on Outsourcing of IT Services
+for those banks. NBFCs have a parallel 2025 instrument. Source:
+https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13139
+
+The 2026 Directions expressly **preserve** that instrument and carve around it: their third-party
+provisions apply only to IT and cybersecurity arrangements falling *outside* the outsourcing
+Directions. So a covered bank runs both — outsourcing governance (materiality, due diligence, audit
+rights reaching subcontractors, concentration, exit) under the 2025 Directions, cybersecurity
+controls and supervisory reporting under the 2026 Directions. Map vendor-oversight evidence to the
+outsourcing instrument, not to Chapter IV, unless the arrangement genuinely sits outside it — and
+say which you have assumed.
 
 **Chapters** — cite at this level. Chapter I Preliminary · II Role of the Board · III Information
 Technology Governance and Oversight · IV IT and Information Security Risk Management · V Baseline
@@ -190,13 +206,19 @@ Short, non-exhaustive context. Applicability is always entity-specific.
 - **DPDP Act, 2023** — engaged wherever outputs touch personal data of data principals. Purpose
   limitation and minimisation apply to what you extract and retain from findings, especially
   exposed-credential data.
-- **RBI** — for **commercial banks**, the Cybersecurity, Technology: Risk, Resilience and Assurance
-  Framework Directions, 2026 (31 July 2026) are the current instrument and supersede the earlier
-  cyber/IT-governance circulars; see the [dedicated section above](#rbi-directions-2026--commercial-banks).
-  For **other regulated entities** — NBFCs, co-operative banks, SFBs, Payments Banks, payment system
-  operators — the IT governance, risk, controls and assurance expectations and the outsourcing norms
-  continue to apply, including third-party risk assessment and ongoing monitoring. Which set applies
-  is entity-specific: ask, don't assume.
+- **RBI** — two separate tracks, and they are not alternatives.
+  - *Cybersecurity and IT governance.* For **commercial banks**, the Cybersecurity, Technology:
+    Risk, Resilience and Assurance Framework Directions, 2026 (31 July 2026) are the current
+    instrument and supersede the earlier cyber/IT-governance circulars; see the
+    [dedicated section above](#rbi-directions-2026--commercial-banks). Other regulated entities —
+    NBFCs, co-operative banks, SFBs, Payments Banks, payment system operators — remain under the IT
+    governance, risk, controls and assurance expectations.
+  - *Outsourcing and vendor oversight.* For **commercial banks**, the Managing Risks in Outsourcing
+    Directions, 2025 (28 November 2025), which repealed the 2023 IT-outsourcing Master Direction for
+    them; NBFCs have a parallel 2025 instrument. The 2026 cyber Directions preserve these rather
+    than absorbing them.
+  - Which set applies is entity-specific, and vendor-oversight evidence usually belongs against the
+    outsourcing instrument rather than the cyber one: ask, don't assume.
 - **SEBI** — the cybersecurity and cyber-resilience framework for regulated market entities,
   including third-party and vendor-risk provisions.
 - **IRDAI** — information and cybersecurity guidelines for insurers and intermediaries, including
