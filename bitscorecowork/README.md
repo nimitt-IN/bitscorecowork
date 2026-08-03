@@ -1,4 +1,4 @@
-# BitScoreCoWork — v0.3.0
+# BitScoreCoWork — v0.3.1
 
 An asset by **BitScore Cybertech LLP** — [bitscore.in](https://bitscore.in), authorised India
 partner for [Bitsight](https://www.bitsight.com/).
@@ -53,6 +53,31 @@ Everything is **read-only** — nothing here can modify your Bitsight portfolio 
 | **security-test-plan** | "create a VAPT/BAS engagement plan" | Full test plan, RoE, ATT&CK scenarios, report scaffold |
 
 See [`HELP_GUIDE.md`](HELP_GUIDE.md) for example prompts, expected inputs, and troubleshooting.
+
+---
+
+## What's new in 0.3.1
+
+**Outsourcing is a separate RBI instrument, and 0.3.0 blurred it.** 0.3.0 described non-bank
+entities as remaining under "the IT governance Master Direction and the outsourcing norms", which
+left the impression that the 2026 cybersecurity Directions had absorbed outsourcing for the banks
+they cover. Checking the text: they had not, and they say so explicitly. Their third-party
+paragraphs apply *only* to IT and cybersecurity arrangements falling **outside** the
+[RBI (Commercial Banks – Managing Risks in Outsourcing) Directions, 2025](https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13139)
+— RBI/DOR/2025-26/171, issued 28 November 2025, existing IT outsourcing agreements to comply by
+10 April 2026. Those 2025 Directions are themselves what repealed the 2023 Master Direction on
+Outsourcing of IT Services for commercial banks; NBFCs have a parallel 2025 instrument.
+
+So a covered bank runs two tracks, and evidence files differently against each: outsourcing
+governance — materiality, due diligence, audit rights reaching subcontractors, concentration, exit —
+under the 2025 Directions; cybersecurity controls and supervisory reporting under the 2026
+Directions. `regmap` now asks which of the two a pack is actually about before mapping vendor
+oversight, and the RBI checklist separates the outsourcing artefacts from the Chapter IV ones. The
+mapping reference and global rules §7 carry the distinction.
+
+This matters because it is the kind of error that survives review: both instruments are recent, both
+are RBI, both have a third-party chapter, and mapping vendor due diligence to the wrong one produces
+a pack that looks right and cites the wrong authority.
 
 ---
 

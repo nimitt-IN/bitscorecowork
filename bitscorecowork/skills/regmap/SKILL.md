@@ -9,7 +9,7 @@ description: >
   Cybersecurity Directions 2026", or wants ratings evidence organized for an
   audit, assessment or supervisory review.
 metadata:
-  version: "0.3.0"
+  version: "0.3.1"
 ---
 
 # regmap — framework evidence pack from Bitsight data
@@ -67,9 +67,18 @@ output — an auditor can work with it, and it doesn't assert something the data
    [source](https://rbi.org.in/scripts/NotificationUser.aspx?Mode=0&Id=13643)) apply to commercial
    banks other than SFBs, Payments Banks and Local Area Banks, and repeal the earlier cyber and
    IT-governance instructions for those banks. Other regulated entities stay under the IT governance
-   Master Direction and the outsourcing norms. **Ask the user which applies to the subject entity —
-   never rule on it yourself** (global rules §7). If they don't know, map to the 2026 Directions,
-   label the assumption at the top of the pack, and tell them to have compliance confirm it.
+   Master Direction. **Ask the user which applies to the subject entity — never rule on it yourself**
+   (global rules §7). If they don't know, map to the 2026 Directions, label the assumption at the top
+   of the pack, and tell them to have compliance confirm it.
+
+   **And ask whether the pack is really about outsourcing**, because that is a different instrument.
+   Vendor due diligence, monitoring, audit rights and exit sit in the **RBI (Commercial Banks –
+   Managing Risks in Outsourcing) Directions, 2025** (28 November 2025), which repealed the 2023
+   IT-outsourcing Master Direction for those banks; NBFCs have a parallel 2025 instrument. The 2026
+   cyber Directions **preserve** that regime and carve around it — their third-party provisions
+   reach only IT/cyber arrangements falling outside it. A pack about vendor oversight filed against
+   Chapter IV of the cyber Directions is filed against the wrong instrument. If the subject is
+   third-party oversight, say which instrument you have mapped to and why.
 
    **Then ask what else to fold in.** Bitsight covers a narrow slice of these Directions. Say so, and
    ask — in one message, as an invitation rather than a form — for anything the user wants included:
@@ -87,7 +96,8 @@ output — an auditor can work with it, and it doesn't assert something the data
    | --- | --- |
    | II — Role of the Board | Board-approved IT, cybersecurity and business continuity strategy; minutes or resolutions; IT Strategy Committee composition |
    | III — IT Governance | IT Governance Framework; the standalone Cybersecurity Policy; IT Steering Committee terms of reference; CISO appointment and reporting line |
-   | IV — Risk Management | IT/IS risk register; information asset inventory with criticality classification; vendor risk assessments, outsourcing register and contract clauses on right-to-audit and RBI inspection access |
+   | IV — Risk Management | IT/IS risk register; information asset inventory with criticality classification; for third-party arrangements outside the outsourcing Directions, the vendor risk assessments and contract clauses on right-to-audit and RBI inspection access |
+   | Outsourcing (2025 Directions, not the 2026 ones) | Outsourcing register and materiality determinations; due-diligence files; audit rights reaching subcontractors; concentration analysis; exit plans — map these to the outsourcing instrument |
    | V — Baseline Controls | VA reports (six-monthly, critical systems) and PT reports (annual); patch and configuration-management records; MFA coverage; DLP; anti-malware coverage; DR drill results with RTO/RPO |
    | VI — CSOC | CSOC scope and staffing; SIEM log coverage; sample incident investigations; threat-intelligence sharing |
    | Incident handling | Cyber incident response and recovery policy; DAKSH submissions and timestamps; CERT-In notifications; root-cause analyses |

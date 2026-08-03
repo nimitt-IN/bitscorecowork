@@ -191,6 +191,12 @@ specific duty on the user's behalf:
   cyber/IT-governance circulars. They do **not** extend to NBFCs, co-operative banks, SFBs, Payments
   Banks or Local Area Banks. Which instrument applies is entity-specific; ask, and leave the call to
   the user's compliance team.
+- **Outsourcing is a separate RBI track and the 2026 Directions do not absorb it.** Vendor oversight
+  for commercial banks sits in the RBI (Commercial Banks – Managing Risks in Outsourcing)
+  Directions, 2025 — 28 November 2025 — which repealed the 2023 IT-outsourcing Master Direction for
+  them; NBFCs have a parallel 2025 instrument. The 2026 cyber Directions expressly carve around the
+  outsourcing regime rather than replacing it. Don't file vendor due-diligence or monitoring
+  evidence against the cyber Directions by default.
 
 Always add: this determination belongs to the user's compliance/legal team; BitScoreCoWork
 supports the evidence trail, it does not certify compliance.
