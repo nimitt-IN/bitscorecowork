@@ -7,7 +7,7 @@ description: >
   security rating", "portfolio-wide security ratings", or wants ratings across a
   whole monitored portfolio rather than a single company.
 metadata:
-  version: "0.3.1"
+  version: "0.4.0"
 ---
 
 # MyPortfolio — ratings across a managed portfolio
@@ -52,7 +52,10 @@ handling, no discrimination, India context).
 
 7. **Offer next steps:** run the `mycompany` skill on any flagged vendor for a deeper single-company
    read, or `boardpack` to escalate several at once. If the user is clearly running this
-   periodically, mention it can be scheduled — but only offer, don't set it up unprompted.
+   periodically, **`watchtower` is built for that** — it reports only what changed since the last run
+   rather than re-reading the whole portfolio, and it can be scheduled. Mention it, but only offer;
+   don't set it up unprompted. `peer-index` if the question is how these companies compare with their
+   sectors rather than with each other.
 
 8. **Close** with the standing notes: this is confidential third-party data (don't write it to a
    file or forward it unless asked), and Bitsight reflects externally observable signals only. If it

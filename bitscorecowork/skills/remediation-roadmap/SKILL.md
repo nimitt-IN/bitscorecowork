@@ -7,7 +7,7 @@ description: >
   at 690, how do we get to 740", "what should we fix first", "rating improvement
   plan", or wants findings turned into a prioritized, ownable work plan.
 metadata:
-  version: "0.3.1"
+  version: "0.4.0"
 ---
 
 # remediation-roadmap — a sequenced plan to improve a rating

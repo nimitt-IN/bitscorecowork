@@ -9,7 +9,7 @@ description: >
   Cybersecurity Directions 2026", or wants ratings evidence organized for an
   audit, assessment or supervisory review.
 metadata:
-  version: "0.3.1"
+  version: "0.4.0"
 ---
 
 # regmap — framework evidence pack from Bitsight data

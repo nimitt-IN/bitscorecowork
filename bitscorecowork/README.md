@@ -1,4 +1,4 @@
-# BitScoreCoWork — v0.3.1
+# BitScoreCoWork — v0.4.0
 
 An asset by **BitScore Cybertech LLP** — [bitscore.in](https://bitscore.in), authorised India
 partner for [Bitsight](https://www.bitsight.com/).
@@ -8,9 +8,12 @@ them into executive-ready reporting and **scoped, authorization-gated** security
 without leaving Claude.
 
 Built for BitScore's enterprise customers who are Bitsight subscribers: quick rating lookups for
-your own organization, portfolio-wide vendor/third-party monitoring, vendor due-diligence briefs,
-remediation roadmaps, CVE exposure sweeps, framework evidence packs, indicative financial exposure
-estimates, board briefings, and VAPT/BAS *planning* artifacts your licensed testers execute manually.
+your own organization, portfolio-wide vendor/third-party monitoring, recurring change digests,
+footprint validation and attribution disputes, vendor due-diligence briefs, remediation roadmaps,
+CVE exposure sweeps, framework evidence packs, customer questionnaire responses, sector benchmarking,
+indicative financial exposure estimates, board briefings, board-level crisis simulations, the
+time-bound Indian regulatory notifications an incident triggers, and VAPT/BAS *planning* artifacts
+your licensed testers execute manually.
 
 ---
 
@@ -51,8 +54,128 @@ Everything is **read-only** — nothing here can modify your Bitsight portfolio 
 | **quantify** | "what's our exposure in rupees?" | Indicative financial exposure range with every assumption shown |
 | **vapt-plan** | "build a VAPT / vulnerability-assessment plan" | Findings report + assessment plan (identification only) |
 | **security-test-plan** | "create a VAPT/BAS engagement plan" | Full test plan, RoE, ATT&CK scenarios, report scaffold |
+| **entity-scope** | "those IPs aren't ours" | Signed-off asset inventory + attribution-dispute submission |
+| **incident-notify** | "we've had an incident — what must we report?" | Escalation matrix with IST deadlines + per-instrument notification drafts |
+| **tabletop** | "run a board tabletop exercise" | Scenario, timed injects, regulatory clocks, facilitator guide, report template |
+| **peer-index** | "where do we sit against other private-sector banks?" | Industry-percentile position + peer cohort, vector by vector |
+| **watchtower** | "what changed since last week?" | Recurring delta digest, triaged act now / watch / ignore |
+| **assurance-pack** | "answer this customer security questionnaire" | Outbound answers dispositioned by what the evidence supports |
 
 See [`HELP_GUIDE.md`](HELP_GUIDE.md) for example prompts, expected inputs, and troubleshooting.
+
+**Bundled references** — the skills read these rather than repeating them:
+[`bitscore-global-rules.md`](reference/bitscore-global-rules.md) (binding on all sixteen),
+[`regulatory-map.md`](reference/regulatory-map.md) (risk vector → framework control areas),
+[`incident-reporting-map.md`](reference/incident-reporting-map.md) (source-cited notification clocks),
+and [`attribution-patterns.md`](reference/attribution-patterns.md) (why an asset is attributed, and
+what a dispute needs).
+
+---
+
+## What's new in 0.4.0
+
+**Six new skills, taking the plugin from ten to sixteen.** The first ten all answer some version of
+*"what does Bitsight say?"*. These six answer questions the platform raises but doesn't close.
+
+**`entity-scope`** takes on the first objection in every ratings deployment — *"those IPs aren't
+ours"* — and the one that stalls the most pilots. It pages the full observed footprint, categorises
+every asset against an eight-part attribution taxonomy in the new
+[`attribution-patterns.md`](reference/attribution-patterns.md) reference, and produces a signed-off
+inventory plus a dispute submission. It is deliberately even-handed: the strongest mis-attribution
+signal available is an asset carrying **more than one** attributed company on its findings, but the
+skill pushes back just as hard where "not ours" doesn't hold. An acquired entity's estate is the
+group's estate. A cloud PaaS hostname proves nothing about who deployed the workload. A CDN edge
+address may be disputable while the TLS configuration on it is entirely the customer's own. And a
+third outcome — **shared responsibility** — catches what most customers actually have: real,
+brand-bearing assets operated by someone else. Because Bitsight exposes no dispute endpoint and this
+plugin is read-only, the skill says plainly that it cannot change a footprint: submissions are filed
+through the platform, Bitsight adjudicates, and the rating does not move while that is pending.
+
+**`incident-notify`** drafts the time-bound notifications an Indian entity owes after an incident,
+against the new [`incident-reporting-map.md`](reference/incident-reporting-map.md) — CERT-In's six
+hours, the RBI filings, SEBI CSCRF and LODR Reg. 30, IRDAI, DPDP intimation to the Data Protection
+Board and to affected Data Principals, and NCIIPC. Every clock carries its reference number, issue
+date, source URL and a **Primary/Secondary** marker recording whether the published text was read
+directly; the CERT-In directions and the RBI 2026 Directions were read at source, and the rest are
+marked for confirmation before filing. Two corrections are baked in. "RBI requires 2–6 hour reporting
+for banks and NBFCs" conflates instruments that no longer travel together — a commercial bank files
+to **DAKSH within six hours** under Chapter V of the 2026 Directions, while NBFCs sit under the 2023
+IT Governance Master Direction and only in the Top, Upper and Middle Layers. And a **listed** entity
+usually owes SEBI LODR Reg. 30 disclosure to the exchanges in parallel with its technical filings,
+which is the obligation most often missed in the first six hours. The skill will not decide whether an
+incident is reportable, whether an instrument applies, or whether an event is material — and it will
+skip the token prompt entirely if the user is mid-incident, because an incident response is not the
+moment to block on a credential.
+
+**`tabletop`** builds a board crisis simulation from the client's own attack surface: the weakest
+observed vectors become the entry point, real assets name the systems, a real portfolio vendor
+supplies the supply-chain inject. The regulatory clocks run as injects, which is what makes an Indian
+board exercise bite — a six-hour CERT-In deadline ticking while the room is still arguing about
+whether this counts as an incident is the actual lesson. Every artefact carries
+`EXERCISE — NOT A REAL INCIDENT` in the header, the footer, and inside the body of any simulated
+notification, because a convincing fake breach disclosure that leaves the room causes a real problem.
+
+**`peer-index`** answers "where do we sit against the other private-sector banks?" while refusing to
+overclaim. A cohort assembled from portfolio rows is a **convenience sample** — it contains only
+whoever the customer happens to monitor — so the skill uses Bitsight's own industry percentiles and
+distribution bands for the statistical claim, reports any named cohort with `n` and the selection
+basis stated, and anonymises peers by default for anything leaving the security team. The value is
+vector-level: *mid-pack overall, bottom-quartile on Critical Vulnerability Management* is actionable
+in a way a single percentile never is.
+
+**`watchtower`** turns a quarterly pull into a weekly habit — the delta since the last run, triaged
+into act now, watch and ignore. Because the plugin holds no state between sessions, it writes a dated
+snapshot to the working folder and reads it back next run; that is now the one file any skill persists
+by design, and global rules §8 has been extended to sanction it and to set the handling rules. The
+ignore list is justified rather than merely counted, because a digest nobody trusts to filter gets
+skipped — and then the one that mattered gets skipped too. A first run has no baseline, and it says so
+rather than reporting a quiet week.
+
+**`assurance-pack`** is the outbound mirror of `regmap`: answering a customer's security
+questionnaire, DDQ or RFP security section from the organisation's own evidence. The constraints are
+tighter than anywhere else in the plugin, because the output is commercial and a questionnaire answer
+becomes a contractual representation surprisingly often. It never writes "compliant" or "certified",
+never overstates to win a deal, routes anything the data can't support to *requires internal input*
+with a named owner, and **never attaches itemised findings** — a list of your own open issues sent to
+a prospect is a target map.
+
+**Verified against a live Bitsight subscription on 4 August 2026: 16 checks passed, 0 failed, 0 gated
+by entitlement.** Three things the live run changed:
+
+**`bitsight_get_alerts` declared a severity enum that matches nothing.** The tool advertised
+`INFO`/`WARN`/`DANGER`/`MATERIAL`; the endpoint returned `CRITICAL` and `INCREASE` on
+`RATING_THRESHOLD` alerts, and each of the four declared values matched **zero** alerts. Because an
+unmatched severity returns an empty set rather than an error, a filtered pull was indistinguishable
+from a quiet period — which is precisely the failure `watchtower` exists to prevent, and it would
+also have let `vendor-brief` report a clean 90 days on a vendor that wasn't. The enum constraint is
+removed, the tool now tells you to read severity off the response and group by it, and `watchtower`,
+`vendor-brief` and `boardpack` no longer filter on an assumed vocabulary.
+
+**`hosted_by` is a better attribution signal than any hostname pattern.** Every asset carries a
+`hosted_by` object naming the hosting organisation, which cleanly separated an ISP-hosted estate from
+Microsoft, AWS, GoDaddy, Cloudflare and Google infrastructure. `entity-scope` now reads it first and
+keeps the hostname patterns as the fallback for when the assets endpoint is unentitled.
+
+**Multi-company attribution means two different things, and the count doesn't tell you which.** The
+assumption `entity-scope` was built on held — 42 of 100 findings carried multiple attributions — but
+the names revealed that most were not shared hosting at all: one domain was attributed to eleven
+entities that were all the same organisation, onboarded once per cloud account and in places suffixed
+`DUPLICATE`. A rule that flagged multi-attribution as shared infrastructure would have been wrong on
+every one of them. So the taxonomy gained a ninth category, **entity overlap**, and a fourth outcome
+alongside keep / dispute / shared responsibility. It is a portfolio-hygiene item for the account
+team, explicitly not a dispute — filing it as one spends the customer's credibility on a submission
+that should be a conversation.
+
+**Also in this release.** Global rules §5 now covers `tabletop`'s no-exploitation boundary and the
+exercise stamp; §7 points at the incident-reporting reference and restates that applicability is the
+customer's compliance team's call; §8 resolves a long-standing contradiction — it said "don't write it
+to files" while every skill offered `.xlsx` and `.docx` output, and now distinguishes producing an
+artefact the user asked for from persisting data on your own initiative. Existing skills gained
+onward links: `vapt-plan` and `security-test-plan` route to `entity-scope` when scope is disputed,
+since an authorization cannot cover an asset the customer doesn't own; `cve-sweep` routes to
+`incident-notify` when an exposure turns out to have been exploited; `myportfolio` routes to
+`watchtower` for anyone running it on a cadence; `boardpack` routes to `peer-index`, because "how do
+we compare?" is the board's first question.
 
 ---
 

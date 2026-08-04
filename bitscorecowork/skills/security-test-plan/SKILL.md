@@ -9,7 +9,7 @@ description: >
   test-plan + RoE + reporting template. Plan and template only — no working
   exploit code and no live execution.
 metadata:
-  version: "0.3.1"
+  version: "0.4.0"
 ---
 
 # security-test-plan — engagement plan & reporting scaffold (planning only)
@@ -42,6 +42,9 @@ Section 5 (the **authorization gate**) and Section 7 (IT Act, 2000) are mandator
    - **Scope:** all / selective / **by Bitsight asset criticality** (`importance`).
    - **Engagement type:** **VAPT** (vulnerability assessment + manual penetration testing) or
      **BAS** (breach-and-attack simulation of adversary behaviors).
+   - **If the user disputes that an in-scope asset is theirs, stop and run `entity-scope` first.**
+     The authorization in step 2 cannot cover an asset the user doesn't own, and testing one is an
+     offence under the IT Act regardless of who signed the RoE.
 
 4. **Fetch attack-surface / asset data** (in-scope only):
    - `bitsight_search_portfolio_company` to resolve a name → GUID if needed.
