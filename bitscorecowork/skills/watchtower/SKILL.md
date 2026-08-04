@@ -62,8 +62,13 @@ its band is not news. Treat it as such, and say so.
    - `bitsight_get_portfolio`, **paged through fully**, for every company's current rating, tier and
      rating date. This is the delta's raw material and a partial page is a wrong digest.
    - `bitsight_get_alerts` over the window — the direct signal for what Bitsight itself flagged.
-     Filter to `MATERIAL` and `DANGER` for the headline, but read `WARN` before dismissing a company
-     that also moved on rating.
+     **Fetch unfiltered and group by the `severity` field you actually get back.** The severity
+     vocabulary varies by `alert_type` and is not fixed: verified live on 4 August 2026, this endpoint
+     returned `CRITICAL` and `INCREASE` on `RATING_THRESHOLD` alerts, while `MATERIAL`, `DANGER`,
+     `WARN` and `INFO` each matched nothing. An unmatched severity filter returns an **empty set, not
+     an error** — so a filtered pull is indistinguishable from a quiet week, which is exactly the
+     failure this skill must not produce. Read `alert_type` and `trigger` alongside severity; a
+     threshold crossing tells you more than the label does.
    - `bitsight_get_rating_change_insights` **only** for companies with a notable move (~10+ points),
      to explain the driver. Don't call it for everyone — it is entitlement-gated and it is noise on a
      company that didn't move.
@@ -73,11 +78,13 @@ its band is not news. Treat it as such, and say so.
 5. **Compute the delta and triage it.** Compare current state to the snapshot: rating movements,
    tier-band crossings, companies added or removed from the portfolio, and new alerts. Then sort into
    three buckets — absent a user threshold:
-   - **Act now** — a drop into **Basic tier (250–630 🔴)**; any `MATERIAL` alert; a fall of 40+ points;
-     a critical vendor crossing a band downward; or a sustained decline across consecutive digests.
-     Each with the driver, the affected vectors, and a suggested owner and action.
-   - **Watch** — 20–40 point moves, `DANGER` alerts, a critical vendor drifting down within its band,
-     or a second consecutive small decline. Not urgent, but named so the next digest can see the trend.
+   - **Act now** — a drop into **Basic tier (250–630 🔴)**; an alert at the most severe level present
+     in the response (`CRITICAL` where that is what came back); a fall of 40+ points; a critical vendor
+     crossing a band downward; or a sustained decline across consecutive digests. Each with the driver,
+     the affected vectors, and a suggested owner and action.
+   - **Watch** — 20–40 point moves, mid-severity alerts, a critical vendor drifting down within its
+     band, or a second consecutive small decline. Not urgent, but named so the next digest sees the
+     trend.
    - **Ignore** — routine drift, small moves within band on non-critical vendors, improvements,
      rating-date churn. **Say why**, in a line.
 

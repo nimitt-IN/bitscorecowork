@@ -26,6 +26,48 @@ evidence, and what a dispute submission has to contain to succeed.
 
 ---
 
+## Two signals the API gives you directly
+
+Before reaching for hostname patterns, use the two fields Bitsight already provides. Both were
+confirmed live on 4 August 2026.
+
+### `hosted_by` on every asset — the hosting organisation, named
+
+`bitsight_get_assets` returns a **`hosted_by`** object per asset (`{guid, name}`) identifying the
+organisation hosting it. On the verified sample this cleanly separated a company's own ISP-hosted
+estate from `Microsoft Group of Companies`, `Amazon Web Services, Inc.`, `GoDaddy Operating Company,
+LLC`, `Cloudflare, Inc.` and `Google Corporation`.
+
+**This is the primary signal for categories 1–4** and it is far more reliable than pattern-matching a
+hostname. Read it first. The hostname patterns later in this document are the fallback for when
+`bitsight_get_assets` is unentitled and the footprint has to be rebuilt from findings.
+
+Note what `hosted_by` does *not* settle: an asset hosted by AWS may still be entirely the company's
+own workload. **It tells you who runs the infrastructure, never who controls the configuration.**
+
+### `attributed_companies` on findings — but read *whose* names appear
+
+`bitsight_get_findings` expands **`attributed_companies`**, and an asset attributed to more than one
+company is a genuine signal — on the verified sample, 42 of 100 findings carried multiple
+attributions (histogram: 58 single, 20 double, 9 quadruple, 8 quintuple, 5 with eleven).
+
+**But multiple attribution has two completely different meanings, and the names tell you which:**
+
+| What the names look like | What it means | What to do |
+| --- | --- | --- |
+| **Unrelated companies** | Genuinely shared infrastructure — shared hosting, CDN, multi-tenant platform | Categories 1–4 below |
+| **Variations on the same organisation** | The same entity modelled several times in Bitsight | **Category 9 — entity overlap.** Not a dispute |
+
+On the verified sample the second case dominated: a single domain was attributed to eleven entities
+with names like `Saperix, Inc.`, `Saperix, Inc. - (GCP)`, `Saperix Corporate - (AWS)-DUPLICATE8` and
+`Saperix Corporate - (Azure)-DUPLICATE17`. That is not shared hosting and disputing it would be
+wrong — it is one organisation onboarded once per cloud account.
+
+**So never treat a multi-attribution count as a mis-attribution finding on its own.** Look at the
+names first.
+
+---
+
 ## Why an asset shows up, and where the error creeps in
 
 | Attribution basis | What Bitsight is inferring | Where it goes wrong |
@@ -44,8 +86,9 @@ evidence, and what a dispute submission has to contain to succeed.
 
 ## The taxonomy
 
-Eight categories. The first four are the common false positives; the last four are the cases where
-"not ours" is usually the wrong answer.
+Nine categories. The first four are the common false positives; categories 5–8 are the cases where
+"not ours" is usually the wrong answer; category 9 is neither — it is a portfolio-hygiene problem
+that masquerades as both.
 
 ### 1. Shared hosting and multi-tenant platforms
 
@@ -149,9 +192,34 @@ certificates; services on versions long out of support.
 longer controls is a takeover risk, not an attribution error. The fix is removing the record — which
 also removes the finding, legitimately.
 
+### 9. Entity overlap and duplicate onboarding
+
+**The claim:** usually none — this one surfaces on its own, as an asset attributed to a suspiciously
+long list of companies whose names are all variations of the same organisation.
+
+**Evidence to look for:**
+- Multiple `attributed_companies` whose names share a stem — the parent, plus per-cloud or per-region
+  variants (`… - (AWS)`, `… - (Azure)`, `… - (GCP)`), lab and test entities, and entries literally
+  suffixed `DUPLICATE`.
+- The same asset appearing under several portfolio rows the customer thinks of as one company.
+- A portfolio whose company count is well above the number of organisations the customer believes
+  they monitor.
+
+**Usual outcome: neither keep nor dispute — consolidate.** Nothing is mis-attributed: the asset really
+does belong to the organisation. The problem is that the organisation is modelled several times, which
+distorts everything downstream — a portfolio pull double-counts, a peer cohort is polluted by the
+customer's own duplicates, and a finding looks like it recurs across several companies when it is one
+issue on one host. Raise it as a **portfolio-hygiene item for the Bitsight account team**, not as an
+attribution dispute, and say plainly that a dispute would be the wrong instrument.
+
+**Care point:** this category is why the multi-attribution signal must never be used mechanically.
+Verified on 4 August 2026, the most heavily multi-attributed asset in the sample was attributed to
+eleven entities, all of them the same company. A rule that flagged "attributed to more than one
+company" as shared hosting would have been wrong on every one of them.
+
 ---
 
-## The decision, in three outcomes
+## The decision, in four outcomes
 
 Every asset reviewed lands in exactly one of these. Record the basis and the named sign-off for each.
 
@@ -160,10 +228,12 @@ Every asset reviewed lands in exactly one of these. Record the basis and the nam
 | **Keep** | Confirmed as the entity's own asset | Stays in scope for findings, remediation and testing |
 | **Dispute** | Believed mis-attributed, with evidence | Goes into the submission; **stays in scope until Bitsight rules** |
 | **Shared responsibility** | Real, brand-bearing, but operated by a third party | Stays in the footprint; routed to third-party risk and the vendor |
+| **Entity overlap** | Correctly attributed, but the organisation is modelled more than once | Portfolio-hygiene item for the account team; **not a dispute** |
 
 **Care point:** the third row is what stops this exercise becoming score management. Most of what
 customers initially want to dispute belongs there — genuinely operated by someone else, and genuinely
-still their exposure.
+still their exposure. The fourth row is what stops the multi-attribution signal being read
+mechanically; it looks like the strongest evidence of shared hosting and frequently is not.
 
 ---
 
@@ -193,14 +263,24 @@ pending, and Bitsight may decline. A disputed asset is not a removed asset.
 
 ## API notes for this work
 
-- `bitsight_get_assets` returns the observed inventory with `importance_category`, services and
-  country. **Page through it fully** — a footprint review on the first page is not a footprint review.
+- `bitsight_get_assets` returns, per asset: `asset`, `asset_type` (IP / Domain), **`hosted_by`**
+  (`{guid, name}` — read this first), `country` and `country_code`, `findings`, `importance` (a
+  float from 0 to 1) and **`importance_category`** (the string `low`/`medium`/`high`/`critical` the
+  `importance` filter matches on). **Page through it fully** — a footprint review on the first page is
+  not a footprint review.
+- The tool's `importance` filter is applied **client-side to the fetched page** and keys off
+  `importance_category`. Verified working on 4 August 2026; an empty result means no asset on that
+  page carried the category, not that the filter is broken. Page through rather than concluding from
+  one call.
 - `bitsight_get_assets` is one of the endpoints most often **gated by subscription (403)**. When it
   is, reconstruct a partial footprint from the asset names carried on individual findings via
-  `bitsight_get_findings`, and label the result explicitly as findings-derived and incomplete. Never
-  present it as a full inventory.
-- `bitsight_get_findings` expands `attributed_companies`. Where an asset carries **more than one**
-  attributed company, that is the strongest available signal for categories 1 and 2.
+  `bitsight_get_findings` — each finding's `assets` array carries `asset`, `asset_type`, `category`,
+  `importance`, `is_ip` and `country_code` — and label the result explicitly as findings-derived and
+  incomplete. It sees only assets that *have* findings. Never present it as a full inventory.
+- `bitsight_get_findings` expands `attributed_companies` as an array of `{guid, name}`. Where an asset
+  carries **more than one**, read the **names** before drawing any conclusion: unrelated companies
+  point at categories 1–4, variations on the same organisation point at **category 9**. Verified live
+  on 4 August 2026, the second case was the more common of the two.
 - `bitsight_get_company_details` gives `primary_domain` — the anchor for judging whether a domain
   plausibly belongs to the same estate.
 - `bitsight_search_portfolio_company` resolves sibling, parent and acquired entities that may be the

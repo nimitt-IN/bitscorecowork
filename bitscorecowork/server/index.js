@@ -511,12 +511,12 @@ const TOOLS = [
   {
     name: "bitsight_get_alerts",
     description:
-      "Get recent Bitsight alerts across the portfolio: rating drops, new findings, and other risk events, with severity (INFO/WARN/DANGER/MATERIAL). Use this to check what changed since a previous review, e.g. for periodic vendor monitoring.",
+      "Get recent Bitsight alerts across the portfolio: rating drops, threshold crossings, new findings, and other risk events. Use this to check what changed since a previous review, e.g. for periodic vendor monitoring.\n\nIMPORTANT — read severity off the response, do not assume a vocabulary. Verified live on 4 August 2026: this endpoint returned severities 'CRITICAL' and 'INCREASE' on alert_type 'RATING_THRESHOLD', while the values 'INFO', 'WARN', 'DANGER' and 'MATERIAL' (which earlier releases of this server declared) each matched zero alerts. The severity vocabulary appears to vary by alert_type and is not fully enumerated here, so the severity filter is deliberately unconstrained: pass a value only when you already know it exists in this portfolio, and otherwise fetch unfiltered and group by the severity field you actually get back. Each alert also carries alert_type, trigger, start_date, company_guid and company_name.",
     inputSchema: {
       type: "object",
       properties: {
         company_guid: { type: "string", description: "Filter alerts to a single company GUID." },
-        severity: { type: "string", enum: ["INFO", "WARN", "DANGER", "MATERIAL"], description: "Filter by alert severity." },
+        severity: { type: "string", description: "Filter by alert severity, e.g. 'CRITICAL'. No fixed enum — the vocabulary varies by alert_type and an unmatched value returns an empty set rather than an error. Prefer fetching unfiltered and grouping by the severity field in the response." },
         alert_date_gte: { type: "string", description: "Only include alerts on or after this date, YYYY-MM-DD." },
         alert_date_lte: { type: "string", description: "Only include alerts on or before this date, YYYY-MM-DD." },
         limit: { type: "integer", minimum: 1, maximum: 100, description: "Max results (default 100)." },

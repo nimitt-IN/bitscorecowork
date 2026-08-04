@@ -64,8 +64,11 @@ contractual and financial due diligence).
 
 5. **Form the recommendation.** State the criteria before the verdict, so the reader can disagree
    with the criteria rather than guess at them. Absent a user-supplied threshold, use:
-   - **Go** — Advanced tier (740+), flat or improving trend, no MATERIAL alerts in 90 days, no
-     high-severity findings on the vectors that matter for this engagement.
+   - **Go** — Advanced tier (740+), flat or improving trend, no high-severity alerts in 90 days, no
+     high-severity findings on the vectors that matter for this engagement. Judge alert severity from
+     what the response actually returns — the vocabulary varies by `alert_type` and an unmatched
+     severity filter comes back empty rather than erroring, so a filtered pull can look like a clean
+     90 days when it isn't.
    - **Go with conditions** — Intermediate tier (640–730), *or* Advanced with a declining trend or
      concentrated weakness in a relevant vector. Name the conditions and the deadline for each.
    - **No-go (as things stand)** — Basic tier (250–630), *or* a sharp recent drop, *or* unresolved

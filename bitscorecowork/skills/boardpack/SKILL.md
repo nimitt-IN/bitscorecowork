@@ -54,7 +54,8 @@ framework you're following:
 6. **Gather the data** for the scoped set:
    - `bitsight_get_portfolio` (paginated) for the rating distribution — count per tier band.
    - `bitsight_get_alerts` for the period to surface what changed.
-   - For each company below "needs attention" (rating < 640) or with a MATERIAL/DANGER alert:
+   - For each company below "needs attention" (rating < 640) or carrying a high-severity alert
+     (read the severity values off the response rather than filtering for an assumed one):
      `bitsight_get_company_details` (with `include_industry_comparison: true`) and
      `bitsight_get_findings_summary` — quote its categorical counts rather than deriving them. If a
      slide needs the findings themselves, fetch with a numeric `severity_gte` (9 severe, 8 material

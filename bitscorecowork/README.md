@@ -139,6 +139,33 @@ never overstates to win a deal, routes anything the data can't support to *requi
 with a named owner, and **never attaches itemised findings** — a list of your own open issues sent to
 a prospect is a target map.
 
+**Verified against a live Bitsight subscription on 4 August 2026: 16 checks passed, 0 failed, 0 gated
+by entitlement.** Three things the live run changed:
+
+**`bitsight_get_alerts` declared a severity enum that matches nothing.** The tool advertised
+`INFO`/`WARN`/`DANGER`/`MATERIAL`; the endpoint returned `CRITICAL` and `INCREASE` on
+`RATING_THRESHOLD` alerts, and each of the four declared values matched **zero** alerts. Because an
+unmatched severity returns an empty set rather than an error, a filtered pull was indistinguishable
+from a quiet period — which is precisely the failure `watchtower` exists to prevent, and it would
+also have let `vendor-brief` report a clean 90 days on a vendor that wasn't. The enum constraint is
+removed, the tool now tells you to read severity off the response and group by it, and `watchtower`,
+`vendor-brief` and `boardpack` no longer filter on an assumed vocabulary.
+
+**`hosted_by` is a better attribution signal than any hostname pattern.** Every asset carries a
+`hosted_by` object naming the hosting organisation, which cleanly separated an ISP-hosted estate from
+Microsoft, AWS, GoDaddy, Cloudflare and Google infrastructure. `entity-scope` now reads it first and
+keeps the hostname patterns as the fallback for when the assets endpoint is unentitled.
+
+**Multi-company attribution means two different things, and the count doesn't tell you which.** The
+assumption `entity-scope` was built on held — 42 of 100 findings carried multiple attributions — but
+the names revealed that most were not shared hosting at all: one domain was attributed to eleven
+entities that were all the same organisation, onboarded once per cloud account and in places suffixed
+`DUPLICATE`. A rule that flagged multi-attribution as shared infrastructure would have been wrong on
+every one of them. So the taxonomy gained a ninth category, **entity overlap**, and a fourth outcome
+alongside keep / dispute / shared responsibility. It is a portfolio-hygiene item for the account
+team, explicitly not a dispute — filing it as one spends the customer's credibility on a submission
+that should be a conversation.
+
 **Also in this release.** Global rules §5 now covers `tabletop`'s no-exploitation boundary and the
 exercise stamp; §7 points at the incident-reporting reference and restates that applicability is the
 customer's compliance team's call; §8 resolves a long-standing contradiction — it said "don't write it

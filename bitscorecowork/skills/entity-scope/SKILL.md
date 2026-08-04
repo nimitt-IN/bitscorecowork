@@ -57,14 +57,16 @@ be told otherwise by their own rating tomorrow.
 3. **Pull the observed footprint.**
    - `bitsight_get_assets`, **paged through fully** with `limit`/`offset`. A footprint review that
      stops at the first page is not a footprint review — and on a large estate the interesting
-     assets are rarely on page one.
+     assets are rarely on page one. **Read `hosted_by` first** — Bitsight names the hosting
+     organisation directly on every asset, which beats inferring one from a hostname. Also carried:
+     `asset_type`, `country`, `importance_category` and the finding count.
    - `bitsight_get_company_details` for `primary_domain` and the current rating, so the effect of any
      successful dispute has a baseline.
    - `bitsight_get_findings` with `severity_gte: 1` across the estate — here you want everything, not
      a material-and-above worklist, because an asset with a single minor finding is exactly the kind
-     that turns out not to be theirs. Read the **`attributed_companies`** expansion on each finding:
-     an asset attributed to more than one company is the strongest available signal for shared
-     hosting and CDN infrastructure. Page through rather than reporting the first page.
+     that turns out not to be theirs. Read the **`attributed_companies`** expansion on each finding,
+     and **read the names, not just the count** — that distinction is in the attribution reference and
+     it decides the category. Page through rather than reporting the first page.
 
    **If `bitsight_get_assets` returns 403**, the asset inventory isn't in this subscription. Do not
    stop. Reconstruct a partial footprint from the asset names carried on the individual findings,
@@ -73,12 +75,21 @@ be told otherwise by their own rating tomorrow.
    token problem. An inventory built this way sees only assets that *have* findings, which is a
    material gap and must be stated as one.
 
-4. **Categorise every asset** against the eight categories in the attribution reference, using the
-   observable evidence — rDNS and CNAME patterns, multi-company attribution, service mix, country,
-   naming conventions. Assign each asset one of three outcomes:
+4. **Categorise every asset** against the nine categories in the attribution reference, using the
+   observable evidence — `hosted_by`, multi-company attribution, service mix, country, naming
+   conventions, and rDNS or CNAME patterns where the inventory wasn't available. Assign each asset one
+   of four outcomes:
    - **Keep** — confirmed the entity's own.
    - **Dispute** — believed mis-attributed, with evidence.
    - **Shared responsibility** — real and brand-bearing, but operated by a third party.
+   - **Entity overlap** — correctly attributed, but the same organisation is modelled more than once
+     in the portfolio. A hygiene item for the account team, not a dispute.
+
+   **Read multi-attribution by the names it returns, never by the count.** Unrelated companies on one
+   asset point at shared hosting or a CDN. Names that are all variants of the same organisation —
+   per-cloud entities, lab entities, anything suffixed `DUPLICATE` — point at entity overlap, where
+   nothing is mis-attributed and a dispute would be the wrong instrument. On the live subscription
+   this was verified against, the second case was the more common of the two.
 
    **Show the reasoning per asset**, not just the verdict. The user has to be able to disagree with a
    categorisation, and an auditor has to be able to follow it. Where the evidence is thin, say the
@@ -105,11 +116,11 @@ be told otherwise by their own rating tomorrow.
    skill assembles evidence, it does not adjudicate. Record the name, role and date against every
    decision, including the keeps.
 
-7. **Build the signed-off inventory.** One row per asset: asset as Bitsight lists it, importance,
-   observed services, attributed companies where more than one, outcome (**keep / dispute / shared
-   responsibility**), the category, the evidence, current findings attributed to it, who signed off,
-   and the date. Head it with the entity, the GUID, the pull date and the current rating — this is a
-   point-in-time record and the footprint changes.
+7. **Build the signed-off inventory.** One row per asset: asset as Bitsight lists it, asset type,
+   `hosted_by`, importance category, country, attributed companies where more than one, outcome
+   (**keep / dispute / shared responsibility / entity overlap**), the category, the evidence, current
+   findings attributed to it, who signed off, and the date. Head it with the entity, the GUID, the
+   pull date and the current rating — this is a point-in-time record and the footprint changes.
 
 8. **Draft the dispute submission** for the disputed rows only, following the submission checklist in
    the attribution reference: the asset as listed, the claimed category, checkable evidence, what the
@@ -136,7 +147,10 @@ be told otherwise by their own rating tomorrow.
   never net disputed assets out of a finding count.
 - **Never let this become score management.** The purpose is an accurate footprint, which sometimes
   means *adding* context rather than removing assets. If the review ends with every contested asset
-  disputed and nothing reclassified as shared responsibility, it was not a review.
+  disputed and nothing reclassified as shared responsibility or entity overlap, it was not a review.
+- **Never file entity overlap as a dispute.** Nothing is mis-attributed when an organisation is
+  modelled twice — the asset really is theirs. Sending it to adjudication wastes the customer's
+  credibility on a submission that should be a conversation with their account team.
 - **Never assert ownership or non-ownership on the user's behalf.** Categories are hypotheses from
   observable evidence; the determination rests with the asset owner and, for the footprint itself,
   with Bitsight.
