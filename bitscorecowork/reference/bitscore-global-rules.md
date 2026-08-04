@@ -1,6 +1,6 @@
 # BitScoreCoWork — Global Rules (apply to every skill)
 
-These rules are binding for **all ten** BitScoreCoWork skills. Each `SKILL.md` links here
+These rules are binding for **all sixteen** BitScoreCoWork skills. Each `SKILL.md` links here
 instead of repeating them. If anything in a skill appears to conflict with a rule below,
 the rule below wins.
 
@@ -153,6 +153,16 @@ scan and needs no authorization gate — but it is still bound by the no-exploit
 must never produce proof-of-concept code, exploitation steps, or instructions for verifying an
 exposure by attempting it.
 
+`tabletop` is bound by the same no-exploitation rule and likewise needs no gate — it plans no testing
+and produces a simulation, not an engagement. A scenario may be grounded in real observed weaknesses,
+but never at the altitude of a working exploit or a step-by-step path. **Every artefact it produces
+must carry `EXERCISE — NOT A REAL INCIDENT`** in the header, the footer, and inside the body of any
+simulated notification, press statement or customer communication. A convincing simulated breach
+disclosure that escapes the room reads as a real one.
+
+`entity-scope` performs no scan either, but its output names internet-facing infrastructure and is
+useful to an attacker — treat asset inventories as confidential under §8.
+
 The full gate applies to the planning skills:
 
 Any skill that plans security testing must, before producing asset-specific testing content:
@@ -201,6 +211,20 @@ specific duty on the user's behalf:
 Always add: this determination belongs to the user's compliance/legal team; BitScoreCoWork
 supports the evidence trail, it does not certify compliance.
 
+**Incident-reporting obligations — the clocks are in a dedicated reference.** The `incident-notify`
+skill, and the regulatory-clock injects in `tabletop`, work from
+[`incident-reporting-map.md`](incident-reporting-map.md): CERT-In's six hours, the RBI filings, SEBI
+CSCRF and LODR Reg. 30, IRDAI, DPDP breach intimation, and NCIIPC. Every entry there is source-cited,
+dated, and marked **Primary** or **Secondary** by whether the published text was read directly. Quote
+no clock without checking it there, and pass the confidence marker through — a wrong deadline in an
+incident is worse than no deadline, because it will be relied on.
+
+Two rules carry over into every skill that touches an incident. **The clocks run from *noticing*, not
+from confirming** — an investigation in progress does not pause them. And **applicability is
+entity-specific**: a commercial bank, a Middle-Layer NBFC, a Payments Bank and a listed insurer owe
+different filings to different recipients. Ask which entity, state the assumption if the user is
+unsure, and route the determination to their compliance team.
+
 **Framework mapping — permitted as evidence, never as a conclusion.** The `regmap` skill may map
 observed risk vectors to control areas in NIST CSF 2.0, ISO/IEC 27001:2022 and Indian regulatory
 obligation areas, using [`regulatory-map.md`](regulatory-map.md). That is an **evidence-organizing**
@@ -218,11 +242,37 @@ that framework references are indicative and must be confirmed by the user's com
 ## 8. Data handling
 
 Bitsight data is confidential under Bitsight's Terms of Service and often concerns third parties'
-security posture, not just the user's own. Summarize in-conversation; don't write it to files,
-share it, or email it anywhere the user hasn't asked. Ratings reflect **externally observable
-signals only** — one input into risk management, never a substitute for full due diligence.
+security posture, not just the user's own. Summarize in-conversation; **don't write it to files,
+share it, or email it anywhere the user hasn't asked.** Producing a report, deck or workbook the user
+asked for is asking — writing Bitsight data to disk on your own initiative is not. Ratings reflect
+**externally observable signals only** — one input into risk management, never a substitute for full
+due diligence.
+
+**The one file written by design.** `watchtower` computes a delta against the previous run, and this
+plugin holds no state between sessions, so it writes a dated snapshot
+(`watchtower-snapshot-YYYY-MM-DD`) to the user's working folder and reads it back next time. That is
+sanctioned. It stays minimal — GUID, name, rating, tier, rating date, run date — and it is still
+confidential third-party data: **not shared, not emailed, and not committed to a repository.** No
+other skill persists Bitsight data between sessions.
+
+**Two outputs deserve extra care** because they are useful to an attacker rather than merely
+confidential: `entity-scope`'s asset inventories, which enumerate internet-facing infrastructure, and
+`tabletop`'s exercise packs, which set out the organisation's real weaknesses in narrative form. Keep
+both inside the stated purpose.
 
 ## 9. Reference docs (align to these; don't contradict them)
+
+**Bundled with this plugin** — read the relevant one before producing output that depends on it:
+
+- [`regulatory-map.md`](regulatory-map.md) — risk vector → NIST CSF 2.0 / ISO 27001 / Indian regime
+  control areas, plus the RBI Directions, 2026 section. Used by `regmap`.
+- [`incident-reporting-map.md`](incident-reporting-map.md) — source-cited incident-notification
+  instruments and clocks (CERT-In, RBI, SEBI CSCRF and LODR, IRDAI, DPDP, NCIIPC). Used by
+  `incident-notify` and `tabletop`.
+- [`attribution-patterns.md`](attribution-patterns.md) — why assets are attributed, the
+  mis-attribution taxonomy, and what a dispute submission needs. Used by `entity-scope`.
+
+**External:**
 
 - API overview — https://help.bitsighttech.com/hc/en-us/articles/231872628-API-Documentation-Overview
 - What is a rating — https://help.bitsighttech.com/hc/en-us/articles/231352528-What-is-a-Bitsight-Security-Rating

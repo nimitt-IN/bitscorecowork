@@ -7,7 +7,7 @@ description: >
   deck about our Bitsight score", "quarterly cyber risk deck for leadership", or
   wants Bitsight data turned into a leadership/board presentation (not a raw pull).
 metadata:
-  version: "0.3.1"
+  version: "0.4.0"
 ---
 
 # BoardPack — executive briefing from Bitsight data
@@ -83,6 +83,10 @@ framework you're following:
      documentation trail — not as a compliance certification or legal conclusion.
    - Save the file(s) to the user's working folder and present them — don't just describe them. Do
      not overwrite an existing board pack without confirming.
+
+9. **Offer next steps:** `peer-index` if the board's first question will be "how do we compare?" —
+   it usually is — `tabletop` if the pack lands on a risk the board has never rehearsed, or
+   `quantify` if the discussion is heading towards funding.
 
 ## Error handling & data care
 

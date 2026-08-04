@@ -690,7 +690,7 @@ async function handleRequest(req) {
         sendResult(id, {
           protocolVersion: "2024-11-05",
           capabilities: { tools: {} },
-          serverInfo: { name: "bitsight", version: "0.3.1" },
+          serverInfo: { name: "bitsight", version: "0.4.0" },
         });
         return;
 

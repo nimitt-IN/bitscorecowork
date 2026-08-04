@@ -1,6 +1,6 @@
 # BitScoreCoWork — Help Guide
 
-How to trigger each of the ten skills, what to have ready, and how to read API errors.
+How to trigger each of the sixteen skills, what to have ready, and how to read API errors.
 
 An asset by **BitScore Cybertech LLP** — [bitscore.in](https://bitscore.in).
 
@@ -260,6 +260,168 @@ hard-refused.
 
 ---
 
+## Skill 11 — `entity-scope`
+
+**Use it for:** settling *"those IPs aren't ours"* — validating the attributed footprint before
+anyone acts on the findings.
+
+**Trigger phrases**
+- "Those IPs aren't ours."
+- "Validate our Bitsight digital footprint."
+- "Why is this domain attributed to us?"
+- "Help us dispute an asset with Bitsight."
+
+**Example prompt**
+> "Review the footprint for GUID `a1b2c3d4-…`. We sold our logistics arm in March 2025 and we think a
+> lot of what's showing is theirs. Give me an inventory and a dispute submission."
+
+**Expected inputs:** the **GUID**, and — more usefully — your **corporate history**: acquisitions,
+divestments (with dates), franchisee or dealer estates, and which entities are rated separately. Also
+**who can sign off** on the inventory. You get every asset categorised as **keep / dispute / shared
+responsibility** with the evidence, plus a submission draft.
+
+> ⚠️ **A disputed asset is not a removed asset.** This plugin is read-only and Bitsight exposes no
+> dispute API — you file through the platform or your account team, Bitsight adjudicates, and your
+> rating doesn't move while it's pending. The skill will also push back where "not ours" doesn't hold:
+> an acquired company's estate is your estate, and a cloud hostname proves nothing about who deployed
+> the workload.
+
+---
+
+## Skill 12 — `incident-notify`
+
+**Use it for:** the regulatory notifications you owe after an incident, and the clocks they run on.
+
+**Trigger phrases**
+- "We've had an incident — what do we have to report?"
+- "Draft our CERT-In report."
+- "DPDP breach intimation."
+- "What are our notification deadlines?"
+
+**Example prompt**
+> "We noticed unauthorised access to a customer-facing app at 09:40 IST today. We're a listed NBFC in
+> the Middle Layer and customer personal data is likely involved. What do we owe and by when?"
+
+**Expected inputs:** **when you noticed it** (the single most important fact), your **entity type**
+(commercial bank / SFB / Payments Bank / co-operative / NBFC and its SBR layer / SEBI-regulated /
+insurer), whether you're **listed**, and whether **personal data** is in scope. You get an escalation
+matrix with real IST deadlines, a fact-gathering checklist, per-instrument drafts and a timeline log.
+
+> ⚠️ **The clock runs from noticing, not from confirming.** "We're still investigating" does not pause
+> six hours. And a listed entity often owes **SEBI LODR Reg. 30** disclosure to the exchanges *in
+> parallel* with its technical filings — that's the one that gets forgotten.
+
+> ⚖️ **Drafts only, nothing is filed.** The skill will not decide whether an incident is reportable,
+> whether an instrument applies to you, or whether an event is material — those are your legal and
+> compliance team's calls. Clocks are source-cited and marked **Primary** or **Secondary** by whether
+> the published text was read directly; confirm the Secondary ones before filing.
+
+---
+
+## Skill 13 — `tabletop`
+
+**Use it for:** a board or executive crisis exercise built from your own real attack surface.
+
+**Trigger phrases**
+- "Run a tabletop exercise for the board."
+- "War-game a breach with the leadership team."
+- "Build a cyber crisis simulation."
+
+**Example prompt**
+> "Build a 90-minute board tabletop for GUID `a1b2c3d4-…`. We're a listed private-sector bank. Focus
+> on the escalation path and the regulatory clocks. Facilitator guide and post-exercise report please."
+
+**Expected inputs:** **who's in the room** (board / exec / technical — don't blend them), **how long**,
+**what you're testing** (two objectives is plenty), your **regulatory position**, and anything
+**off-limits**. You get a scenario seeded from your weakest observed vectors, a timed inject list,
+decision points, live regulatory clocks, media questions, a facilitator guide and a report template.
+
+> ⚠️ **Every artefact is stamped `EXERCISE — NOT A REAL INCIDENT`** — header, footer, and inside any
+> simulated notification. A convincing fake breach disclosure that leaves the room causes a real
+> problem. External parties are anonymised, and roles are titles rather than named people so the
+> exercise doesn't become a performance review.
+
+---
+
+## Skill 14 — `peer-index`
+
+**Use it for:** where you sit against your sector, by rating and by risk vector.
+
+**Trigger phrases**
+- "Where do we sit against the other private-sector banks?"
+- "How do we compare to our peers?"
+- "Sector benchmarking."
+- "Are we above or below the industry average?"
+
+**Example prompt**
+> "Benchmark us against the other private-sector banks in our portfolio, and against Bitsight's
+> finance industry percentiles. Vector-level detail — the board will ask where we're weakest."
+
+**Expected inputs:** the **subject GUID**, and which comparison you want: **Bitsight industry
+percentiles** (the statistically defensible one), a **named peer list**, or a **portfolio segment**.
+Also **who reads it**, which sets the confidentiality mode.
+
+> ⚠️ **Your portfolio is not your sector.** A cohort built from portfolio rows is a convenience sample
+> — it contains only whoever you happen to monitor, and a competitor's absence tells you nothing about
+> them. The skill states `n` and the selection basis every time, uses Bitsight's own industry
+> percentiles for the "where do we sit" claim, and **anonymises named peers by default** for anything
+> leaving the security team.
+
+---
+
+## Skill 15 — `watchtower`
+
+**Use it for:** a recurring digest of what actually changed since the last review.
+
+**Trigger phrases**
+- "What changed since last week?"
+- "Run our portfolio monitoring digest."
+- "Weekly vendor risk update."
+- "Set up recurring Bitsight monitoring."
+
+**Example prompt**
+> "Run the weekly watchtower digest against last Monday's snapshot. Our payments and payroll vendors
+> are the critical ones."
+
+**Expected inputs:** the **previous snapshot** if you have one (the skill writes a
+`watchtower-snapshot-YYYY-MM-DD` file to your working folder each run), the **review window**, and
+**which vendors are critical**. You get a short digest triaged into **act now / watch / ignore** —
+with the ignores justified, which is the point: a digest nobody trusts to filter gets skipped, and
+then the one that mattered gets skipped too.
+
+> ⚠️ **The first run has no baseline, so it has no delta.** It will say so and write the snapshot
+> rather than reporting a quiet week. The snapshot holds confidential third-party data — don't share
+> it and don't commit it to a repository. Pair with the `schedule` skill to run it weekly.
+
+---
+
+## Skill 16 — `assurance-pack`
+
+**Use it for:** answering a customer's security questionnaire, DDQ, or the security section of an RFP.
+
+**Trigger phrases**
+- "Answer this security questionnaire."
+- "Fill in the customer DDQ."
+- "A client wants proof of our security posture."
+- "Respond to the security section of this RFP."
+
+**Example prompt**
+> "Here's a prospect's security questionnaire. They'll be holding our customer data. Answer what our
+> Bitsight evidence supports and tell me what I need to get from internal teams."
+
+**Expected inputs:** **the actual questionnaire** (paste or attach it — answering a generic template
+when a specific one exists wastes the work), **who's asking and what the deal involves**, the
+**deadline and required format**, and any **previous responses** so the answers stay consistent. Every
+answer is dispositioned as *evidenced*, *partially evidenced*, *not evidenced by this data*, or
+*requires internal input* with a named owner.
+
+> ⚖️ **This is an outbound commercial document, so the constraints are tighter.** It will never write
+> "compliant" or "certified" about you, never overstate to win a deal, and **never attach your
+> itemised findings** — a list of your own open issues sent to a prospect is a target map. Posture,
+> trend and grades only, and it flags what a competent reader will infer about you before it goes out.
+
+---
+
 ## API-error troubleshooting
 
 | What you see | HTTP | Meaning | What to do |
@@ -280,12 +442,18 @@ hard-refused.
 
 - One company (usually *ours*) → **`mycompany`**
 - Everyone we monitor → **`myportfolio`**
+- Only what changed since last time → **`watchtower`**
 - Slides for leadership → **`boardpack`**
+- How do we compare to our sector? → **`peer-index`**
 - Should we sign with this vendor? → **`vendor-brief`**
 - What do we fix, in what order? → **`remediation-roadmap`**
 - Who's exposed to this CVE? → **`cve-sweep`**
 - Evidence for an auditor or a framework → **`regmap`**
+- Answers for a customer's questionnaire → **`assurance-pack`**
 - What's it worth in money? → **`quantify`**
+- Are these assets even ours? → **`entity-scope`**
+- We've had an incident — what must we report? → **`incident-notify`**
+- Rehearse a crisis with the board → **`tabletop`**
 - Findings + assessment plan (no testing) → **`vapt-plan`**
 - Full test-engagement plan + templates for testers → **`security-test-plan`**
 
@@ -293,6 +461,13 @@ hard-refused.
 the conditions you impose. Or `cve-sweep` → `vendor-brief` on the worst-exposed critical vendor →
 `boardpack` if it needs to go up. Or `regmap` → `remediation-roadmap` for the gaps it surfaces →
 `quantify` to fund the work.
+
+**Chains through the newer skills.** `entity-scope` → `vapt-plan` or `security-test-plan`, so you
+scope a test against assets you've confirmed are yours. `watchtower` weekly → `vendor-brief` on
+anything it puts in *act now*. `boardpack` → `peer-index`, because "how do we compare?" is the board's
+first question. `tabletop` → `incident-notify`, so the notification drafts exist before the real
+incident rather than being improvised during it. `assurance-pack` → `remediation-roadmap` for whatever
+the customer's questionnaire exposed.
 
 ---
 

@@ -8,7 +8,7 @@ description: >
   findings report", or wants a scoped VA plan and findings mapped to Bitsight risk
   vectors. Planning/reporting only — it never scans or exploits anything.
 metadata:
-  version: "0.3.1"
+  version: "0.4.0"
 ---
 
 # vapt-plan — vulnerability-assessment plan & findings (identification only)
@@ -52,6 +52,9 @@ Section 5 (the **authorization gate**) and Section 7 (IT Act, 2000) are mandator
 
 4. **Confirm scope selection:** all IPs + domains, a selective subset, or **by Bitsight asset
    criticality** (`importance`). Restrict everything downstream to the authorized, in-scope set.
+   **If the user disputes that an asset is theirs, stop and run `entity-scope` first.** Planning an
+   assessment against an asset that turns out to belong to someone else is the expensive version of
+   an attribution error, and the authorization in step 2 cannot cover an asset the user doesn't own.
 
 5. **Produce the deliverable — two parts:**
 

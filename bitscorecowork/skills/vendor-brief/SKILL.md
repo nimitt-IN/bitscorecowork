@@ -8,7 +8,7 @@ description: >
   "assess this third party before we sign", or wants one vendor assessed for an
   onboarding or renewal decision (as opposed to a whole-portfolio pull).
 metadata:
-  version: "0.3.1"
+  version: "0.4.0"
 ---
 
 # vendor-brief — pre-contract due-diligence brief on one vendor
