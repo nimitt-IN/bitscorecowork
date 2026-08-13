@@ -318,8 +318,11 @@ insurer), whether you're **listed**, and whether **personal data** is in scope. 
 matrix with real IST deadlines, a fact-gathering checklist, per-instrument drafts and a timeline log.
 
 > ⚠️ **The clock runs from noticing, not from confirming.** "We're still investigating" does not pause
-> six hours. And a listed entity often owes **SEBI LODR Reg. 30** disclosure to the exchanges *in
-> parallel* with its technical filings — that's the one that gets forgotten.
+> six hours. And a listed entity owes **SEBI LODR Reg. 30(6)** disclosure to the exchanges *in
+> parallel* with its technical filings — **within twelve hours**, not the twenty-four usually quoted,
+> because a cyber incident emanates from within the entity. On a twelve-hour limb it can fall due
+> before some of the technical filings. Reg. 27(2)(ba) then puts the incident in the **quarterly**
+> corporate governance report regardless of materiality.
 
 > ⚖️ **Drafts only, nothing is filed.** The skill will not decide whether an incident is reportable,
 > whether an instrument applies to you, or whether an event is material — those are your legal and

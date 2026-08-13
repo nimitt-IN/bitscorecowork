@@ -1,4 +1,4 @@
-# BitScoreCoWork — v0.4.1
+# BitScoreCoWork — v0.4.2
 
 An asset by **BitScore Cybertech LLP** — [bitscore.in](https://bitscore.in), authorised India
 partner for [Bitsight](https://www.bitsight.com/).
@@ -72,6 +72,46 @@ what a dispute needs).
 
 ---
 
+## What's new in 0.4.2
+
+**SEBI LODR closed out at source — and it was wrong in both directions.** 0.4.1 marked Reg. 30(6) as
+the one unverified row. It is now Primary, read from the consolidated text (last amended 14 July 2026),
+and the correction matters:
+
+- **A cyber incident is twelve hours, not twenty-four.** Limb (ii) of Reg. 30(6) covers events
+  *emanating from within* the listed entity, which is what a ransomware event, data breach or IT
+  outage is. The twenty-four-hour figure everyone quotes — including every earlier release of this
+  plugin — is limb (iii), for events arising **outside** the entity. Quoting it puts the disclosure
+  twelve hours late.
+- **Board decisions are thirty minutes**, not the twelve hours 0.4.1 attributed to them (three hours
+  under an after-hours proviso). Both limbs were wrong, in opposite directions.
+- **The seventy-two-hour figure is much narrower than reported** — it applies only to non-tax
+  litigation claims under Schedule III Part A Para B(8) held in the entity's structured digital
+  database under the PIT Regulations. Not available for a cyber incident.
+- **Reg. 27(2)(ba) is new to the plugin entirely.** Cyber incidents, breaches and loss of data go in
+  the **quarterly corporate governance report**, with **no materiality test** — so an incident
+  correctly judged immaterial for Reg. 30 can still be reportable. It outlives the incident and now
+  sits on the post-incident checklist.
+- **Reg. 21(4)** requires the Risk Management Committee's role to *"specifically cover cyber
+  security"* — a governance hook `regmap` can evidence against.
+
+**`regmap` gained the listed-entity question it never asked.** It now asks whether the entity is
+listed **whatever framework was chosen** — LODR reaches every listed entity in any sector, and a
+SEBI-regulated entity that is also listed is in both LODR and CSCRF. The mapping reference carries a
+new LODR section in which **two of three rows are "Bitsight evidences nothing"**, plus a guardrail
+that a rating change is neither an incident nor a disclosable event and must never be mapped onto
+Reg. 27(2)(ba) or Reg. 30(6).
+
+Retrieval note for anyone re-checking: SEBI serves regulations through a **PDF viewer iframe**, so the
+page HTML carries no regulation text. Read the iframe `src`.
+
+Also fixes a stale claim left in this README by 0.4.1 — NBFCs described as sitting under the 2023 IT
+Governance Master Direction.
+
+**Every instrument in `incident-reporting-map.md` has now been read at source. Nothing is outstanding.**
+
+---
+
 ## What's new in 0.4.1
 
 **Regulatory corrections — the reason to upgrade.** Two references carried positions that would have
@@ -104,7 +144,7 @@ misrouted a real filing, and both are fixed:
   2026 text (§3.6, read from the Annexure B ZIP) sets **six hours to CERT-In with a copy to IRDAI**
   and nothing further; the entity list is also wider than the usual shorthand — FRBs, TPAs, IMFs,
   ISNP, MISPs, CSCs and the IIB are all named.
-- **SEBI LODR Reg. 30 is now honestly marked unverified.** SEBI serves the consolidated regulations
+- **SEBI LODR Reg. 30 was marked unverified in this release — 0.4.2 closes it.** SEBI serves the consolidated regulations
   through a client-rendered page whose text could not be read, so the 12/24-hour limbs are flagged as
   indicative rather than quoted with false confidence. It is the last Secondary row in the file.
 
@@ -144,13 +184,15 @@ against the new [`incident-reporting-map.md`](reference/incident-reporting-map.m
 hours, the RBI filings, SEBI CSCRF and LODR Reg. 30, IRDAI, DPDP intimation to the Data Protection
 Board and to affected Data Principals, and NCIIPC. Every clock carries its reference number, issue
 date, source URL and a **Primary/Secondary** marker recording whether the published text was read
-directly; the CERT-In directions and the RBI 2026 Directions were read at source, and the rest are
-marked for confirmation before filing. Two corrections are baked in. "RBI requires 2–6 hour reporting
-for banks and NBFCs" conflates instruments that no longer travel together — a commercial bank files
-to **DAKSH within six hours** under Chapter V of the 2026 Directions, while NBFCs sit under the 2023
-IT Governance Master Direction and only in the Top, Upper and Middle Layers. And a **listed** entity
-usually owes SEBI LODR Reg. 30 disclosure to the exchanges in parallel with its technical filings,
-which is the obligation most often missed in the first six hours. The skill will not decide whether an
+directly — and as of 0.4.2 **every instrument in the reference has been read at source**. Three
+corrections are baked in. "RBI requires 2–6 hour reporting for banks and NBFCs" conflates instruments
+that no longer travel together — there are **seven parallel 2026 Directions, one per entity class**,
+each setting six hours to **DAKSH**, and an NBFC files under 461 rather than the 2023 Master
+Direction. A **listed** entity owes SEBI LODR disclosure to the exchanges in parallel with its
+technical filings — **twelve hours**, not the twenty-four usually quoted, because a cyber incident
+emanates from within the entity — plus a standing quarterly obligation under Reg. 27(2)(ba) that
+carries no materiality test at all. And the **DPDP breach duties do not commence until 13 May 2027**,
+so no DPDP clock runs on an incident today. The skill will not decide whether an
 incident is reportable, whether an instrument applies, or whether an event is material — and it will
 skip the token prompt entirely if the user is mid-incident, because an incident response is not the
 moment to block on a credential.

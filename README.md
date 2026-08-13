@@ -4,7 +4,7 @@ A Claude Cowork plugin for **Bitsight Security Ratings**, by
 **BitScore Cybertech LLP** — [bitscore.in](https://bitscore.in), authorised India partner for
 [Bitsight](https://www.bitsight.com/).
 
-**Latest release: [v0.4.1](https://github.com/nimitt-IN/bitscorecowork/releases/tag/v0.4.1)** —
+**Latest release: [v0.4.2](https://github.com/nimitt-IN/bitscorecowork/releases/tag/v0.4.2)** —
 sixteen skills, 15 read-only tools, verified against the live Bitsight API.
 [All releases →](https://github.com/nimitt-IN/bitscorecowork/releases)
 
@@ -42,7 +42,7 @@ usage and troubleshooting).
 | Path | What it is |
 | --- | --- |
 | [`bitscorecowork/`](bitscorecowork/) | The plugin source tree — edit here |
-| `bitscorecowork-0.4.1.plugin` | The current built, installable plugin (a zip of `bitscorecowork/`) |
+| `bitscorecowork-0.4.2.plugin` | The current built, installable plugin (a zip of `bitscorecowork/`) |
 | [`LICENSE`](LICENSE) | MIT License |
 
 Only the current bundle is kept at the repo root. Earlier bundles remain downloadable from their
@@ -50,12 +50,12 @@ Only the current bundle is kept at the repo root. Earlier bundles remain downloa
 
 ## Install
 
-Download **[`bitscorecowork-0.4.1.plugin` from the v0.4.1 release](https://github.com/nimitt-IN/bitscorecowork/releases/tag/v0.4.1)**
+Download **[`bitscorecowork-0.4.2.plugin` from the v0.4.2 release](https://github.com/nimitt-IN/bitscorecowork/releases/tag/v0.4.2)**
 (it's also committed at the repo root) and add it in Claude, or point at the `bitscorecowork/`
 directory as a local plugin. The `bitsight` MCP server starts automatically — no `npm install` and
 no configuration required.
 
-**Upgrade from any earlier bundle.** Releases before 0.4.1 describe the RBI Cybersecurity Directions,
+**Upgrade from any earlier bundle.** Releases before 0.4.2 describe the RBI Cybersecurity Directions,
 2026 as a single commercial-banks instrument and route every other regulated entity to the 2023 IT
 Governance Master Direction. There are in fact **seven parallel Directions**, one per entity class,
 so an `incident-notify` escalation matrix or a `regmap` pack built on an older bundle can cite the
@@ -64,34 +64,31 @@ wrong instrument for an NBFC, SFB, Payments Bank, UCB, AIFI or CIC. They also st
 
 ## Current release
 
-**v0.4.1** — 16 skills, 15 read-only tools.
+**v0.4.2** — 16 skills, 15 read-only tools. **Every instrument in the incident-reporting reference has
+now been read at source; nothing is outstanding.**
 
-Regulatory corrections to the bundled references. The RBI Cybersecurity, Technology: Risk, Resilience
-and Assurance Framework Directions, 2026 are **seven parallel instruments issued on 31 July 2026**,
-one per entity class — commercial banks 410, SFBs 419, Payments Banks 428, UCBs 437, AIFIs 456, NBFCs
-461, CICs 470 — each carrying the same six-hour DAKSH clock under its own reporting paragraph. The
-plugin previously treated 410 as the single instrument and sent every other entity class to the 2023
-IT Governance Master Direction, which would have misrouted a live filing. All seven were read directly
-from rbi.org.in. NBFC scope is corrected too: 461 binds every RBI-registered NBFC, graded by chapter,
-and Base Layer below ₹500 crore carries no DAKSH clause at all — only CERT-In's six hours. IRDAI moves
-to the 2026 Guidelines that replaced the 2023 text, and the DPDP Rules gain their G.S.R. 846(E)
-citation with the 13-versus-14 November date trap spelled out.
+**SEBI LODR, closed out — and wrong in both directions.** 0.4.1 left Reg. 30(6) as the one unverified
+row. Read from the consolidated text (last amended 14 July 2026): **a cyber incident is twelve hours,
+not twenty-four**, because limb (ii) covers events *emanating from within* the listed entity. The
+twenty-four-hour figure everyone quotes is limb (iii), for events arising outside it — quoting it puts
+the disclosure twelve hours late. Board decisions are **thirty minutes**, not the twelve hours 0.4.1
+attributed to them. The seventy-two-hour figure applies only to non-tax litigation claims held in the
+structured digital database, not to incidents.
 
-**The DPDP breach clock is not running, and earlier releases implied it was.** Rule 1(4) of
-G.S.R. 846(E) places **Rule 7 in the eighteen-month tranche — commencing 13 May 2027** — and
-G.S.R. 843(E) commences Act section 8 on the same date. `incident-notify` no longer drafts DPDP
-intimations as live filings; `tabletop` runs them as labelled rehearsal injects.
+**Two LODR provisions the plugin never carried.** **Reg. 27(2)(ba)** puts cyber incidents, breaches and
+data loss in the **quarterly corporate governance report with no materiality test** — so an incident
+correctly judged immaterial for Reg. 30 can still be reportable, and it outlives the incident.
+**Reg. 21(4)** requires the Risk Management Committee's role to specifically cover cyber security.
 
-**SEBI CSCRF is three filings, not one** — six hours to `mkt_incidents@sebi.gov.in` and CERT-In, 24
-hours to the SEBI Incident Reporting Portal, plus a further six-hour leg to exchanges and depositories
-for brokers and DPs. **IRDAI's 24-hour step turned out not to exist** in the 2026 Guidelines; it was a
-2023 carry-over. **SEBI LODR Reg. 30 is now marked unverified** rather than quoted with false
-confidence — SEBI's consolidated text is client-rendered and could not be read.
+**`regmap` now asks whether the entity is listed**, whatever framework was chosen — LODR reaches every
+listed entity in any sector. The mapping reference gains a LODR section in which **two of three rows
+are "Bitsight evidences nothing"**, with a guardrail that a rating change is neither an incident nor a
+disclosable event.
 
-`entity-scope` also gains **`origin_subsidiary`**, the asset field that explains estate size: the same
-IP is returned once per subsidiary it maps through, so a Bitsight asset total is a row count, not a
-host count. The reference now requires deduplication before any total is quoted, documents `hosted_by`
-being routinely null, and points at RDAP as the checkable registry fallback a dispute submission needs.
+Carried from 0.4.1: the **seven parallel RBI Directions** (410/419/428/437/456/461/470, one per entity
+class, six hours to DAKSH); **DPDP breach duties not in force until 13 May 2027**; **IRDAI's 24-hour
+step does not exist** in the 2026 Guidelines; **CSCRF is three filings**; and `entity-scope`'s
+**`origin_subsidiary`** — a Bitsight asset total is a row count, not a host count.
 
 [Full release history →](https://github.com/nimitt-IN/bitscorecowork/releases)
 
@@ -101,8 +98,8 @@ The `.plugin` file is just a zip of the `bitscorecowork/` directory. After chang
 `bitscorecowork/`, rebuild it so the shipped artifact matches:
 
 ```bash
-rm -f bitscorecowork-0.4.1.plugin
-zip -r -X bitscorecowork-0.4.1.plugin bitscorecowork \
+rm -f bitscorecowork-0.4.2.plugin
+zip -r -X bitscorecowork-0.4.2.plugin bitscorecowork \
   -x '*/.DS_Store' -x '*/node_modules/*'
 ```
 

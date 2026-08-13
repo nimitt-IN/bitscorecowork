@@ -219,6 +219,33 @@ more.
 
 ---
 
+## SEBI LODR — the listed-entity obligations regmap is usually asked about last
+
+**Verified Primary against the consolidated text (last amended 14 July 2026) on 13 August 2026.**
+
+These bind **every listed entity, in any sector** — a listed manufacturer with no financial-sector
+regulator owes them. They are easy to miss because they sit in the *listing* regulations rather than in
+a cybersecurity framework, and a SEBI-regulated entity that is also listed is in **both** these and
+CSCRF.
+
+| Provision | What it requires | What Bitsight can evidence |
+| --- | --- | --- |
+| **Reg. 21(4)** | The Risk Management Committee's role shall *"specifically cover cyber security"* | Dated external-posture packs and trend put in front of the RMC (`boardpack`, `watchtower`) evidence the **committee having cyber material to review** — not that the committee exists or met |
+| **Reg. 27(2)(ba)** | Details of **cyber security incidents or breaches or loss of data or documents** disclosed with the **quarterly corporate governance report** — **no materiality test** | **Nothing.** Bitsight does not observe incidents. Say so plainly; this comes from the entity's own incident register |
+| **Reg. 30(6)** | Market disclosure of material events — **12 hours** for an event emanating from within the entity | **Nothing directly.** Ratings are not a disclosure trigger and must never be presented as one |
+
+**Care point, and it is the important one for this section.** Two of these three rows are *"Bitsight
+evidences nothing"*, and that is the correct output. The temptation is to map a rating movement onto
+Reg. 30 or Reg. 27(2)(ba) because both mention incidents. **A rating change is not an incident, is not
+a disclosable event, and must never be presented as either.** Where a client asks, say what the
+provision requires, say the evidence comes from their incident register, and stop.
+
+**Never opine on materiality.** Reg. 30(4) makes it the authorised KMP's determination on advice, and
+it carries securities-law consequences in both directions. regmap surfaces the obligation and names
+who decides.
+
+---
+
 ## Indian regimes — orientation notes
 
 Short, non-exhaustive context. Applicability is always entity-specific.
@@ -244,10 +271,18 @@ Short, non-exhaustive context. Applicability is always entity-specific.
     than absorbing them.
   - Which set applies is entity-specific, and vendor-oversight evidence usually belongs against the
     outsourcing instrument rather than the cyber one: ask, don't assume.
-- **SEBI** — the cybersecurity and cyber-resilience framework for regulated market entities,
-  including third-party and vendor-risk provisions.
-- **IRDAI** — information and cybersecurity guidelines for insurers and intermediaries, including
-  outsourcing risk.
+- **SEBI** — two separate tracks, and a listed SEBI-regulated entity is in both.
+  - *CSCRF* (SEBI/HO/ITD-1/ITD_CSC_EXT/P/CIR/2024/113, 20 August 2024) — the cybersecurity and
+    cyber-resilience framework for regulated market entities, including third-party and vendor-risk
+    provisions, graded by RE category.
+  - *LODR, for listed entities* — **Reg. 27(2)(ba)** requires details of **cyber security incidents,
+    breaches or loss of data or documents** in the **quarterly corporate governance report**, with no
+    materiality test; **Reg. 21(4)** requires the Risk Management Committee's role to *"specifically
+    cover cyber security"*; **Reg. 30(6)** governs market disclosure of material events. These reach
+    listed entities in **any** sector, including ones with no financial-sector regulator at all. See
+    [`incident-reporting-map.md`](incident-reporting-map.md) for the clocks.
+- **IRDAI** — Information and Cyber Security Guidelines, **2026** (IRDAI/GA&HR/CIR/MISC/51/4/2026,
+  6 April 2026), which replaced the 2023 Guidelines, including outsourcing risk.
 
 For each of these, the correct output is *"here is the observed evidence relevant to this obligation
 area"* — never *"you are compliant with X"*.

@@ -9,7 +9,7 @@ description: >
   Cybersecurity Directions 2026", or wants ratings evidence organized for an
   audit, assessment or supervisory review.
 metadata:
-  version: "0.4.1"
+  version: "0.4.2"
 ---
 
 # regmap — framework evidence pack from Bitsight data
@@ -52,6 +52,13 @@ output — an auditor can work with it, and it doesn't assert something the data
      IRDAI, CERT-In, DPDP). Mapping to two frameworks at once is normal; more than that produces an
      unreadable table, so ask which matter. **If RBI is one of them, go to step 3 before pulling
      any data.**
+   - **Is the entity listed?** Ask this **whatever framework was chosen** — it is not a SEBI-only
+     question. SEBI **LODR** reaches every listed entity in any sector, including one with no
+     financial-sector regulator, and a SEBI-regulated entity that is also listed is in **both** LODR
+     and CSCRF. Three provisions matter: **Reg. 21(4)** (the Risk Management Committee's role must
+     specifically cover cyber security), **Reg. 27(2)(ba)** (cyber incidents, breaches and data loss
+     in the quarterly corporate governance report, **no materiality test**) and **Reg. 30(6)** (market
+     disclosure of material events). See the LODR section of the mapping reference.
    - **The consumer** — an internal audit team, an external auditor, a customer's assessment
      questionnaire, or a regulator-facing file. This sets the tone and the level of hedging.
    - **Whether the user has their own control mapping already.** If they do, use theirs and map into
@@ -214,6 +221,14 @@ output — an auditor can work with it, and it doesn't assert something the data
   to those rows exactly as they do to Bitsight rows.
 - **Never overstate the evidence** to make a pack look complete. The "not evidenced" rows are doing
   real work.
+- **A rating change is not an incident and not a disclosable event.** For SEBI LODR specifically:
+  never map a rating movement or a new finding onto **Reg. 27(2)(ba)** or **Reg. 30(6)** because both
+  mention incidents. Bitsight does not observe incidents; that evidence comes from the entity's own
+  incident register. Two of the three LODR rows in the reference are correctly *"Bitsight evidences
+  nothing"*, and that is the answer, not a gap to fill.
+- **Never opine on materiality.** Under Reg. 30(4) it is the authorised KMP's determination on advice
+  and carries securities-law consequences in both directions. Surface the obligation, name who
+  decides, stop there.
 - Where the pack covers a third party, it contains that party's confidential security posture under
   Bitsight's Terms of Service — don't forward it beyond the user's stated purpose.
 - Where findings touch personal data (exposed credentials in particular), apply DPDP minimisation:

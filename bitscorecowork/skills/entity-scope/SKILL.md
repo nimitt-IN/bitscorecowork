@@ -9,7 +9,7 @@ description: >
   wants the attributed estate confirmed before anyone acts on the findings (as
   opposed to analysing the findings themselves).
 metadata:
-  version: "0.4.1"
+  version: "0.4.2"
 ---
 
 # entity-scope — validating the Bitsight digital footprint

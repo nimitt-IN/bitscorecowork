@@ -22,12 +22,14 @@ where it goes, and what the notification has to contain.
 >   against the instrument itself — treat those clocks as indicative and confirm before filing.
 > - Nothing here certifies compliance, and no draft produced from it has been filed or sent.
 
-**All entries verified on 4 August 2026.** **Re-verified on 13 August 2026 against the published texts:
-RBI (all seven Directions), IRDAI 2026, SEBI CSCRF, and both DPDP gazette notifications — all now
-Primary.** Four rows were wrong: the RBI family is seven instruments rather than one, IRDAI cited a
-superseded instrument and a 24-hour step that does not exist in the 2026 text, CSCRF is three filings
-rather than one, and the DPDP breach obligations turn out **not to be in force until 13 May 2027**.
-**SEBI LODR Reg. 30 remains the one unverified row.** See the change note at the end.
+**All entries verified on 4 August 2026, and every instrument re-verified against its published text on
+13 August 2026. Every row in this file is now Primary.**
+
+Five rows were wrong. The RBI family is **seven instruments**, not one. IRDAI cited a **superseded**
+instrument and a 24-hour step that does not exist in the 2026 text. CSCRF is **three filings**, not
+one. The DPDP breach obligations are **not in force until 13 May 2027**. And SEBI LODR's cyber
+disclosure is **twelve hours, not twenty-four** — plus a standing quarterly obligation the file did not
+carry at all. See the change note at the end.
 
 ---
 
@@ -49,7 +51,8 @@ rather than one, and the DPDP breach obligations turn out **not to be in force u
 | RBI Cyber Directions, 2026 — **seven instruments, one per entity class** | **6 hours** | Detection | DAKSH, plus CERT-In |
 | RBI IT Governance MD, 2023 | Superseded for the classes covered above — **check before using** | Detection | RBI, plus CERT-In |
 | SEBI CSCRF | **6 hours**, then **24 hours** | Noticing/detecting, or being brought to notice | `mkt_incidents@sebi.gov.in` + CERT-In; then SEBI Incident Reporting Portal |
-| SEBI LODR, Reg. 30 (listed entities) | **12 / 24 hours** by limb — *unverified, see section* | Occurrence of a *material* event | Stock exchanges |
+| SEBI LODR, Reg. 30(6) (listed entities) | **12 hours** for a cyber incident (30 min for board decisions; 24h only if the event arises *outside* the entity) | Occurrence of a *material* event | Stock exchanges |
+| SEBI LODR, Reg. 27(2)(ba) (listed entities) | Next **quarterly** CG report — no materiality test | Any cyber incident, breach or data loss | Stock exchanges |
 | IRDAI Cyber Guidelines, **2026** (replaced the 2023 Guidelines) | **6 hours** — *no 24-hour step in the 2026 text* | Noticing, or being brought to notice | CERT-In, copied to IRDAI |
 | DPDP — Data Principals | ⚠️ **Not in force until 13 May 2027** | — | Each affected Data Principal |
 | DPDP — the Board | ⚠️ **Not in force until 13 May 2027** | — | Data Protection Board of India |
@@ -288,31 +291,78 @@ the other — and the 24-hour portal submission is a third step, not a substitut
 
 ## SEBI LODR, Regulation 30 — the parallel obligation that gets missed
 
-**Confidence: Secondary — and deliberately so.** An attempt to read Regulation 30(6) directly on
-13 August 2026 **failed**: SEBI serves the consolidated regulations through a client-rendered page
-whose text is not retrievable, and the LODR FAQ PDF does not restate the limits. The timings below
-are therefore **not verified against the published text**. Treat them as indicative only and have the
-company secretary confirm against the current consolidated version before anything is filed.
+**Confidence: Primary.** Regulation 30(6), 27(2)(ba) and 21(4) read directly from the consolidated
+text on 13 August 2026 and quoted verbatim below.
+
+*Retrieval note, because it defeated a first attempt:* SEBI's regulation pages render the text in a
+**PDF viewer iframe**, so the HTML carries no regulation content. The consolidated PDF is at
+`sebi.gov.in/sebi_data/attachdocs/jul-2026/1784630770711.pdf` — read the iframe `src`, not the page.
 
 | | |
 | --- | --- |
-| **Instrument** | SEBI (Listing Obligations and Disclosure Requirements) Regulations, 2015, Reg. 30 and Schedule III, Part A |
-| **Current version** | Last amended **14 July 2026** (verified as the current consolidated version on 13 August 2026) |
-| **Source** | https://www.sebi.gov.in/legal/regulations/jul-2026/securities-and-exchange-board-of-india-listing-obligations-and-disclosure-requirements-regulations-2015-last-amended-on-july-14-2026-_102974.html |
+| **Instrument** | SEBI (Listing Obligations and Disclosure Requirements) Regulations, 2015 — Reg. 30 and Schedule III Part A; also **Reg. 27(2)(ba)** and **Reg. 21(4)** |
+| **Current version** | Last amended **14 July 2026** |
+| **Source** | https://www.sebi.gov.in/sebi_data/attachdocs/jul-2026/1784630770711.pdf (consolidated PDF) · [landing page](https://www.sebi.gov.in/legal/regulations/jul-2026/securities-and-exchange-board-of-india-listing-obligations-and-disclosure-requirements-regulations-2015-last-amended-on-july-14-2026-_102974.html) |
 
 **Who it binds.** Listed entities — regardless of sector. A listed manufacturer with no financial-sector
 regulator at all still owes this one.
 
-**The clock (unverified).** Reg. 30(6) sets tiered limits — commonly stated as **12 hours** for events
-arising from a decision of the board, **24 hours** for events emanating from within the listed entity,
-and a longer window where the event originates outside it. **Confirm which limb applies**; the
-distinction matters and this reference has not been able to check it. Materiality is determined by Key
-Managerial Personnel authorised by the Board for that purpose.
+**The clock — Reg. 30(6), verbatim.** *"The listed entity shall first disclose to the stock exchange(s)
+all events or information which are material in terms of the provisions of this regulation as soon as
+reasonably possible and in any case not later than the following:"*
 
-**Why it matters here.** A significant data breach, ransomware event, customer-data leak or major IT
-disruption can be a material event. This is a **disclosure to the market**, drafted to a different
-audience and a different standard than a regulatory incident report, and it is routinely forgotten in
-the first six hours while the security team is working the technical clocks.
+| Limb | Deadline | Applies to |
+| --- | --- | --- |
+| **(i)** | **thirty minutes** from closure of the meeting | Events decided at a **board meeting**. Provisos: **three hours** where the meeting closes after normal trading hours but more than three hours before the next trading day opens; for multi-day meetings, results are disclosed within 30 minutes or 3 hours of the close of the day they were considered |
+| **(ii)** | **twelve hours** from occurrence | Event **emanating from within** the listed entity |
+| **(iii)** | **twenty-four hours** from occurrence | Event **not** emanating from within the listed entity |
+
+> ### ⚠️ A cyber incident is almost always limb (ii) — **twelve hours, not twenty-four**
+>
+> This corrects the industry shorthand *and* what this reference said until 13 August 2026. A
+> ransomware event, data breach, customer-data leak or IT outage **originates within the listed
+> entity**, so it falls in limb (ii). Quoting "24 hours" — the figure most commonly repeated, and the
+> one this file previously carried — puts the disclosure **twelve hours late**.
+>
+> Note also that limb (i) is **thirty minutes**, not twelve hours. This reference previously
+> attributed twelve hours to board decisions. Both limbs were wrong, in opposite directions.
+
+**The 72-hour figure is narrower than usually reported.** It is **not** a general limb. It applies only
+to claims made against the listed entity **under litigation or dispute (other than tax)** falling under
+Schedule III Part A Para B sub-para 8, **and only where** the relevant information is maintained in the
+entity's structured digital database under the PIT Regulations, 2015 — then 72 hours from receipt of
+notice. Do not offer it for a cyber incident.
+
+**Two further provisos.** Events with timelines specified in Part A of Schedule III follow **those**
+timelines. And where disclosure is made after the deadline, the entity must **provide an explanation
+for the delay along with the disclosure** — so a late filing is visible on its face.
+
+**Materiality.** Determined under Reg. 30(4); the board authorises **Key Managerial Personnel** for the
+purpose of determining materiality and making the disclosures, and the KMP's contact details and the
+materiality policy are both website disclosures under Reg. 46(2).
+
+**Cyber incidents are not named in Schedule III.** They reach Reg. 30 through the materiality test
+rather than by being listed. The nearest express entry is Part A Para B sub-para 6 — disruption of
+operations of a unit or division due to natural calamity, force majeure, strikes or lockouts. Do not
+tell a client a cyber incident is a listed Schedule III event; it is a materiality judgement.
+
+**Why it matters here.** This is a **disclosure to the market**, drafted to a different audience and a
+different standard than a regulatory incident report, and it is routinely forgotten in the first six
+hours while the security team works the technical clocks. On a twelve-hour limb it can fall due
+*before* some of them.
+
+### The standing LODR obligation nobody puts in an incident plan
+
+**Reg. 27(2)(ba):** *"Details of cyber security incidents or breaches or loss of data or documents
+shall be disclosed along with the report mentioned in clause (a) of sub-regulation (2), as may be
+specified."* — i.e. **in the quarterly corporate governance report.**
+
+This is separate from Reg. 30 and **does not depend on materiality**. An incident that was correctly
+judged immaterial for Reg. 30 can still be reportable here. It is a recurring obligation, so it also
+outlives the incident: put it on the post-incident checklist, not just the first-24-hours one.
+
+**Reg. 21(4)** additionally requires the **Risk Management Committee's** role to *"specifically cover
+cyber security"* — a governance hook regmap can evidence against.
 
 **Care point:** never assert that an incident *is* material. Materiality is the authorised KMP's
 determination on advice, and it carries securities-law consequences in both directions — disclosing
@@ -541,13 +591,11 @@ above.
 | DPDP treated as a live clock | ⚠️ **Rule 7 and Act s.8 do not commence until 13 May 2027** — there is no DPDP breach clock running today | **Primary** — Rule 1(2)–(4) of G.S.R. 846(E) and the tranches in G.S.R. 843(E) read and quoted |
 | IRDAI shown as "6 hours, then 24 hours" | **6 hours only.** The 24-hour step is from the 2023 Guidelines and has no counterpart in the 2026 text | **Primary** — §3.6 quoted from the Guidelines inside the Annexure B ZIP; full-text search returns no 24-hour incident obligation |
 | SEBI CSCRF was Secondary, one filing, "from detection" | **Primary**, and it is three filings — 6h to SEBI + CERT-In, 24h to the SEBI portal, plus a 6h leg to exchanges/depositories for brokers and DPs — triggered by *noticing or being brought to notice* | **Primary** — circular SEBI/HO/ITD-1/ITD_CSC_EXT/P/CIR/2024/113 read directly |
-| SEBI LODR pointed at a bare domain | Points at the current consolidated version (last amended 14 July 2026), with the limits explicitly marked **unverified** | Verification **attempted and failed** — SEBI's regulation text is client-rendered and unreadable; recorded as a known gap rather than papered over |
+| SEBI LODR said **24 hours** for a cyber incident and **12 hours** for board decisions | **Reversed and corrected: 12 hours** for an incident (limb (ii), emanating from within), **30 minutes** for board decisions. Adds Reg. 27(2)(ba) — cyber incidents in the **quarterly CG report, with no materiality test** — and Reg. 21(4) | **Primary** — Reg. 30(6), 27(2)(ba) and 21(4) read from the consolidated PDF and quoted |
 
-**Still outstanding:**
-
-1. **SEBI LODR Reg. 30(6) remains unverified.** The 12/24-hour limbs could not be read from the
-   published text. This is the last Secondary row in the file and the one most likely to be quoted
-   wrongly — read it from a PDF copy of the consolidated regulations and close it.
+**Nothing outstanding.** Every instrument in this file has been read at source. What remains is
+maintenance: instruments are amended, so re-verify before relying on any row, and treat the
+verification dates above as the freshness marker.
 
 *(The three missing RBI paragraph numbers — 419, 428, 437 — were filled on 13 August 2026 from the
 published texts. All seven RBI rows are now Primary and complete.)*

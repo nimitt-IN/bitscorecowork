@@ -8,7 +8,7 @@ description: >
   the industry average", "rank these NBFCs by rating", or wants comparative
   positioning (as opposed to a single company's own posture, which is `mycompany`).
 metadata:
-  version: "0.4.1"
+  version: "0.4.2"
 ---
 
 # peer-index — sector and peer benchmarking
