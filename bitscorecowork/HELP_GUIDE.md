@@ -167,12 +167,22 @@ be used instead of the generic reference.
 ### Picking RBI
 
 Choosing RBI changes the flow. Before pulling any data, the skill asks **which RBI instrument
-applies** to the entity — the
-[Cybersecurity, Technology: Risk, Resilience and Assurance Framework Directions, 2026](https://rbi.org.in/scripts/NotificationUser.aspx?Mode=0&Id=13643)
-(RBI/DoS/2026-27/410, 31 July 2026, in force immediately) cover commercial banks other than SFBs,
-Payments Banks and Local Area Banks and repeal the earlier circulars for them; everyone else stays
-under the IT governance Master Direction and the outsourcing norms. It will ask rather than decide —
-applicability is your compliance team's call.
+applies** to the entity. The Cybersecurity, Technology: Risk, Resilience and Assurance Framework
+Directions, 2026 are **seven parallel instruments**, all issued 31 July 2026 and in force
+immediately — one per entity class, each repealing the earlier circulars for its class:
+
+| Entity class | Reference |
+| --- | --- |
+| Commercial Banks | [RBI/DoS/2026-27/410](https://rbi.org.in/scripts/NotificationUser.aspx?Mode=0&Id=13643) |
+| Small Finance Banks | [RBI/DoS/2026-27/419](https://rbi.org.in/scripts/NotificationUser.aspx?Mode=0&Id=13634) |
+| Payments Banks | [RBI/DoS/2026-27/428](https://rbi.org.in/scripts/NotificationUser.aspx?Mode=0&Id=13625) |
+| Urban Co-operative Banks | [RBI/DoS/2026-27/437](https://rbi.org.in/scripts/NotificationUser.aspx?Mode=0&Id=13616) |
+| All India Financial Institutions | [RBI/DoS/2026-27/456](https://rbi.org.in/scripts/NotificationUser.aspx?Mode=0&Id=13597) |
+| Non-Banking Financial Companies | [RBI/DoS/2026-27/461](https://rbi.org.in/scripts/NotificationUser.aspx?Mode=0&Id=13592) |
+| Credit Information Companies | [RBI/DoS/2026-27/470](https://rbi.org.in/scripts/NotificationUser.aspx?Mode=0&Id=13583) |
+
+Regional Rural Banks and Local Area Banks have none in this family. Outsourcing is a separate track
+either way. It will ask rather than decide — applicability is your compliance team's call.
 
 It then **invites you to add your own material**, with a chapter-by-chapter checklist: Board-approved
 strategy and minutes, the Cybersecurity Policy and IT Governance Framework, CISO appointment, the

@@ -1,4 +1,4 @@
-# BitScoreCoWork — v0.4.0
+# BitScoreCoWork — v0.4.1
 
 An asset by **BitScore Cybertech LLP** — [bitscore.in](https://bitscore.in), authorised India
 partner for [Bitsight](https://www.bitsight.com/).
@@ -72,14 +72,62 @@ what a dispute needs).
 
 ---
 
-## What's new in 0.4.0
+## What's new in 0.4.1
 
-**Six new skills, taking the plugin from ten to sixteen.** The first ten all answer some version of
-*"what does Bitsight say?"*. These six answer questions the platform raises but doesn't close.
+**Regulatory corrections — the reason to upgrade.** Two references carried positions that would have
+misrouted a real filing, and both are fixed:
+
+- **The RBI 2026 framework is seven instruments, not one.** The Directions issued on 31 July 2026 are
+  parallel texts, one per entity class — commercial banks **410**, SFBs **419**, Payments Banks
+  **428**, UCBs **437**, AIFIs **456**, NBFCs **461**, CICs **470** (all `RBI/DoS/2026-27/`), each
+  with the same six-hour DAKSH clock but its own reporting paragraph. The plugin previously described
+  410 as *the* instrument and routed everyone else to the 2023 IT Governance Master Direction, so an
+  NBFC pack or notification could cite the wrong text entirely. All seven were read directly from
+  rbi.org.in and are now Primary throughout.
+- **NBFC Base Layer was described as out of scope; it isn't.** 461 binds every RBI-registered NBFC,
+  graded by chapter — and Base Layer below ₹500 crore carries **no** DAKSH clause, only CERT-In's six
+  hours. Both the old exclusion and the naive inclusion were wrong in different directions.
+- **IRDAI moved to the 2026 Guidelines** (IRDAI/GA&HR/CIR/MISC/51/4/2026, 6 April 2026), which
+  replaced the 2023 text the plugin still cited. IRDAI's page for the 2023 PDF is still live with no
+  superseded notice — the trap is now called out in place.
+- ⚠️ **The DPDP breach clock is not running, and the plugin previously implied it was.** Rule 1(4) of
+  G.S.R. 846(E) puts **Rule 7 in the eighteen-month tranche — it commences 13 May 2027** — and
+  G.S.R. 843(E) commences Act **section 8** on the same date. `incident-notify` no longer drafts DPDP
+  intimations as live filings, and `tabletop` runs them as clearly labelled rehearsal injects. The
+  two-dates trap (the 14th is only the e-gazette upload stamp) is documented alongside.
+- **SEBI CSCRF is three filings, not one**, and is now Primary from circular
+  SEBI/HO/ITD-1/ITD_CSC_EXT/P/CIR/2024/113: six hours to `mkt_incidents@sebi.gov.in` **and** CERT-In,
+  details to the SEBI Incident Reporting Portal within 24 hours, plus a further six-hour leg to the
+  exchanges/depositories for stock brokers and depository participants. Triggered by *noticing or
+  being brought to notice*, not detection alone.
+- **IRDAI's "24-hour step" does not exist in the 2026 Guidelines.** It was carried over from 2023. The
+  2026 text (§3.6, read from the Annexure B ZIP) sets **six hours to CERT-In with a copy to IRDAI**
+  and nothing further; the entity list is also wider than the usual shorthand — FRBs, TPAs, IMFs,
+  ISNP, MISPs, CSCs and the IIB are all named.
+- **SEBI LODR Reg. 30 is now honestly marked unverified.** SEBI serves the consolidated regulations
+  through a client-rendered page whose text could not be read, so the 12/24-hour limbs are flagged as
+  indicative rather than quoted with false confidence. It is the last Secondary row in the file.
+
+**`entity-scope` gained the field that explains estate size.** Assets carry **`origin_subsidiary`**,
+naming the entity an attribution came through — and the same IP is returned **once per subsidiary it
+maps through**. Verified live: one address appearing six times in a single page, whole pages running
+100 rows to 18 unique hosts. A Bitsight asset total is a *row* count, not a host count, and the
+reference now says so and tells you to deduplicate before quoting either. `hosted_by` being routinely
+null is documented too, with RDAP lookups as the checkable fallback a dispute submission needs.
+
+Skills, tools and the taxonomy are otherwise unchanged from 0.4.0.
+
+---
+
+## The sixteen skills
+
+**Six skills arrived in 0.4.0, taking the plugin from ten to sixteen.** The first ten all answer some
+version of *"what does Bitsight say?"*. These six answer questions the platform raises but doesn't
+close.
 
 **`entity-scope`** takes on the first objection in every ratings deployment — *"those IPs aren't
 ours"* — and the one that stalls the most pilots. It pages the full observed footprint, categorises
-every asset against an eight-part attribution taxonomy in the new
+every asset against a nine-part attribution taxonomy in the
 [`attribution-patterns.md`](reference/attribution-patterns.md) reference, and produces a signed-off
 inventory plus a dispute submission. It is deliberately even-handed: the strongest mis-attribution
 signal available is an asset carrying **more than one** attributed company on its findings, but the
@@ -176,148 +224,6 @@ since an authorization cannot cover an asset the customer doesn't own; `cve-swee
 `incident-notify` when an exposure turns out to have been exploited; `myportfolio` routes to
 `watchtower` for anyone running it on a cadence; `boardpack` routes to `peer-index`, because "how do
 we compare?" is the board's first question.
-
----
-
-## What's new in 0.3.1
-
-**Outsourcing is a separate RBI instrument, and 0.3.0 blurred it.** 0.3.0 described non-bank
-entities as remaining under "the IT governance Master Direction and the outsourcing norms", which
-left the impression that the 2026 cybersecurity Directions had absorbed outsourcing for the banks
-they cover. Checking the text: they had not, and they say so explicitly. Their third-party
-paragraphs apply *only* to IT and cybersecurity arrangements falling **outside** the
-[RBI (Commercial Banks – Managing Risks in Outsourcing) Directions, 2025](https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13139)
-— RBI/DOR/2025-26/171, issued 28 November 2025, existing IT outsourcing agreements to comply by
-10 April 2026. Those 2025 Directions are themselves what repealed the 2023 Master Direction on
-Outsourcing of IT Services for commercial banks; NBFCs have a parallel 2025 instrument.
-
-So a covered bank runs two tracks, and evidence files differently against each: outsourcing
-governance — materiality, due diligence, audit rights reaching subcontractors, concentration, exit —
-under the 2025 Directions; cybersecurity controls and supervisory reporting under the 2026
-Directions. `regmap` now asks which of the two a pack is actually about before mapping vendor
-oversight, and the RBI checklist separates the outsourcing artefacts from the Chapter IV ones. The
-mapping reference and global rules §7 carry the distinction.
-
-This matters because it is the kind of error that survives review: both instruments are recent, both
-are RBI, both have a third-party chapter, and mapping vendor due diligence to the wrong one produces
-a pack that looks right and cites the wrong authority.
-
----
-
-## What's new in 0.3.0
-
-**`regmap` maps to the RBI Directions, 2026.** The Reserve Bank of India issued the
-[Reserve Bank of India (Commercial Banks – Cybersecurity, Technology: Risk, Resilience and Assurance
-Framework) Directions, 2026](https://rbi.org.in/scripts/NotificationUser.aspx?Mode=0&Id=13643) on
-**31 July 2026** (RBI/DoS/2026-27/410), in force immediately. They apply to commercial banks other
-than Small Finance Banks, Payments Banks and Local Area Banks, and they **repeal** the earlier
-cybersecurity and IT-governance instructions for those banks. A pack that still cites the superseded
-circulars is citing the wrong instrument.
-
-The mapping reference now carries a dedicated, source-cited RBI section: which entities the
-Directions cover and which they don't, the eight chapters, a risk-vector → chapter table with an
-explicit *what this cannot show* column, and the portfolio and vendor activities that evidence
-Chapter IV third-party oversight. References are **chapter-level by design** — paragraph numbers are
-read off the published text, not out of this plugin.
-
-**`regmap` now asks for your own material when RBI is the framework.** Bitsight evidences the
-external surface of Chapter V, the detection outcomes Chapter VI's CSOC exists to produce, and
-third-party monitoring under Chapter IV. Most of these Directions — Board and IT Strategy Committee,
-CISO reporting line, CSOC staffing, VA/PT reports, DR drills and RTO/RPO, MFA enforcement, training,
-IS Audit, DAKSH incident submissions — sit in records only the bank has. So when RBI is chosen, and
-only then, the skill first asks **which RBI instrument applies** (it never rules on applicability
-itself), then invites you to hand over policies, VA/PT reports, audit findings, the outsourcing
-register, prior inspection findings, or an existing control mapping, with a chapter-by-chapter
-checklist of what would strengthen the pack.
-
-Nothing is required. Decline and you get a Bitsight-only pack with more "not evidenced" rows and a
-coverage statement that says why. What you do supply is **recorded, never assessed**: RBI rows carry
-an evidence-source column — *Bitsight-observed*, *client-supplied*, *not evidenced* — so a reader can
-always tell which is which, and a supplied document never upgrades a Bitsight row. Judging your
-documents against the Directions stays with your compliance team, where it belongs.
-
-Other frameworks are untouched: NIST, ISO, SEBI, IRDAI, CERT-In and DPDP packs behave exactly as
-they did in 0.2.1.
-
-### One risk-vector name, one severity filter
-
-**`critical_vulnerability_management` is now the only vector name in the plugin.** 0.2.1 documented
-both it and the retired `patching_cadence` slug and asked the model to retry with the other if one
-came back empty. Testing against the live API on 3 August 2026 showed why that was not good enough:
-
-| `risk_vector` sent | Result |
-| --- | --- |
-| `critical_vulnerability_management` | HTTP 200, **0 findings** |
-| `patching_cadence` | HTTP 200, **210 findings** |
-| `not_a_real_vector` | HTTP 200, **0 findings** |
-
-— on a company Bitsight grades **F** on that vector. The product renamed; the API did not. And an
-unrecognised slug isn't rejected, it returns an empty set that looks exactly like a clean company.
-Leaving that to a retry heuristic meant a skill could report "no vulnerability findings" for an
-estate with hundreds, and be believed.
-
-The MCP server now owns the difference. Skills, prompts and outputs use one name; the server tries
-the wire slug that actually answers, falls back automatically, and rewrites the legacy slug to the
-canonical one in `rating_details`, `findings_risk_vector_counts` and individual findings before any
-skill sees it. When Bitsight switches the API over, one constant changes and nothing else.
-
-**Severity is filtered with `severity_gte`, everywhere, as a number.** The API rejects
-`severity=severe` with HTTP 422 — a mistake that is easy to make and returns an error rather than a
-wrong answer, but only if you make it that way round. Thresholds are verified against the
-categorical counts: **9** = severe, **8** = material and above, **6** = moderate and above, **1** =
-everything. All ten skills now name an explicit floor appropriate to their output — 8 for
-vendor-brief, regmap, vapt-plan and security-test-plan, staged 8→6 for remediation-roadmap — instead
-of pulling everything and discarding client-side, which on a large estate truncates before it is
-useful. Categorical counts still come from `bitsight_get_findings_summary`, which stays
-authoritative.
-
----
-
-## What's new in 0.2.1
-
-**Critical Vulnerability Management replaces Patching Cadence.** Bitsight retired the Patching
-Cadence risk vector on 16 July 2026 and replaced it with Critical Vulnerability Management at the
-same 20% weight. This is a methodology change, not a rename: the grade is now a **severity-weighted
-average time-to-remediate**, and findings live 90 days.
-
-That inverts one piece of advice the plugin used to give. `remediation-roadmap` treated patching as
-slow process work and sequenced it into days 61–90; under CVM, promptly remediating a Material or
-Severe vulnerability is among the fastest ways to move a rating, so those findings now belong in the
-first 30 days. The roadmap skill says so explicitly, and the slow-programme-work bucket is now
-software currency and asset inventory hygiene, which genuinely do move slowly.
-
-`regmap`'s framework mapping table, and the vector references in `mycompany` and `vendor-brief`, use
-the new name. The `bitsight_get_findings` `risk_vector` parameter documents both the new
-`critical_vulnerability_management` slug and the legacy `patching_cadence` one, and tells the model
-to retry with the other rather than report zero findings if one comes back empty — Bitsight's public
-API reference doesn't state which the endpoint accepts, so this is deliberately tolerant of either.
-
----
-
-## What's new in 0.2.0
-
-**Five new skills** — `vendor-brief`, `remediation-roadmap`, `cve-sweep`, `regmap` and `quantify`
-cover the ground between pulling a rating and planning a pentest: the vendor decision, the fix list,
-the CVE exposure question, the audit evidence, and the money.
-
-**Four new read-only tools** — an industry-benchmark tool so a score is reported against its sector
-rather than in a vacuum, plus the three threat tools that make CVE sweeps possible
-(`/v2/threats` → affected companies → per-company evidence).
-
-**403 no longer misreported as a bad token.** Bitsight returns 401 for an invalid token but 403 for
-a *valid* token whose subscription doesn't include an endpoint — `findings/summaries`, `assets` and
-`insights` are commonly gated. 0.1.1 collapsed the two, so a 403 told you to re-paste a credential
-that was never the problem and abandoned the workflow. The skills now continue without that source,
-name the gap, and substitute where an honest substitute exists.
-
-**Response shapes corrected against the live API.** There is no top-level `rating` scalar on the
-company object (the current rating is `ratings[0].rating`); `industry` is a display string while the
-slug lives in `industry_slug`; `rating_details` returns null rather than 403 when unentitled; and
-`mycompany` now resolves your own organization from the portfolio response instead of asking you for
-a GUID.
-
-Every tool in this release was exercised against a live Bitsight subscription: 18 checks passed,
-0 failed, 3 gated by entitlement.
 
 ---
 

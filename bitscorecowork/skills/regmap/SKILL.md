@@ -9,7 +9,7 @@ description: >
   Cybersecurity Directions 2026", or wants ratings evidence organized for an
   audit, assessment or supervisory review.
 metadata:
-  version: "0.4.0"
+  version: "0.4.1"
 ---
 
 # regmap — framework evidence pack from Bitsight data
@@ -61,15 +61,28 @@ output — an auditor can work with it, and it doesn't assert something the data
    This step runs **only** when the user picks RBI. Skip it entirely for NIST, ISO, SEBI, IRDAI,
    CERT-In or DPDP-only packs.
 
-   **First, which RBI instrument.** The **Reserve Bank of India (Commercial Banks – Cybersecurity,
-   Technology: Risk, Resilience and Assurance Framework) Directions, 2026** (RBI/DoS/2026-27/410,
-   issued 31 July 2026, in force immediately —
-   [source](https://rbi.org.in/scripts/NotificationUser.aspx?Mode=0&Id=13643)) apply to commercial
-   banks other than SFBs, Payments Banks and Local Area Banks, and repeal the earlier cyber and
-   IT-governance instructions for those banks. Other regulated entities stay under the IT governance
-   Master Direction. **Ask the user which applies to the subject entity — never rule on it yourself**
-   (global rules §7). If they don't know, map to the 2026 Directions, label the assumption at the top
-   of the pack, and tell them to have compliance confirm it.
+   **First, which RBI instrument.** The Cybersecurity, Technology: Risk, Resilience and Assurance
+   Framework Directions, 2026 are **seven parallel instruments issued on 31 July 2026, one per
+   entity class**, each repealing the earlier cyber and IT-governance instructions for its class:
+
+   | Entity class | Reference | Id |
+   | --- | --- | --- |
+   | Commercial Banks | RBI/DoS/2026-27/**410** | 13643 |
+   | Small Finance Banks | RBI/DoS/2026-27/**419** | 13634 |
+   | Payments Banks | RBI/DoS/2026-27/**428** | 13625 |
+   | Urban Co-operative Banks | RBI/DoS/2026-27/**437** | 13616 |
+   | All India Financial Institutions | RBI/DoS/2026-27/**456** | 13597 |
+   | Non-Banking Financial Companies | RBI/DoS/2026-27/**461** | 13592 |
+   | Credit Information Companies | RBI/DoS/2026-27/**470** | 13583 |
+
+   Source pattern: `https://rbi.org.in/scripts/NotificationUser.aspx?Mode=0&Id=<Id>`. Regional Rural
+   Banks and Local Area Banks have none in this family. **Mapping a pack to 410 for anything other
+   than a commercial bank is wrong.** For an NBFC also establish the chapter — 461 grades Ch. III
+   (Base Layer under ₹500 crore, and CICs), Ch. IV (Base Layer ₹500 crore and above) and Ch. V (Top,
+   Upper and Middle Layer, excluding CICs). **Ask the user which applies to the subject entity —
+   never rule on it yourself** (global rules §7). If they don't know, map to the instrument matching
+   their stated entity type, label the assumption at the top of the pack, and tell them to have
+   compliance confirm it.
 
    **And ask whether the pack is really about outsourcing**, because that is a different instrument.
    Vendor due diligence, monitoring, audit rights and exit sit in the **RBI (Commercial Banks –

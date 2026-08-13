@@ -4,7 +4,7 @@ A Claude Cowork plugin for **Bitsight Security Ratings**, by
 **BitScore Cybertech LLP** — [bitscore.in](https://bitscore.in), authorised India partner for
 [Bitsight](https://www.bitsight.com/).
 
-**Latest release: [v0.4.0](https://github.com/nimitt-IN/bitscorecowork/releases/tag/v0.4.0)** —
+**Latest release: [v0.4.1](https://github.com/nimitt-IN/bitscorecowork/releases/tag/v0.4.1)** —
 sixteen skills, 15 read-only tools, verified against the live Bitsight API.
 [All releases →](https://github.com/nimitt-IN/bitscorecowork/releases)
 
@@ -42,43 +42,58 @@ usage and troubleshooting).
 | Path | What it is |
 | --- | --- |
 | [`bitscorecowork/`](bitscorecowork/) | The plugin source tree — edit here |
-| `bitscorecowork-0.4.0.plugin` | **Current** built, installable plugin (a zip of `bitscorecowork/`) |
-| `bitscorecowork-0.3.1.plugin` | Previous release, kept for anyone still on it |
-| `bitscorecowork-0.3.0.plugin` | Older release, kept for anyone still on it |
-| `bitscorecowork-0.2.1.plugin` | Older release, kept for anyone still on it |
-| `bitscorecowork-0.2.0.plugin` | Older release, kept for anyone still on it |
-| `bitscorecowork-0.1.1.plugin` | Older release, kept for anyone still on it |
+| `bitscorecowork-0.4.1.plugin` | The current built, installable plugin (a zip of `bitscorecowork/`) |
 | [`LICENSE`](LICENSE) | MIT License |
+
+Only the current bundle is kept at the repo root. Earlier bundles remain downloadable from their
+[GitHub releases](https://github.com/nimitt-IN/bitscorecowork/releases).
 
 ## Install
 
-Download **[`bitscorecowork-0.4.0.plugin` from the v0.4.0 release](https://github.com/nimitt-IN/bitscorecowork/releases/tag/v0.4.0)**
+Download **[`bitscorecowork-0.4.1.plugin` from the v0.4.1 release](https://github.com/nimitt-IN/bitscorecowork/releases/tag/v0.4.1)**
 (it's also committed at the repo root) and add it in Claude, or point at the `bitscorecowork/`
 directory as a local plugin. The `bitsight` MCP server starts automatically — no `npm install` and
 no configuration required.
 
-Older bundles are retained so existing installs aren't stranded, but upgrade when you can. 0.3.1
-lacks the six skills added in 0.4.0 — in particular it has no answer to "those IPs aren't ours", no
-incident-notification clocks, and no way to report only what changed since the last run. 0.3.0
-implies the 2026 cybersecurity Directions absorbed RBI outsourcing governance for commercial banks;
-they expressly do not, so a vendor-oversight pack built on it can cite the wrong instrument. 0.2.1
-maps `regmap` to the RBI cybersecurity circulars that the 31 July 2026 Directions repealed for
-commercial banks, so an RBI pack built on it cites a superseded instrument. 0.2.0 additionally
-still describes the retired **Patching Cadence** risk vector and sequences it as slow programme
-work, which is now the wrong advice under Critical Vulnerability Management. 0.1.1 additionally
-lacks the five newer skills and treats an HTTP 403 as an authentication failure, which sends you
-rotating a valid token when Bitsight is really telling you an endpoint isn't in your subscription.
+**Upgrade from any earlier bundle.** Releases before 0.4.1 describe the RBI Cybersecurity Directions,
+2026 as a single commercial-banks instrument and route every other regulated entity to the 2023 IT
+Governance Master Direction. There are in fact **seven parallel Directions**, one per entity class,
+so an `incident-notify` escalation matrix or a `regmap` pack built on an older bundle can cite the
+wrong instrument for an NBFC, SFB, Payments Bank, UCB, AIFI or CIC. They also still cite the IRDAI
+2023 Guidelines, replaced in April 2026.
 
-## Versions
+## Current release
 
-| Version | Skills | Tools | Notes |
-| --- | --- | --- | --- |
-| **[0.4.0](https://github.com/nimitt-IN/bitscorecowork/releases/tag/v0.4.0)** — current | 16 | 15 | Six new skills, no new tools. **`entity-scope`** settles *"those IPs aren't ours"* — it pages the full footprint, categorises every asset against an eight-part attribution taxonomy in the new `attribution-patterns.md`, and produces a signed-off inventory plus a dispute submission, while pushing back where the claim doesn't hold (an acquired entity's estate is your estate; a cloud hostname proves nothing about who deployed the workload). **`incident-notify`** drafts the time-bound Indian notifications against the new source-cited `incident-reporting-map.md` — CERT-In's six hours, DAKSH for covered commercial banks, SEBI CSCRF **and** LODR Reg. 30 for listed entities, IRDAI, DPDP intimation to the Board and to Data Principals, NCIIPC — with each clock marked **Primary** or **Secondary** by whether the published text was read directly, and with the common "RBI 2–6 hours for banks and NBFCs" conflation corrected. **`tabletop`** builds a board crisis simulation from the real attack surface with the regulatory clocks running as injects, every artefact stamped `EXERCISE — NOT A REAL INCIDENT`. **`peer-index`** benchmarks by sector while refusing to pass a portfolio cohort off as the sector. **`watchtower`** reports only the delta since a dated snapshot it writes to the working folder — now the one file any skill persists by design, sanctioned in global rules §8. **`assurance-pack`** answers inbound customer questionnaires without ever writing "compliant" and without attaching itemised findings. |
-| [0.3.1](https://github.com/nimitt-IN/bitscorecowork/releases/tag/v0.3.1) | 10 | 15 | Separates the two RBI tracks 0.3.0 blurred. Outsourcing for commercial banks sits in the **[Managing Risks in Outsourcing Directions, 2025](https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13139)** (28 Nov 2025), which repealed the 2023 IT-outsourcing Master Direction for them; the 2026 cybersecurity Directions expressly **preserve** that regime and carve around it, their third-party paragraphs reaching only arrangements outside it. `regmap` now asks which instrument a pack is about before mapping vendor oversight, and separates the outsourcing artefacts from the Chapter IV ones. |
-| [0.3.0](https://github.com/nimitt-IN/bitscorecowork/releases/tag/v0.3.0) | 10 | 15 | Makes `critical_vulnerability_management` the plugin's only risk-vector name and moves the wire-level compatibility into the MCP server — verified on the live API, the retired `patching_cadence` slug is still the one Bitsight answers, and an unrecognised slug returns an empty set rather than an error, so 0.2.1's retry heuristic could report a clean company that was graded F. All ten skills now filter severity with a numeric `severity_gte` floor (9 severe, 8 material and above, 6 moderate and above) instead of pulling everything. Adds the **[RBI (Commercial Banks – Cybersecurity, Technology: Risk, Resilience and Assurance Framework) Directions, 2026](https://rbi.org.in/scripts/NotificationUser.aspx?Mode=0&Id=13643)** (RBI/DoS/2026-27/410, 31 July 2026, in force immediately) to `regmap`'s mapping reference — coverage, the eight chapters, a risk-vector → chapter table, and what the data cannot show. Chapter-level references by design. When RBI is the chosen framework, and only then, `regmap` first asks **which** RBI instrument applies (the 2026 Directions repeal the earlier circulars for covered banks, but not for NBFCs, SFBs, Payments Banks or co-operative banks), then invites the user to supply policies, VA/PT reports, IS Audit findings, the outsourcing register or an existing control mapping. Supplied material is recorded, never assessed, and RBI rows carry an evidence-source column so client-supplied evidence never blurs into Bitsight-observed evidence. Other frameworks are unchanged. |
-| [0.2.1](https://github.com/nimitt-IN/bitscorecowork/releases/tag/v0.2.1) | 10 | 15 | Tracks Bitsight's 16 July 2026 replacement of the **Patching Cadence** risk vector with **Critical Vulnerability Management**. More than a rename: CVM grades on a severity-weighted average time-to-remediate with a 90-day finding lifetime, so `remediation-roadmap` no longer defers it to days 61–90 as slow programme work and instead puts Material/Severe findings in the first 30 days. `regmap`'s framework table, the `mycompany` and `vendor-brief` copy, and the `bitsight_get_findings` risk-vector slug guidance all follow. |
-| [0.2.0](https://github.com/nimitt-IN/bitscorecowork/releases/tag/v0.2.0) | 10 | 15 | Adds `vendor-brief`, `remediation-roadmap`, `cve-sweep`, `regmap`, `quantify`, plus industry-benchmark and threat/CVE tools. Separates 401 (bad token) from 403 (endpoint not in subscription) so a gated endpoint degrades gracefully instead of aborting the workflow. Response shapes corrected against the live API. |
-| [0.1.1](https://github.com/nimitt-IN/bitscorecowork/releases/tag/v0.1.1) | 5 | 11 | Initial release: `mycompany`, `myportfolio`, `boardpack`, `vapt-plan`, `security-test-plan`. |
+**v0.4.1** — 16 skills, 15 read-only tools.
+
+Regulatory corrections to the bundled references. The RBI Cybersecurity, Technology: Risk, Resilience
+and Assurance Framework Directions, 2026 are **seven parallel instruments issued on 31 July 2026**,
+one per entity class — commercial banks 410, SFBs 419, Payments Banks 428, UCBs 437, AIFIs 456, NBFCs
+461, CICs 470 — each carrying the same six-hour DAKSH clock under its own reporting paragraph. The
+plugin previously treated 410 as the single instrument and sent every other entity class to the 2023
+IT Governance Master Direction, which would have misrouted a live filing. All seven were read directly
+from rbi.org.in. NBFC scope is corrected too: 461 binds every RBI-registered NBFC, graded by chapter,
+and Base Layer below ₹500 crore carries no DAKSH clause at all — only CERT-In's six hours. IRDAI moves
+to the 2026 Guidelines that replaced the 2023 text, and the DPDP Rules gain their G.S.R. 846(E)
+citation with the 13-versus-14 November date trap spelled out.
+
+**The DPDP breach clock is not running, and earlier releases implied it was.** Rule 1(4) of
+G.S.R. 846(E) places **Rule 7 in the eighteen-month tranche — commencing 13 May 2027** — and
+G.S.R. 843(E) commences Act section 8 on the same date. `incident-notify` no longer drafts DPDP
+intimations as live filings; `tabletop` runs them as labelled rehearsal injects.
+
+**SEBI CSCRF is three filings, not one** — six hours to `mkt_incidents@sebi.gov.in` and CERT-In, 24
+hours to the SEBI Incident Reporting Portal, plus a further six-hour leg to exchanges and depositories
+for brokers and DPs. **IRDAI's 24-hour step turned out not to exist** in the 2026 Guidelines; it was a
+2023 carry-over. **SEBI LODR Reg. 30 is now marked unverified** rather than quoted with false
+confidence — SEBI's consolidated text is client-rendered and could not be read.
+
+`entity-scope` also gains **`origin_subsidiary`**, the asset field that explains estate size: the same
+IP is returned once per subsidiary it maps through, so a Bitsight asset total is a row count, not a
+host count. The reference now requires deduplication before any total is quoted, documents `hosted_by`
+being routinely null, and points at RDAP as the checkable registry fallback a dispute submission needs.
+
+[Full release history →](https://github.com/nimitt-IN/bitscorecowork/releases)
 
 ## Building the `.plugin` from source
 
@@ -86,8 +101,8 @@ The `.plugin` file is just a zip of the `bitscorecowork/` directory. After chang
 `bitscorecowork/`, rebuild it so the shipped artifact matches:
 
 ```bash
-rm -f bitscorecowork-0.4.0.plugin
-zip -r -X bitscorecowork-0.4.0.plugin bitscorecowork \
+rm -f bitscorecowork-0.4.1.plugin
+zip -r -X bitscorecowork-0.4.1.plugin bitscorecowork \
   -x '*/.DS_Store' -x '*/node_modules/*'
 ```
 

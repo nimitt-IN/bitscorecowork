@@ -10,7 +10,7 @@ description: >
   findings (as opposed to drafting notifications for a real incident, which is
   `incident-notify`).
 metadata:
-  version: "0.4.0"
+  version: "0.4.1"
 ---
 
 # tabletop — board crisis simulation from the real attack surface
@@ -94,9 +94,12 @@ If an artefact would be convincing, it needs the stamp most.
    trigger:
    - The **CERT-In six hours** ticking while the room is still arguing about whether this counts as an
      incident. That argument *is* the lesson.
-   - The applicable **sectoral filing** — DAKSH for a covered commercial bank, the relevant instrument
-     for an NBFC, SEBI CSCRF, IRDAI.
+   - The applicable **sectoral filing** — DAKSH under the entity's own instrument (one of seven RBI
+     Directions), SEBI CSCRF, IRDAI.
    - **DPDP** intimation to affected Data Principals, which reaches customers and therefore the market.
+     Its obligations commence **13 May 2027**, so run it as a **rehearsal inject** — label it as such
+     in the facilitator guide. Exercising it early is legitimate and useful; presenting it as a clock
+     running today is not.
    - **SEBI LODR Reg. 30** if listed — the materiality decision, under time pressure, with incomplete
      facts. This one reliably surprises boards.
 

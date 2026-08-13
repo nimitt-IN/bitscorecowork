@@ -10,7 +10,7 @@ description: >
   checklist, escalation matrix and notification drafts (as opposed to a simulated
   exercise, which is `tabletop`).
 metadata:
-  version: "0.4.0"
+  version: "0.4.1"
 ---
 
 # incident-notify — time-bound Indian regulatory notifications after an incident
@@ -66,8 +66,11 @@ determinations to make.
      insurance intermediary, or none of these.
    - **Listed?** — SEBI LODR Regulation 30 reaches every listed entity regardless of sector, and it is
      the obligation most often forgotten in the first six hours.
-   - **Personal data in scope?** — DPDP runs on its own clocks, to its own recipients, and it is the
-     only track here that reaches individuals.
+   - **Personal data in scope?** — DPDP is the only track that reaches individuals, but **its breach
+     obligations do not commence until 13 May 2027** (Rule 7 and Act s.8; see the reference). Ask
+     anyway — it shapes containment, evidence handling and customer communications now, and the
+     entity may have contractual or policy commitments of its own. Just don't put a DPDP deadline in
+     the matrix as though one were running.
    - **Any declared protected system affected?** — protected-system status is a notified fact. Ask;
      do not infer it from sector or size.
    - **Did it originate at a service provider, or is the entity itself the provider?** — either way,
@@ -116,15 +119,23 @@ determinations to make.
    document. Follow the reference for what each must contain, and in particular:
    - **CERT-In** — the Annexure I category, the 6-hour clock, the technical facts, and the logs the
      directions require to accompany it.
-   - **RBI** — DAKSH for covered commercial banks; the applicable instrument for NBFCs. Name which
-     instrument you drafted against and label the assumption if applicability was not confirmed.
-   - **SEBI CSCRF** and, separately, **LODR Reg. 30** if listed — different audiences, different
-     standards. The Reg. 30 disclosure is written for the market.
-   - **IRDAI** — the 6-hour copy, then the detailed format within 24 hours.
-   - **DPDP** — two distinct drafts: the intimation to **each affected Data Principal** (concise,
-     clear, plain, with the consequences, the mitigation and a contact who can answer them), and the
-     **Board** notification in two stages. Track the Data Principal intimations from the outset — the
-     72-hour report has to summarise them.
+   - **RBI** — DAKSH within six hours, under **the instrument for that entity class** (one of seven;
+     see the reference). Name which instrument you drafted against and label the assumption if
+     applicability was not confirmed.
+   - **SEBI CSCRF** — three filings, not one: six hours to `mkt_incidents@sebi.gov.in` **and**
+     CERT-In, details to the SEBI Incident Reporting Portal within 24 hours, and for stock brokers and
+     depository participants a further six-hour leg to the exchanges/depositories.
+   - **LODR Reg. 30** if listed — separate from CSCRF, different audience, different standard. The
+     Reg. 30 disclosure is written for the market. Its time limits are the one **unverified** row in
+     the reference; say so rather than stating a limit with false confidence.
+   - **IRDAI** — six hours to CERT-In with a copy to IRDAI. **There is no 24-hour step in the 2026
+     Guidelines**; do not carry one over from the 2023 text.
+   - **DPDP** — ⚠️ **do not draft these as live filings.** Rule 7 and Act s.8 commence **13 May 2027**.
+     If the user wants them, produce them clearly marked as **preparatory, not yet in force**: the
+     intimation to each affected Data Principal (concise, clear, plain, with the consequences, the
+     mitigation and a contact who can answer them) and the two-stage Board notification. Say plainly
+     that no DPDP clock is running on this incident, and that the CERT-In and sectoral filings are
+     the live ones.
 
    Every draft carries: the trigger time, what is known, what is under investigation, and a named
    contact. Mark each one **DRAFT — NOT FILED**.
