@@ -10,7 +10,7 @@ description: >
   checklist, escalation matrix and notification drafts (as opposed to a simulated
   exercise, which is `tabletop`).
 metadata:
-  version: "0.4.1"
+  version: "0.4.2"
 ---
 
 # incident-notify — time-bound Indian regulatory notifications after an incident
@@ -125,9 +125,14 @@ determinations to make.
    - **SEBI CSCRF** — three filings, not one: six hours to `mkt_incidents@sebi.gov.in` **and**
      CERT-In, details to the SEBI Incident Reporting Portal within 24 hours, and for stock brokers and
      depository participants a further six-hour leg to the exchanges/depositories.
-   - **LODR Reg. 30** if listed — separate from CSCRF, different audience, different standard. The
-     Reg. 30 disclosure is written for the market. Its time limits are the one **unverified** row in
-     the reference; say so rather than stating a limit with false confidence.
+   - **LODR Reg. 30** if listed — separate from CSCRF, different audience, different standard, written
+     for the market. **A cyber incident is limb (ii) — twelve hours, not the twenty-four everyone
+     quotes** — because it emanates from within the listed entity. On a twelve-hour clock this can
+     fall due *before* some of the technical filings, so put it in the matrix early.
+   - **LODR Reg. 27(2)(ba)** if listed — cyber incidents, breaches and data loss go into the
+     **quarterly corporate governance report**, with **no materiality test**. An incident correctly
+     judged immaterial for Reg. 30 can still be reportable here. It outlives the incident: put it on
+     the post-incident checklist, and say so even though it is not a first-day clock.
    - **IRDAI** — six hours to CERT-In with a copy to IRDAI. **There is no 24-hour step in the 2026
      Guidelines**; do not carry one over from the 2023 text.
    - **DPDP** — ⚠️ **do not draft these as live filings.** Rule 7 and Act s.8 commence **13 May 2027**.

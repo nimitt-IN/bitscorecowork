@@ -10,7 +10,7 @@ description: >
   findings (as opposed to drafting notifications for a real incident, which is
   `incident-notify`).
 metadata:
-  version: "0.4.1"
+  version: "0.4.2"
 ---
 
 # tabletop — board crisis simulation from the real attack surface
@@ -100,8 +100,10 @@ If an artefact would be convincing, it needs the stamp most.
      Its obligations commence **13 May 2027**, so run it as a **rehearsal inject** — label it as such
      in the facilitator guide. Exercising it early is legitimate and useful; presenting it as a clock
      running today is not.
-   - **SEBI LODR Reg. 30** if listed — the materiality decision, under time pressure, with incomplete
-     facts. This one reliably surprises boards.
+   - **SEBI LODR Reg. 30(6)** if listed — the materiality decision, under time pressure, with
+     incomplete facts. This one reliably surprises boards, and the deadline surprises them twice:
+     **twelve hours**, not twenty-four, because the event emanates from within the entity. Run it as a
+     hard inject — it can fall due before some of the technical filings.
 
    Put a visible countdown in the facilitator guide. A clock nobody can see does not create pressure.
 

@@ -9,7 +9,7 @@ description: >
   test-plan + RoE + reporting template. Plan and template only — no working
   exploit code and no live execution.
 metadata:
-  version: "0.4.1"
+  version: "0.4.2"
 ---
 
 # security-test-plan — engagement plan & reporting scaffold (planning only)
