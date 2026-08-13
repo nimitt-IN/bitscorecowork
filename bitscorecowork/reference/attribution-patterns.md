@@ -22,14 +22,14 @@ evidence, and what a dispute submission has to contain to succeed.
 >   dispute endpoint. Submissions are filed by the customer through the Bitsight platform or their
 >   account team, and the rating does not move until Bitsight adjudicates.
 
-**Verified against the live Bitsight API on 4 August 2026.**
+**Verified against the live Bitsight API on 4 August 2026, and extended from a second live estate on 13 August 2026.**
 
 ---
 
-## Two signals the API gives you directly
+## Three signals the API gives you directly
 
-Before reaching for hostname patterns, use the two fields Bitsight already provides. Both were
-confirmed live on 4 August 2026.
+Before reaching for hostname patterns, use the fields Bitsight already provides. The first two were
+confirmed live on 4 August 2026; the third on 13 August 2026.
 
 ### `hosted_by` on every asset — the hosting organisation, named
 
@@ -44,6 +44,35 @@ hostname. Read it first. The hostname patterns later in this document are the fa
 
 Note what `hosted_by` does *not* settle: an asset hosted by AWS may still be entirely the company's
 own workload. **It tells you who runs the infrastructure, never who controls the configuration.**
+
+Two further caveats from the 13 August 2026 sample: `hosted_by` is frequently **null** — on one large
+estate it was absent on entire pages — so treat a missing value as "unknown", never as "unhosted". And
+where it is null, the registry still answers: an **RDAP lookup** (`rdap.arin.net/registry/ip/<ip>`,
+`rdap.db.ripe.net/ip/<ip>`) returns the allocation holder and range, which is exactly the checkable
+evidence a dispute submission needs. Use it — a named RIR allocation beats an inference every time.
+
+### `origin_subsidiary` on every asset — **why the asset count is not a host count**
+
+`bitsight_get_assets` also returns **`origin_subsidiary`** (`{guid, name}`): the entity the attribution
+was inherited through. It is the **strongest signal for category 9** below, and the only one that
+explains the *size* of an estate.
+
+**The same IP is returned as a separate row for every subsidiary it maps through.** Verified live on
+13 August 2026: one address appeared **six times** in a single page, once each for six differently
+named entities within the same organisation. Whole pages ran **100 rows to 18 unique IPs**.
+
+**So never quote a Bitsight asset total as a host count.** Deduplicate first —
+`[.results[].asset] | unique | length` — and report both numbers. An estate described as "21,000
+assets" that is really ~4,000 hosts counted five ways will mislead every downstream decision: scoping,
+pricing, testing and the customer's own sense of how bad things are.
+
+Grouping assets by `origin_subsidiary` also names the overlapping entities directly, which is what the
+account-team conversation in category 9 actually needs. Watch for names that are not the company at
+all — test and demo entities sitting inside a production portfolio are common, and they inflate
+everything.
+
+Assets additionally carry `tags` (free-text, user-set — useful context, not evidence) and
+`combined_overrides.importance`, which is where a manual importance override surfaces.
 
 ### `attributed_companies` on findings — but read *whose* names appear
 
@@ -264,10 +293,18 @@ pending, and Bitsight may decline. A disputed asset is not a removed asset.
 ## API notes for this work
 
 - `bitsight_get_assets` returns, per asset: `asset`, `asset_type` (IP / Domain), **`hosted_by`**
-  (`{guid, name}` — read this first), `country` and `country_code`, `findings`, `importance` (a
-  float from 0 to 1) and **`importance_category`** (the string `low`/`medium`/`high`/`critical` the
-  `importance` filter matches on). **Page through it fully** — a footprint review on the first page is
-  not a footprint review.
+  (`{guid, name}` — read this first, and often null), **`origin_subsidiary`** (`{guid, name}` — the
+  entity the attribution came through; read this second), `country` and `country_code`, `services`,
+  `findings` (with `counts_by_severity`), `tags`, `importance` (a float from 0 to 1),
+  **`importance_category`** (the string `low`/`medium`/`high`/`critical` the `importance` filter
+  matches on) and `combined_overrides.importance`. **Page through it fully** — a footprint review on
+  the first page is not a footprint review.
+- **Deduplicate before quoting any total.** Rows repeat per `origin_subsidiary`, so `count` is a row
+  count, not a host count. Report both, and say which is which.
+- Results come back roughly **importance-descending**, so `critical` assets cluster on the early
+  pages. Useful for triage — and a reason not to mistake page one for a representative sample.
+- On a very large estate a full pass is hundreds of sequential calls. If you sample instead, **say so,
+  give the sample size and the offsets**, and do not present the result as a complete inventory.
 - The tool's `importance` filter is applied **client-side to the fetched page** and keys off
   `importance_category`. Verified working on 4 August 2026; an empty result means no asset on that
   page carried the category, not that the filter is broken. Page through rather than concluding from

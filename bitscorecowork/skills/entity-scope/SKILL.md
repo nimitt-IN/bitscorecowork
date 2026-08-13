@@ -9,7 +9,7 @@ description: >
   wants the attributed estate confirmed before anyone acts on the findings (as
   opposed to analysing the findings themselves).
 metadata:
-  version: "0.4.0"
+  version: "0.4.1"
 ---
 
 # entity-scope — validating the Bitsight digital footprint
@@ -22,7 +22,7 @@ submission for the assets that genuinely are mis-attributed.
 handling, no discrimination, India context).
 
 The attribution reference is [`../../reference/attribution-patterns.md`](../../reference/attribution-patterns.md).
-**Read it before categorising any asset**, including its opening caveats — the eight categories and
+**Read it before categorising any asset**, including its opening caveats — the nine categories and
 their counter-cases are the substance of this skill.
 
 ## What this skill can and cannot do
@@ -58,8 +58,22 @@ be told otherwise by their own rating tomorrow.
    - `bitsight_get_assets`, **paged through fully** with `limit`/`offset`. A footprint review that
      stops at the first page is not a footprint review — and on a large estate the interesting
      assets are rarely on page one. **Read `hosted_by` first** — Bitsight names the hosting
-     organisation directly on every asset, which beats inferring one from a hostname. Also carried:
-     `asset_type`, `country`, `importance_category` and the finding count.
+     organisation directly on every asset, which beats inferring one from a hostname; it is often
+     null, and where it is, an **RDAP lookup** on the address gives you the registered allocation
+     holder, which is stronger evidence anyway. **Read `origin_subsidiary` second** — it names the
+     entity the attribution came through. Also carried: `asset_type`, `country`,
+     `importance_category`, `services`, `tags` and the finding count.
+
+     **Deduplicate before quoting any total.** The same asset is returned **once per
+     `origin_subsidiary` it maps through**, so the `count` is a row count, not a host count — pages
+     running 100 rows to 18 unique hosts are normal on an overlapping estate. Report unique hosts and
+     rows separately and say which is which. Quoting the raw total as "assets" overstates the estate
+     several-fold and misleads every downstream decision.
+
+     **If the estate is too large to page fully**, say so explicitly: give the number of pages
+     sampled, the offsets used, and the proportion of the estate covered — and label every conclusion
+     as drawn from a sample. Results come back roughly importance-descending, so an early-pages-only
+     sample is biased towards `critical` assets and is not representative.
    - `bitsight_get_company_details` for `primary_domain` and the current rating, so the effect of any
      successful dispute has a baseline.
    - `bitsight_get_findings` with `severity_gte: 1` across the estate — here you want everything, not

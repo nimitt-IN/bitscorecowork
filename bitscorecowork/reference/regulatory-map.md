@@ -131,11 +131,35 @@ comply-or-explain approach on selected provisions. It **repeals** the previous c
 IT-governance instructions for the banks it covers — so for a covered bank this is the current
 instrument, and the older circulars are the wrong thing to cite.
 
-**Who it does not cover.** NBFCs, co-operative banks, SFBs, Payments Banks, Local Area Banks and
-payment system operators remain under their own RBI instruments — the IT Governance, Risk, Controls
-and Assurance Practices Master Direction and the applicable outsourcing norms. **Ask the user which
-RBI instrument set applies to them; never decide it for them.** Applicability is a determination for
-their compliance and legal team (global rules §7).
+**Who it does not cover — and where they went instead.** 410 is **one of seven parallel Directions
+issued on 31 July 2026**, one per entity class. The classes excluded from 410 are excluded because
+they have their own instrument, **not** because they are outside the framework:
+
+| Entity class | Reference | RBI notification Id |
+| --- | --- | --- |
+| Commercial Banks | RBI/DoS/2026-27/**410** | 13643 |
+| Small Finance Banks | RBI/DoS/2026-27/**419** | 13634 |
+| Payments Banks | RBI/DoS/2026-27/**428** | 13625 |
+| Urban Co-operative Banks | RBI/DoS/2026-27/**437** | 13616 |
+| All India Financial Institutions | RBI/DoS/2026-27/**456** | 13597 |
+| Non-Banking Financial Companies | RBI/DoS/2026-27/**461** | 13592 |
+| Credit Information Companies | RBI/DoS/2026-27/**470** | 13583 |
+
+URL pattern: `https://rbi.org.in/scripts/NotificationUser.aspx?Mode=0&Id=<Id>`. Verified against the
+published texts on 13 August 2026.
+
+**Regional Rural Banks and Local Area Banks have no instrument in this family** — LABs received a
+separate *(Local Area Banks – Miscellaneous) Supervisory Directions, 2026* the same day. A parallel
+*Digital Payment Security Controls* family was also issued on 31 July 2026 for the same classes;
+**different instruments, never cite them interchangeably.**
+
+**NBFCs — the chapter matters as much as the instrument.** 461 binds all RBI-registered NBFCs, but
+graded: Ch. III (Base Layer below ₹500 crore, and CICs) · Ch. IV (Base Layer ₹500 crore and above) ·
+Ch. V (Top, Upper and Middle Layer, excluding CICs). Map evidence to the chapter that binds the
+entity.
+
+**Ask the user which RBI instrument applies to them; never decide it for them.** Applicability is a
+determination for their compliance and legal team (global rules §7).
 
 **What it does *not* replace: outsourcing.** These Directions do not absorb outsourcing governance,
 and assuming they do is the easy mistake. Outsourcing for commercial banks sits in the **Reserve
@@ -207,12 +231,13 @@ Short, non-exhaustive context. Applicability is always entity-specific.
   limitation and minimisation apply to what you extract and retain from findings, especially
   exposed-credential data.
 - **RBI** — two separate tracks, and they are not alternatives.
-  - *Cybersecurity and IT governance.* For **commercial banks**, the Cybersecurity, Technology:
-    Risk, Resilience and Assurance Framework Directions, 2026 (31 July 2026) are the current
-    instrument and supersede the earlier cyber/IT-governance circulars; see the
-    [dedicated section above](#rbi-directions-2026--commercial-banks). Other regulated entities —
-    NBFCs, co-operative banks, SFBs, Payments Banks, payment system operators — remain under the IT
-    governance, risk, controls and assurance expectations.
+  - *Cybersecurity and IT governance.* The Cybersecurity, Technology: Risk, Resilience and Assurance
+    Framework Directions, 2026 (31 July 2026) are **seven parallel instruments, one per entity
+    class** — commercial banks 410, SFBs 419, Payments Banks 428, UCBs 437, AIFIs 456, NBFCs 461,
+    CICs 470 — each superseding the earlier cyber/IT-governance circulars for its class. Identify
+    which one binds the entity; see the
+    [dedicated section above](#rbi-directions-2026--commercial-banks). Regional Rural Banks and Local
+    Area Banks have none in this family.
   - *Outsourcing and vendor oversight.* For **commercial banks**, the Managing Risks in Outsourcing
     Directions, 2025 (28 November 2025), which repealed the 2023 IT-outsourcing Master Direction for
     them; NBFCs have a parallel 2025 instrument. The 2026 cyber Directions preserve these rather

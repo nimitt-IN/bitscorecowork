@@ -195,12 +195,17 @@ specific duty on the user's behalf:
 - **DPDP Act, 2023** — if outputs touch personal data of data principals, handle it under the
   Digital Personal Data Protection Act (purpose limitation, minimisation, breach notification).
 - Sectoral third-party/vendor-risk regimes may also apply (e.g. **RBI** outsourcing/IT norms,
-  **SEBI** cybersecurity framework, **IRDAI** guidelines). For **commercial banks**, the RBI
-  (Commercial Banks – Cybersecurity, Technology: Risk, Resilience and Assurance Framework)
-  Directions, 2026 — RBI/DoS/2026-27/410, 31 July 2026, in force immediately — replace the earlier
-  cyber/IT-governance circulars. They do **not** extend to NBFCs, co-operative banks, SFBs, Payments
-  Banks or Local Area Banks. Which instrument applies is entity-specific; ask, and leave the call to
-  the user's compliance team.
+  **SEBI** cybersecurity framework, **IRDAI** guidelines). The RBI Cybersecurity, Technology: Risk,
+  Resilience and Assurance Framework Directions, 2026 — all issued 31 July 2026, in force immediately
+  — are **seven parallel instruments, one per entity class**, each replacing the earlier
+  cyber/IT-governance circulars for its class: commercial banks **410**, SFBs **419**, Payments Banks
+  **428**, UCBs **437**, AIFIs **456**, NBFCs **461**, CICs **470** (all `RBI/DoS/2026-27/`).
+  **Citing 410 at anything other than a commercial bank is wrong.** Regional Rural Banks and Local
+  Area Banks have no instrument in this family. Which instrument applies is entity-specific; ask, and
+  leave the call to the user's compliance team.
+- **IRDAI** — the Information and Cyber Security Guidelines, **2026** (IRDAI/GA&HR/CIR/MISC/51/4/2026,
+  6 April 2026) replaced the 2023 Guidelines. IRDAI's document page for the 2023 text is still live
+  and carries no superseded notice, so check the year on whatever PDF you actually opened.
 - **Outsourcing is a separate RBI track and the 2026 Directions do not absorb it.** Vendor oversight
   for commercial banks sits in the RBI (Commercial Banks – Managing Risks in Outsourcing)
   Directions, 2025 — 28 November 2025 — which repealed the 2023 IT-outsourcing Master Direction for
