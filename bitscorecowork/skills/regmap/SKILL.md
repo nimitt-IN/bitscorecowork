@@ -3,13 +3,13 @@ name: regmap
 description: >
   Build a framework evidence pack from Bitsight data — map risk vectors and
   findings to NIST CSF 2.0, ISO/IEC 27001:2022 and Indian regulatory obligation
-  areas (RBI, SEBI, IRDAI, CERT-In, DPDP). Use when the user asks to "map our
-  Bitsight data to NIST", "ISO 27001 evidence from our ratings", "show this
-  against the SEBI/RBI framework", "control mapping", "map this to the RBI
-  Cybersecurity Directions 2026", or wants ratings evidence organized for an
-  audit, assessment or supervisory review.
+  areas (RBI, SEBI CSCRF, IRDAI, IFSCA, CERT-In, DPDP). Use when the user asks to
+  "map our Bitsight data to NIST", "ISO 27001 evidence from our ratings", "show
+  this against the SEBI/RBI framework", "control mapping", "which CSCRF category
+  are we", "map this to the RBI Cybersecurity Directions 2026", or wants ratings
+  evidence organized for an audit, assessment or supervisory review.
 metadata:
-  version: "0.4.2"
+  version: "0.5.0"
 ---
 
 # regmap — framework evidence pack from Bitsight data
@@ -49,9 +49,14 @@ output — an auditor can work with it, and it doesn't assert something the data
    - **Subject** — the user's own organization, one third party, or the portfolio as a whole (for
      evidencing third-party monitoring as a control activity in its own right).
    - **Framework(s)** — NIST CSF 2.0, ISO/IEC 27001:2022, and/or an Indian regime (RBI, SEBI,
-     IRDAI, CERT-In, DPDP). Mapping to two frameworks at once is normal; more than that produces an
-     unreadable table, so ask which matter. **If RBI is one of them, go to step 3 before pulling
-     any data.**
+     IRDAI, **IFSCA**, CERT-In, DPDP). Mapping to two frameworks at once is normal; more than that
+     produces an unreadable table, so ask which matter. **If RBI is one of them, go to step 3 before
+     pulling any data. If SEBI, go to step 3a. If IFSCA, go to step 3b.**
+   - **Where is the entity licensed?** Ask before mapping to any Indian regime. An entity licensed by
+     **IFSCA** — a **GIFT City / IFSC** entity — is mapped to the IFSCA Guidelines, **not** to the
+     RBI's Directions or to CSCRF, however mainland its business looks. An IFSC licence displaces the
+     mainland regulator. Mapping a GIFT City banking unit to RBI 410 is the wrong instrument twice
+     over.
    - **Is the entity listed?** Ask this **whatever framework was chosen** — it is not a SEBI-only
      question. SEBI **LODR** reaches every listed entity in any sector, including one with no
      financial-sector regulator, and a SEBI-regulated entity that is also listed is in **both** LODR
@@ -142,6 +147,54 @@ output — an auditor can work with it, and it doesn't assert something the data
    - If they decline, proceed on Bitsight data alone and make the coverage statement in step 6 do
      the work. A Bitsight-only RBI pack is a legitimate output — it just has more "not evidenced"
      rows, and it should say why.
+
+3a. **If SEBI CSCRF was chosen — establish the category before mapping anything.**
+   CSCRF obligations are **graded by RE category**, so the category is the question the whole pack
+   depends on. Ask for it; never compute it from an AUM figure the user mentions in passing, and never
+   determine it yourself (global rules §7).
+
+   **Do not read the category off the August 2024 circular.** The categorisation criteria were
+   **replaced in April 2025 and again in August 2025** — not adjusted, replaced. Portfolio Managers and
+   Merchant Bankers were re-categorised in *both* rounds; the proprietary/client-based split for stock
+   brokers no longer exists; KRAs moved from MII-par to Qualified; AIFs and VCFs are now assessed at
+   **manager** level. The current tables, the amendment circulars and the carve-outs are in
+   [`cscrf-categories.md`](../../reference/cscrf-categories.md).
+
+   Three things to say in the pack itself:
+   - **Which category the user stated**, and that it came from them. A pack that silently assumes a
+     category has assumed the obligations too.
+   - **The category is fixed annually.** It is set at the start of the financial year on the previous
+     year's data and held all year, so it answers a question about last year's numbers. A firm can be
+     correctly categorised and still be working to a superseded threshold table — that is the failure
+     mode, and it does not look like an error from the inside.
+   - **Bitsight cannot categorise anything.** AUM, client counts, folios and trading volume come from
+     the entity's own records.
+
+   If the entity is **also listed**, it is in LODR as well as CSCRF — see the listed-entity question
+   above.
+
+3b. **If IFSCA was chosen — map to the five components, and check the exemptions.**
+   The Guidelines (IFSCA-CSD0MSC/13/2025-DCS, 10 March 2025, in force 1 April 2025) are organised as
+   **I** Governance · **II** Cyber security and cyber resilience framework · **III** Third party risk
+   management · **IV** Communication & awareness · **V** Audit. Map to that structure, using the
+   vector table in [`regulatory-map.md`](../../reference/regulatory-map.md).
+
+   Three things this instrument does that change the pack:
+   - **Para 11 sets an express six-monthly cadence** for reviewing third parties the RE depends on for
+     core operations or that hold critical-system access. This is the clearest cadence obligation in
+     any Indian instrument in the references, and a dated portfolio pack maps onto it directly — say
+     it evidences that the **review was carried out**, not that the vendor is secure (para 13 keeps
+     the responsibility with the RE).
+   - **Para 9(a) requires an asset inventory including interconnections with external systems.** The
+     attributed footprint is direct evidence of the external half. Offer `entity-scope` where the
+     inventory is what is actually in question.
+   - **Proportionality runs through the whole instrument.** Depth is set by scale, complexity, nature
+     of activity, interconnectedness and risk. Do not present a flat checklist.
+
+   **Ask whether the RE falls inside a para 21 exemption** (branch, group-only GIC, fewer than ten
+   employees, foreign university) — each conditional on para 22 — but do not determine it. Note that
+   an exempt RE still files an annual certification within 90 days of the financial-year end, and that
+   the exemptions expire on **10 March 2028**. Bitsight sees nothing of components I, IV or V.
 
 4. **Pull the evidence.**
    - `bitsight_get_company_details` with `include_industry_comparison: true` — rating, per-vector

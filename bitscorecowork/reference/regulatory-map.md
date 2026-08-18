@@ -107,7 +107,7 @@ Continuous third-party monitoring is itself a control activity, independent of a
 
 | Activity | NIST CSF 2.0 | ISO/IEC 27001:2022 | Indian regimes |
 | --- | --- | --- | --- |
-| Continuous monitoring of third parties' external posture | GV.SC, ID.RA | A.5.19, A.5.20, A.5.21, A.5.22 | RBI outsourcing Directions, 2025 (commercial banks; parallel NBFC instrument) and IT governance expectations; SEBI cybersecurity framework; IRDAI outsourcing & cyber guidelines |
+| Continuous monitoring of third parties' external posture | GV.SC, ID.RA | A.5.19, A.5.20, A.5.21, A.5.22 | RBI outsourcing Directions, 2025 — **171** commercial banks, **363** NBFCs — and IT governance expectations; SEBI cybersecurity framework; IRDAI outsourcing & cyber guidelines; IFSCA Guidelines for IFSC entities |
 | Pre-contract due diligence on a vendor | GV.SC, ID.RA | A.5.19, A.5.20 | RBI/SEBI/IRDAI third-party due-diligence expectations |
 | Evidence retention for supervisory review | GV.OV, GV.SC | A.5.19, A.5.22 | CERT-In log-retention direction; sectoral record-keeping expectations |
 
@@ -166,8 +166,14 @@ and assuming they do is the easy mistake. Outsourcing for commercial banks sits 
 Bank of India (Commercial Banks – Managing Risks in Outsourcing) Directions, 2025** —
 RBI/DOR/2025-26/171, issued 28 November 2025, existing IT outsourcing agreements to comply by
 10 April 2026 — which themselves repealed the 2023 Master Direction on Outsourcing of IT Services
-for those banks. NBFCs have a parallel 2025 instrument. Source:
-https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13139
+for those banks. Source: https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13139
+
+NBFCs have their own instrument of the same date: the **Reserve Bank of India (Non-Banking Financial
+Companies – Managing Risks in Outsourcing) Directions, 2025**, RBI/DOR/2025-26/**363**, reaching HFCs,
+CICs, standalone primary dealers and the account aggregator and P2P categories, and graded by
+scale-based layer — Base Layer NBFCs follow the general outsourcing provisions only, Middle Layer and
+above pick up the IT-specific ones. Source:
+https://www.rbi.org.in/scripts/BS_ViewMasDirections.aspx?id=12941
 
 The 2026 Directions expressly **preserve** that instrument and carve around it: their third-party
 provisions apply only to IT and cybersecurity arrangements falling *outside* the outsourcing
@@ -246,6 +252,70 @@ who decides.
 
 ---
 
+## IFSCA — GIFT City, where a rating pack maps unusually well
+
+**Guidelines on Cyber Security and Cyber Resilience for Regulated Entities in IFSCs**
+
+| | |
+| --- | --- |
+| **Reference** | IFSCA-CSD0MSC/13/2025-DCS |
+| **Issued** | 10 March 2025 · **in force 1 April 2025** |
+| **Binds** | *"any entity which is licensed, recognised, registered or authorised by IFSCA"* |
+| **Source** | https://ifsca.gov.in/Document/Legal/guidelines-on-cyber-security-and-cyber-resilience-for-regulated-entities-in-ifscs-1-10032025064412.pdf |
+
+**Establish the licence before the sector.** An IFSC licence **displaces** the mainland regulator: a
+GIFT City banking unit is not mapped to the RBI's 2026 Directions and a GIFT City fund does not take a
+CSCRF category. Ask where the entity is licensed before asking what it does.
+
+**Five key components**, and the pack should be organised on them: **I** Governance · **II** Cyber
+security and cyber resilience framework · **III** Third party risk management · **IV** Communication &
+awareness · **V** Audit.
+
+**Why this instrument suits a ratings pack better than most.** Two provisions are unusually close to
+what Bitsight actually observes:
+
+- **Para 9(a) — asset inventory.** The IS Policy must maintain a detailed inventory of IT assets
+  *"including system configurations, their interconnections with internal and external systems"*, risk
+  assessed and classified by business criticality. The **externally** facing half of that is exactly
+  what the attributed footprint evidences — see [`attribution-patterns.md`](attribution-patterns.md)
+  and the `entity-scope` skill.
+- **Para 11 — six-monthly third-party review, on an express cadence.** For third parties the RE depends
+  on for core operations, or to whom it has granted access to critical systems, the RE must assess for
+  vulnerabilities or compliance gaps *"through audit, review or feedback **every six months**"*. This is
+  the clearest cadence obligation in any of the Indian instruments in this reference, and a dated
+  portfolio pack maps onto it directly. **Para 13 keeps the ultimate responsibility with the RE**, so
+  evidence of the review is evidence the RE performed it — not evidence the vendor is secure.
+
+### Risk vector → IFSCA obligation area
+
+| Risk vector | Component | Obligation area it speaks to | What it cannot show |
+| --- | --- | --- | --- |
+| Critical Vulnerability Management | II, §9(b) | Protection — security controls aligned with NIST / ISO 27000 to minimise likelihood and impact | The control selection process itself, and everything internal |
+| TLS/SSL Certificates · TLS/SSL Configurations · Open Ports · DNSSEC | II, §9(b) | Protection of IT assets and data; secure configuration of internet-facing infrastructure | Internal segmentation, key management, data at rest |
+| Insecure Systems · Server Software · Desktop / Mobile Software | II, §9(a) | Identification and classification of IT assets, and their configurations | Whether the inventory itself is complete — Bitsight sees what is externally observable, not what the RE has listed |
+| Web Application Headers · Mobile Application Security | II, §9(b) | Protection of customer-facing channels | SDLC, source review, pre-release testing |
+| Botnet Infections · Malware Servers · Potentially Exploited · Spam Propagation · Unsolicited Communications | II | Ability to anticipate, withstand, contain and recover from cyber-attacks — detection outcomes | The detection capability itself, and the incident-response process |
+| Exposed Credentials | II, IV | Credential protection; employee awareness and reporting channels | Whether MFA is enforced, and whether training happened |
+| Security Incidents (public disclosure) | II, and the para 19–20 clocks | Incident response and the reporting obligation | Whether the RE actually filed within six hours of detection |
+| Domain Squatting | II, IV | Brand-abuse monitoring; customer and employee phishing awareness | Take-down action taken |
+
+### Portfolio and vendor activity → IFSCA obligation area
+
+| Activity | Component | Obligation area it speaks to |
+| --- | --- | --- |
+| Six-monthly assessment of third parties supporting core operations or holding critical-system access | III, **para 11** | The express six-month review cadence — a dated `watchtower` or `myportfolio` pack is direct evidence of the review having been carried out |
+| Pre-contract vendor due diligence (`vendor-brief`) | III, paras 10 and 11 | Collaborative security approach; risk-based identification of dependent third parties |
+| Board-level reporting of external posture (`boardpack`) | I | Oversight Body's governance of cyber risk |
+| Retained, dated evidence for the annual audit | V | Independent assurance — the audit is **annual**, by a CERT-In empanelled auditor or one holding CISA, CISM, GSNA or CISSP, with the report to IFSCA **within 90 days of the financial-year end**. Brokers, bullion and clearing members and DPs who file a cyber audit report to an MII may submit that same report to IFSCA within 7 days of filing it |
+
+**Care point.** Proportionality runs through the whole instrument — *"the scale and complexity of
+operations, the nature of the activity … its interconnectedness … and the corresponding cyber risks"*.
+A pack that presents these as a flat checklist misrepresents the Guidelines. Say what the observed
+evidence shows and let the RE and its auditor set the depth. And note that Bitsight sees none of
+components I, IV or V at all: governance, training and audit are entirely internal records.
+
+---
+
 ## Indian regimes — orientation notes
 
 Short, non-exhaustive context. Applicability is always entity-specific.
@@ -265,16 +335,22 @@ Short, non-exhaustive context. Applicability is always entity-specific.
     which one binds the entity; see the
     [dedicated section above](#rbi-directions-2026--commercial-banks). Regional Rural Banks and Local
     Area Banks have none in this family.
-  - *Outsourcing and vendor oversight.* For **commercial banks**, the Managing Risks in Outsourcing
-    Directions, 2025 (28 November 2025), which repealed the 2023 IT-outsourcing Master Direction for
-    them; NBFCs have a parallel 2025 instrument. The 2026 cyber Directions preserve these rather
-    than absorbing them.
+  - *Outsourcing and vendor oversight.* Two parallel instruments, both issued 28 November 2025, both
+    with existing IT outsourcing agreements to comply by 10 April 2026: **RBI/DOR/2025-26/171** for
+    commercial banks, which repealed the 2023 IT-outsourcing Master Direction for them, and
+    **RBI/DOR/2025-26/363** for NBFCs, reaching HFCs, CICs, standalone primary dealers and the account
+    aggregator and P2P categories as well, graded by scale-based layer — Base Layer takes the general
+    outsourcing provisions only, Middle Layer and above pick up the IT-specific ones. The 2026 cyber
+    Directions preserve both rather than absorbing them.
   - Which set applies is entity-specific, and vendor-oversight evidence usually belongs against the
     outsourcing instrument rather than the cyber one: ask, don't assume.
 - **SEBI** — two separate tracks, and a listed SEBI-regulated entity is in both.
   - *CSCRF* (SEBI/HO/ITD-1/ITD_CSC_EXT/P/CIR/2024/113, 20 August 2024) — the cybersecurity and
     cyber-resilience framework for regulated market entities, including third-party and vendor-risk
-    provisions, graded by RE category.
+    provisions, **graded by RE category**. The category decides which obligations bind, so it is the
+    first thing to establish for a CSCRF pack — and the categorisation criteria have been **replaced
+    twice since the original circular**, in April 2025 and August 2025. Never determine a category
+    from the August 2024 text alone: see [`cscrf-categories.md`](cscrf-categories.md).
   - *LODR, for listed entities* — **Reg. 27(2)(ba)** requires details of **cyber security incidents,
     breaches or loss of data or documents** in the **quarterly corporate governance report**, with no
     materiality test; **Reg. 21(4)** requires the Risk Management Committee's role to *"specifically
@@ -283,6 +359,18 @@ Short, non-exhaustive context. Applicability is always entity-specific.
     [`incident-reporting-map.md`](incident-reporting-map.md) for the clocks.
 - **IRDAI** — Information and Cyber Security Guidelines, **2026** (IRDAI/GA&HR/CIR/MISC/51/4/2026,
   6 April 2026), which replaced the 2023 Guidelines, including outsourcing risk.
+- **IFSCA — and it displaces the three above.** Guidelines on Cyber Security and Cyber Resilience for
+  Regulated Entities in IFSCs (IFSCA-CSD0MSC/13/2025-DCS, 10 March 2025, in force 1 April 2025) bind
+  *"any entity which is licensed, recognised, registered or authorised by IFSCA"* — the GIFT City IFSC.
+  **An IFSC licence displaces the mainland regulator**: a GIFT City banking unit is not mapped to the
+  RBI's 2026 Directions, and a GIFT City fund does not take a CSCRF category. Applied on a **principle
+  of proportionality** — scale and complexity of operations, nature of the activity, interconnectedness,
+  and the corresponding cyber risks — so the same obligation binds two REs at different depths, which
+  is worth saying in a pack rather than presenting a flat checklist. Four express exemptions at para 21
+  (branches, group-only GICs, REs under ten employees, foreign universities) are conditional on
+  adopting the parent's framework and naming the parent's CISO as Designated Officer, and they expire
+  on 10 March 2028. CERT-In binds an IFSC entity either way. Clocks in
+  [`incident-reporting-map.md`](incident-reporting-map.md).
 
 For each of these, the correct output is *"here is the observed evidence relevant to this obligation
 area"* — never *"you are compliant with X"*.
@@ -292,3 +380,9 @@ area"* — never *"you are compliant with X"*.
 © 2026 BitScore Cybertech LLP. "Bitsight" is a registered trademark of Bitsight Technologies, Inc.;
 this plugin is an independent integration and is not published by Bitsight. Framework and regulatory
 names are the property of their respective bodies; references here are indicative only.
+
+<!-- provenance
+mirrors: bitscore.in lib/regulations.ts
+verified: 2026-08-18
+next-review: 2026-11-18
+-->

@@ -8,7 +8,7 @@ description: >
   business case for security spend", or wants a rating expressed as money for a
   board, budget or insurance conversation.
 metadata:
-  version: "0.4.2"
+  version: "0.5.0"
 ---
 
 # quantify — indicative financial exposure from Bitsight posture
@@ -80,6 +80,21 @@ still want the indicative version.
    arithmetic visible. Then apply posture as a **modifier**, not as the base: a Basic-tier rating and
    a rising finding count push likelihood up; an Advanced rating with a flat trend pushes it down.
    State the modifier and its basis explicitly.
+
+   **Anchor the modifier to the published multiples rather than inventing one** (global rules §3).
+   Bitsight's own comparative figures: Intermediate entities are on average **1.5–2×** more likely to
+   be breached than Advanced; Basic entities **2–3×** more likely than Intermediate; entities rated
+   **400 or below 5×** more likely than those rated 700 or above. Show which one you used and why.
+
+   Three constraints on how they appear in the output, and they are not optional:
+   - **They are comparative, not absolute.** They say a band is more exposed than another band. They
+     do not give this company a probability, and nothing here supports a sentence beginning "there is
+     an X% chance we will be breached".
+   - **Do not use the "50% less likely" figure**, which circulates widely and is not supported by the
+     material usually cited for it. If the user brings it, say so plainly and offer these instead.
+   - **Remember what Advanced means.** About 60% of rated entities are Advanced and the mean rating is
+     720, so "we are Advanced" is the majority position, not an outlier one. An estimate that treats
+     it as exceptional overstates the comfort.
 
    **Show the working.** Every number must trace to either a Bitsight data point, a figure the user
    supplied, or a stated assumption. A reader must be able to change one input and see what moves.

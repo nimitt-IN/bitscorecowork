@@ -8,7 +8,7 @@ description: >
   the industry average", "rank these NBFCs by rating", or wants comparative
   positioning (as opposed to a single company's own posture, which is `mycompany`).
 metadata:
-  version: "0.4.2"
+  version: "0.5.0"
 ---
 
 # peer-index — sector and peer benchmarking
@@ -42,6 +42,26 @@ labelled as constructed rather than presented as a Bitsight-defined sector.
 
 **A missing peer is not a signal.** If a competitor isn't in the cohort, that says something about the
 subscription, nothing about them.
+
+## The distribution, which decides what "above average" is worth
+
+Benchmarking outputs go wrong in a predictable direction: they present a comfortable position as an
+achievement. Three population facts keep that honest, and at least the first two belong in every pack
+(global rules §3):
+
+- **Roughly 60% of rated entities are Advanced.** Advanced is the **modal band**, not the top decile.
+  "We are Advanced" means "we are with the majority", and a deck that frames it as outperformance is
+  wrong in the direction the reader wants to believe. Where the subject is Advanced, the percentile is
+  the number that carries information — say where inside the band they sit.
+- **The mean rating is 720**, which sits in Intermediate. So a 730 is above the average and still not
+  Advanced, and those two facts about the same score point in opposite directions. State both.
+- **Ratings are rounded down in tens.** A ten-point gap between the subject and a peer may be one
+  point wide. Do not build a narrative on a single increment, and do not rank a cohort as though the
+  ordering within a shared band were meaningful.
+
+Where the industry percentile is available from Bitsight, it beats all of this — it is computed across
+the rated population rather than reasoned from it. Use these when the percentile is absent, and to
+sanity-check a conclusion that feels too flattering.
 
 ## Workflow
 

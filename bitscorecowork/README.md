@@ -1,4 +1,4 @@
-# BitScoreCoWork — v0.4.2
+# BitScoreCoWork — v0.5.0
 
 An asset by **BitScore Cybertech LLP** — [bitscore.in](https://bitscore.in), authorised India
 partner for [Bitsight](https://www.bitsight.com/).
@@ -67,8 +67,86 @@ See [`HELP_GUIDE.md`](HELP_GUIDE.md) for example prompts, expected inputs, and t
 [`bitscore-global-rules.md`](reference/bitscore-global-rules.md) (binding on all sixteen),
 [`regulatory-map.md`](reference/regulatory-map.md) (risk vector → framework control areas),
 [`incident-reporting-map.md`](reference/incident-reporting-map.md) (source-cited notification clocks),
-and [`attribution-patterns.md`](reference/attribution-patterns.md) (why an asset is attributed, and
-what a dispute needs).
+[`cscrf-categories.md`](reference/cscrf-categories.md) (SEBI CSCRF categorisation at its current
+thresholds), and [`attribution-patterns.md`](reference/attribution-patterns.md) (why an asset is
+attributed, and what a dispute needs).
+
+---
+
+## What's new in 0.5.0
+
+**GIFT City was missing, and its absence was silent.** An entity licensed by **IFSCA** — the
+International Financial Services Centres Authority, which regulates the GIFT City IFSC — files with
+IFSCA and **not** with the RBI, SEBI or IRDAI. An IFSC licence displaces the mainland regulator,
+however mainland the business looks. Before this release `incident-notify` asked "commercial bank,
+NBFC, intermediary or insurer?", a GIFT City banking unit answered "bank", and the skill drafted a
+DAKSH filing under RBI/DoS/2026-27/410 — an instrument that does not bind it. Nothing about that draft
+looked wrong, which is what made it worth fixing first.
+
+The references now carry the **Guidelines on Cyber Security and Cyber Resilience for Regulated
+Entities in IFSCs** (IFSCA-CSD0MSC/13/2025-DCS, 10 March 2025, in force 1 April 2025), read at source:
+
+- **Four clocks, all from *detection* rather than from noticing** — particulars to
+  `cyber-incidents@ifsca.gov.in` within **6 hours**, interim report at **3 days**, **mitigation
+  measures taken within 7 days**, root cause analysis at **30 days**. The seven-day step is a deadline
+  on the *fix*, not on a filing; no other Indian cyber instrument in these references puts a clock on
+  remediation, and it means the incident file stays open for a month.
+- **The four para 21 exemptions** — branches, group-only GICs, REs with fewer than ten employees, and
+  foreign universities — with their para 22 conditions, the **90-day annual certification an exempt RE
+  still owes**, and the fact that the exemptions **expire on 10 March 2028**. CERT-In binds an exempt
+  RE either way.
+- **A vector-by-vector mapping** in `regulatory-map.md`. Two provisions sit unusually close to what
+  Bitsight observes: para 9(a)'s asset inventory *"including … interconnections with internal and
+  external systems"*, and para 11's **express six-monthly review** of third parties supporting core
+  operations — the clearest cadence obligation in any of these instruments, and one a dated portfolio
+  pack evidences directly.
+
+**SEBI CSCRF is no longer cited at v1.0 alone.** A new reference,
+[`cscrf-categories.md`](reference/cscrf-categories.md), carries the categorisation at its **current**
+thresholds. This matters more than it sounds: the criteria were **replaced in April 2025 and again in
+August 2025** — replaced, not adjusted — and **Portfolio Managers and Merchant Bankers were
+re-categorised in both rounds**. The proprietary/client-based split for stock brokers no longer
+exists, KRAs moved from MII-par to Qualified, and AIFs and VCFs are now assessed at **manager** level.
+Because SEBI fixes a category each April on the previous year's data and holds it for the year, a firm
+can be correctly categorised and still be working to a superseded threshold table — which does not
+look like an error from the inside. `regmap` now asks for the category before mapping anything, and
+the file records that **MIIs, KRAs and QRTAs were excluded from both compliance extensions**, so the
+31 August 2025 deadline everyone quotes never applied to them.
+
+**Four accuracy fixes.**
+
+- `incident-reporting-map.md` claimed *"every row in this file is now Primary"* while NCIIPC and the
+  RBI 2023 Master Direction both still read **Secondary**, and its change note still marked IRDAI
+  Secondary after the IRDAI section itself had been re-verified. The header now names the two
+  Secondary sections and says why each one is.
+- **Urban Co-operative Banks were described as excluded from RBI 410.** They are not: 410's own scope
+  covers *"banking companies (other than Small Finance Banks, Payments Banks, and **Local Area
+  Banks**)"*. UCBs are Primary Co-operative Banks and were never inside the definition to be carved
+  out of it — they file under 437 because 437 is addressed to them. Local Area Banks, which *were*
+  carved out, have **no** instrument in the family at all.
+- **The NBFC outsourcing instrument is now named**: RBI/DOR/2025-26/**363** of 28 November 2025,
+  alongside 171 for commercial banks. Both references previously said only "a parallel 2025
+  instrument", which tells an NBFC that a thing exists without telling it which thing.
+- **`quantify` and `peer-index` gained the published figures they were reasoning without.** Bitsight's
+  band-to-band breach multiples (Intermediate 1.5–2× Advanced, Basic 2–3× Intermediate, ≤400 5× more
+  likely than ≥700) now anchor the likelihood modifier, with an explicit instruction not to use the
+  unsupported "50% less likely" figure that circulates. Global rules §3 gains the mean rating (**720**),
+  the rounding rule (a displayed 730 is anything up to 739) and the distribution fact that matters most
+  to a benchmarking deck: **about 60% of rated entities are Advanced**, so Advanced is the modal band
+  rather than an achievement.
+
+**`entity-scope` gained its argument.** SEBI's **CDSL order of 20 July 2026** — a ₹1 crore penalty
+where an internet-facing ADFS server was never classified as critical, and so was never tested or
+monitored, with the disaster recovery site encrypted too — is a regulator's own finding that an
+inventory error is not one control failing but every control silently skipping one host.
+
+**Keeping this current.** Each reference now carries a provenance block naming the bitscore.in registry
+it mirrors and the date it was verified. These references and the site's `lib/regulations.ts`,
+`lib/incident-clocks.ts` and `lib/cscrf-categories.ts` hold the same facts from the same primary
+sources; when one moves, the other is the counterpart to check. Re-verify at source rather than
+copying across, and stamp the date.
+
+Skills, tools and the taxonomy are otherwise unchanged from 0.4.2. Still sixteen skills.
 
 ---
 
@@ -181,10 +259,12 @@ through the platform, Bitsight adjudicates, and the rating does not move while t
 
 **`incident-notify`** drafts the time-bound notifications an Indian entity owes after an incident,
 against the new [`incident-reporting-map.md`](reference/incident-reporting-map.md) — CERT-In's six
-hours, the RBI filings, SEBI CSCRF and LODR Reg. 30, IRDAI, DPDP intimation to the Data Protection
-Board and to affected Data Principals, and NCIIPC. Every clock carries its reference number, issue
-date, source URL and a **Primary/Secondary** marker recording whether the published text was read
-directly — and as of 0.4.2 **every instrument in the reference has been read at source**. Three
+hours, the RBI filings, SEBI CSCRF and LODR Reg. 30, IRDAI, IFSCA for GIFT City entities *(added in
+0.5.0)*, DPDP intimation to the Data Protection Board and to affected Data Principals, and NCIIPC.
+Every clock carries its reference number, issue date, source URL and a **Primary/Secondary** marker
+recording whether the published text was read directly — every **sectoral** instrument has been read
+at source; NCIIPC and the superseded RBI 2023 Master Direction remain Secondary and say so where they
+sit. Three
 corrections are baked in. "RBI requires 2–6 hour reporting for banks and NBFCs" conflates instruments
 that no longer travel together — there are **seven parallel 2026 Directions, one per entity class**,
 each setting six hours to **DAKSH**, and an NBFC files under 461 rather than the 2023 Master

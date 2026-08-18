@@ -306,16 +306,24 @@ responsibility** with the evidence, plus a submission draft.
 - "We've had an incident — what do we have to report?"
 - "Draft our CERT-In report."
 - "DPDP breach intimation."
+- "We're a GIFT City entity — who do we report this to?"
 - "What are our notification deadlines?"
 
 **Example prompt**
 > "We noticed unauthorised access to a customer-facing app at 09:40 IST today. We're a listed NBFC in
 > the Middle Layer and customer personal data is likely involved. What do we owe and by when?"
 
-**Expected inputs:** **when you noticed it** (the single most important fact), your **entity type**
-(commercial bank / SFB / Payments Bank / co-operative / NBFC and its SBR layer / SEBI-regulated /
-insurer), whether you're **listed**, and whether **personal data** is in scope. You get an escalation
-matrix with real IST deadlines, a fact-gathering checklist, per-instrument drafts and a timeline log.
+**Expected inputs:** **when you noticed it** (the single most important fact), **where you are
+licensed** — mainland or the GIFT City IFSC — your **entity type** (commercial bank / SFB / Payments
+Bank / co-operative / NBFC and its SBR layer / SEBI-regulated / insurer / IFSCA-regulated), whether
+you're **listed**, and whether **personal data** is in scope. You get an escalation matrix with real
+IST deadlines, a fact-gathering checklist, per-instrument drafts and a timeline log.
+
+> 🏛 **If you are licensed in GIFT City, you file with IFSCA — not with the RBI, SEBI or IRDAI.** An
+> IFSC licence displaces the mainland regulator, however mainland the business looks, so say where you
+> are licensed before saying what kind of entity you are. IFSCA runs **six hours from detection**, then
+> an interim report at **3 days**, **mitigation measures within 7 days** and root cause analysis at
+> **30 days** — the seven-day step is a deadline on the fix itself. CERT-In binds you either way.
 
 > ⚠️ **The clock runs from noticing, not from confirming.** "We're still investigating" does not pause
 > six hours. And a listed entity owes **SEBI LODR Reg. 30(6)** disclosure to the exchanges *in
