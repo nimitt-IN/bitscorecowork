@@ -7,7 +7,7 @@ description: >
   deck about our Bitsight score", "quarterly cyber risk deck for leadership", or
   wants Bitsight data turned into a leadership/board presentation (not a raw pull).
 metadata:
-  version: "0.4.2"
+  version: "0.5.0"
 ---
 
 # BoardPack — executive briefing from Bitsight data

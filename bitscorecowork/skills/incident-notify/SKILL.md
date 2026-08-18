@@ -3,14 +3,15 @@ name: incident-notify
 description: >
   Draft the time-bound regulatory notifications an Indian entity owes after a
   cyber incident — CERT-In's 6-hour report, RBI reporting for banks and NBFCs,
-  SEBI CSCRF and LODR disclosure, IRDAI, and DPDP breach intimation to the Data
-  Protection Board and to affected Data Principals. Use when the user says "we've
-  had an incident", "draft our CERT-In report", "what do we have to report and by
-  when", "breach notification", "DPDP breach intimation", or needs the fact-gathering
-  checklist, escalation matrix and notification drafts (as opposed to a simulated
-  exercise, which is `tabletop`).
+  SEBI CSCRF and LODR disclosure, IRDAI, IFSCA for GIFT City entities, and DPDP
+  breach intimation to the Data Protection Board and to affected Data Principals.
+  Use when the user says "we've had an incident", "draft our CERT-In report", "what
+  do we have to report and by when", "breach notification", "GIFT City incident
+  reporting", "DPDP breach intimation", or needs the fact-gathering checklist,
+  escalation matrix and notification drafts (as opposed to a simulated exercise,
+  which is `tabletop`).
 metadata:
-  version: "0.4.2"
+  version: "0.5.0"
 ---
 
 # incident-notify — time-bound Indian regulatory notifications after an incident
@@ -61,9 +62,25 @@ determinations to make.
 
 3. **Establish the entity, because it decides which instruments are in play.** Ask; never rule
    (global rules §7):
+   - **Where is it licensed? Ask this first, before what it does.** If the entity is licensed,
+     recognised, registered or authorised by **IFSCA** — that is, it is a **GIFT City / IFSC** entity —
+     it files with **IFSCA and not with the RBI, SEBI or IRDAI**. An IFSC licence displaces the
+     mainland regulator, however mainland the business looks: a GIFT City banking unit is not on the
+     DAKSH clock and a GIFT City fund does not take a CSCRF category. Asking this second, after "what
+     kind of entity is it", is exactly how a GIFT City banking unit answers "bank" and receives a
+     draft filed under an instrument that does not bind it. **CERT-In binds it either way.**
    - **Entity type** — commercial bank, Small Finance / Payments / Local Area Bank, co-operative bank,
      NBFC (and which Scale-Based Regulation layer), SEBI-regulated intermediary or MII, insurer or
-     insurance intermediary, or none of these.
+     insurance intermediary, IFSCA-regulated IFSC entity, or none of these.
+   - **If IFSCA — test the four exemptions, and do not read them loosely.** Para 21 exempts REs
+     operating as a **branch** of a regulated Indian or foreign entity, REs serving **group entities
+     only** (e.g. GICs), REs with **fewer than 10 employees**, and **foreign universities** in IFSCs.
+     Each is conditional on para 22: the RE adopts the parent's framework and IS Policy, the parent's
+     CISO acts as its Designated Officer, and the parent is regulated by a financial-sector regulator
+     in its home jurisdiction with the IFSC RE inside that framework's scope. An exempt RE owes IFSCA
+     nothing on this incident — but still owes **CERT-In**, and still owes its annual certification
+     within 90 days of the financial-year end. Put paras 21 and 22 in front of their compliance team;
+     do not determine the exemption yourself.
    - **Listed?** — SEBI LODR Regulation 30 reaches every listed entity regardless of sector, and it is
      the obligation most often forgotten in the first six hours.
    - **Personal data in scope?** — DPDP is the only track that reaches individuals, but **its breach
@@ -135,6 +152,13 @@ determinations to make.
      the post-incident checklist, and say so even though it is not a first-day clock.
    - **IRDAI** — six hours to CERT-In with a copy to IRDAI. **There is no 24-hour step in the 2026
      Guidelines**; do not carry one over from the 2023 text.
+   - **IFSCA** if the entity is licensed in the IFSC — **and this replaces the RBI, SEBI or IRDAI
+     filing rather than adding to it.** Four steps, all measured from **detection** rather than from
+     noticing: particulars to `cyber-incidents@ifsca.gov.in` with a copy to the CISO, IFSCA within
+     **6 hours**; interim report at **3 days**; **mitigation measures taken within 7 days**; detailed
+     root cause analysis at **30 days**. The seven-day step is a deadline on the *fix*, not on a
+     filing — no other Indian instrument here puts a clock on remediation — so say so plainly, because
+     it changes what the first week is for. The matrix runs a month, not a day.
    - **DPDP** — ⚠️ **do not draft these as live filings.** Rule 7 and Act s.8 commence **13 May 2027**.
      If the user wants them, produce them clearly marked as **preparatory, not yet in force**: the
      intimation to each affected Data Principal (concise, clear, plain, with the consequences, the
@@ -162,6 +186,10 @@ determinations to make.
 - **Never determine that an incident is reportable, or that an instrument applies.** Present the
   categories, the entity questions and the clocks; the determination belongs to the entity and its
   legal team. This is the single most important line in this skill.
+- **Never assume the sector implies the regulator.** A GIFT City entity is licensed by IFSCA and files
+  there, not with the RBI, SEBI or IRDAI. Establish where the entity is licensed before you establish
+  what it does — this is the one routing error in this skill that produces a draft which looks
+  entirely correct and is filed with the wrong authority.
 - **Never determine materiality** for a SEBI LODR disclosure. That is the authorised KMP's call on
   advice, and it carries consequences in both directions.
 - **Nothing is filed or sent from here.** Every draft is marked `DRAFT — NOT FILED` and handed to a

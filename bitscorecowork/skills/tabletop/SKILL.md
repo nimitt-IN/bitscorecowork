@@ -10,7 +10,7 @@ description: >
   findings (as opposed to drafting notifications for a real incident, which is
   `incident-notify`).
 metadata:
-  version: "0.4.2"
+  version: "0.5.0"
 ---
 
 # tabletop — board crisis simulation from the real attack surface
@@ -95,7 +95,9 @@ If an artefact would be convincing, it needs the stamp most.
    - The **CERT-In six hours** ticking while the room is still arguing about whether this counts as an
      incident. That argument *is* the lesson.
    - The applicable **sectoral filing** — DAKSH under the entity's own instrument (one of seven RBI
-     Directions), SEBI CSCRF, IRDAI.
+     Directions), SEBI CSCRF, IRDAI. **For a GIFT City entity this is IFSCA instead, not as well**:
+     an IFSC licence displaces the mainland regulator. Establishing that in the room, under pressure,
+     is itself a worthwhile inject — teams reach for the regulator they know.
    - **DPDP** intimation to affected Data Principals, which reaches customers and therefore the market.
      Its obligations commence **13 May 2027**, so run it as a **rehearsal inject** — label it as such
      in the facilitator guide. Exercising it early is legitimate and useful; presenting it as a clock
@@ -104,6 +106,15 @@ If an artefact would be convincing, it needs the stamp most.
      incomplete facts. This one reliably surprises boards, and the deadline surprises them twice:
      **twelve hours**, not twenty-four, because the event emanates from within the entity. Run it as a
      hard inject — it can fall due before some of the technical filings.
+
+   - **For an IFSCA entity, run the tail.** Six hours from **detection** to
+     `cyber-incidents@ifsca.gov.in`, then an interim report at **3 days**, **mitigation measures taken
+     within 7 days**, and root cause analysis at **30 days**. This is the most useful clock set in the
+     whole reference for an exercise, because it does not stop when the adrenaline does. Most
+     tabletops end at hour twelve and never test the week that follows — the seven-day mitigation
+     deadline is a **regulatory** deadline on the fix itself, and a board that has never rehearsed it
+     will assume remediation runs to an internal schedule. Consider a second, short session set at
+     day 3 to work the interim report and the mitigation commitment.
 
    Put a visible countdown in the facilitator guide. A clock nobody can see does not create pressure.
 

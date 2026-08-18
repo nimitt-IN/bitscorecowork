@@ -60,6 +60,29 @@ these buckets:
 - Always show the band and color alongside a raw number — a bare score is not a finished answer.
 - Never invent a score, a band, or a trend. If the API doesn't return it, say so.
 
+**Three facts about the scale that change how a number reads.** Carry them wherever a score is
+interpreted rather than merely reported — `peer-index` and `quantify` most of all:
+
+| Fact | Why it matters to an output |
+| --- | --- |
+| The mean rating across Bitsight's rated inventory is **720** | Sits in Intermediate. A 730 is above average and still not Advanced |
+| Roughly **60% of rated entities are Advanced** | **Advanced is the modal band, not an achievement.** A pack that congratulates a board on reaching the majority position is misleading, and a vendor at 740 is ordinary rather than strong |
+| Ratings are **rounded down in ten-point increments** | A displayed 730 is anything from 730 to 739. Never present a displayed score as exact, and never build arithmetic on a ten-point gap that may be one point wide |
+
+**The band-to-band breach multiples, for use in `quantify`.** These are Bitsight's own published
+comparative figures, and they are what the evidence will bear:
+
+- Intermediate entities are, on average, **1.5–2× more likely to be breached** than Advanced entities.
+- Basic entities are, on average, **2–3× more likely** to suffer a publicly disclosed breach than
+  Intermediate entities.
+- Entities rated **400 or below are 5× more likely** to suffer a publicly disclosed breach than
+  entities rated 700 or above.
+
+They are **comparative, not absolute** — none of them gives a probability for one company, and none
+supports a sentence beginning "there is an X% chance". **Do not use the "50% less likely" figure that
+circulates**: it is not supported by the material usually cited for it. Use the multiples, name them
+as comparative, and attribute them to Bitsight.
+
 **Where the rating actually lives (verified against the live API).** The company object from
 `bitsight_get_company_details` has **no top-level `rating` scalar** — reading one gives you
 `undefined`, not a score. The current rating is the **first entry of the `ratings` array**
@@ -335,3 +358,9 @@ subscriptions, and nothing performs an active scan.
 
 © 2026 BitScore Cybertech LLP. "Bitsight" is a registered trademark of Bitsight Technologies, Inc.;
 this plugin is an independent integration and is not published by Bitsight.
+
+<!-- provenance
+mirrors: bitscore.in lib/bitsight-rating.ts (scale facts and breach multiples)
+verified: 2026-08-18
+next-review: 2026-11-18
+-->

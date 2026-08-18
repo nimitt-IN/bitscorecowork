@@ -22,14 +22,23 @@ where it goes, and what the notification has to contain.
 >   against the instrument itself — treat those clocks as indicative and confirm before filing.
 > - Nothing here certifies compliance, and no draft produced from it has been filed or sent.
 
-**All entries verified on 4 August 2026, and every instrument re-verified against its published text on
-13 August 2026. Every row in this file is now Primary.**
+**Verified on 4 August 2026, re-verified against every published text on 13 August 2026, and extended
+to the IFSCA track on 18 August 2026.** Every sectoral instrument here is **Primary**. Two sections are
+**Secondary** and say so where they sit: **NCIIPC**, whose terms come from the protected-system
+declaration rather than from a general instrument, and the **RBI IT Governance Master Direction, 2023**,
+retained only as a historical pointer.
 
-Five rows were wrong. The RBI family is **seven instruments**, not one. IRDAI cited a **superseded**
-instrument and a 24-hour step that does not exist in the 2026 text. CSCRF is **three filings**, not
-one. The DPDP breach obligations are **not in force until 13 May 2027**. And SEBI LODR's cyber
-disclosure is **twelve hours, not twenty-four** — plus a standing quarterly obligation the file did not
-carry at all. See the change note at the end.
+**The gap this edition closes: GIFT City.** An entity licensed by **IFSCA** files with the Authority,
+**not** with the RBI, SEBI or IRDAI — an IFSC licence displaces the mainland regulator even for business
+those regulators supervise onshore. Routing a GIFT City banking unit to RBI/DoS/2026-27/410 was the
+failure mode before this edition, and it is silent: the draft looks right. IFSCA also runs the only
+Indian cyber clock that continues past the first filing, to seven days for the fix and thirty for root
+cause. See [the IFSCA section](#ifsca--gift-city-ifsc-entities).
+
+Earlier corrections, retained because the wrong versions still circulate: the RBI family is **seven
+instruments**, not one; IRDAI's **2026** Guidelines replaced the 2023 ones and carry **no 24-hour step**;
+CSCRF is **three filings**, not one; the DPDP breach obligations are **not in force until 13 May 2027**;
+and SEBI LODR's cyber disclosure is **twelve hours, not twenty-four**. See the change note at the end.
 
 ---
 
@@ -54,6 +63,7 @@ carry at all. See the change note at the end.
 | SEBI LODR, Reg. 30(6) (listed entities) | **12 hours** for a cyber incident (30 min for board decisions; 24h only if the event arises *outside* the entity) | Occurrence of a *material* event | Stock exchanges |
 | SEBI LODR, Reg. 27(2)(ba) (listed entities) | Next **quarterly** CG report — no materiality test | Any cyber incident, breach or data loss | Stock exchanges |
 | IRDAI Cyber Guidelines, **2026** (replaced the 2023 Guidelines) | **6 hours** — *no 24-hour step in the 2026 text* | Noticing, or being brought to notice | CERT-In, copied to IRDAI |
+| IFSCA Cyber Security Guidelines, 2025 — **GIFT City, and it replaces the mainland filing** | **6 hours**, then **3 days**, then **7 days** to mitigate, then **30 days** | Detection | `cyber-incidents@ifsca.gov.in`, copied to the CISO, IFSCA |
 | DPDP — Data Principals | ⚠️ **Not in force until 13 May 2027** | — | Each affected Data Principal |
 | DPDP — the Board | ⚠️ **Not in force until 13 May 2027** | — | Data Protection Board of India |
 | NCIIPC (protected systems) | **6 hours** | Noticing | NCIIPC |
@@ -61,6 +71,10 @@ carry at all. See the change note at the end.
 **Care point:** these are not alternatives. A listed private-sector bank holding customer personal
 data can owe CERT-In, DAKSH and the stock exchanges on the same incident, on different clocks, in
 different formats. Work the overlap section below before drafting.
+
+**The IFSCA row is the exception to that, and it is the one to get right.** IFSCA does not stack on top
+of the RBI, SEBI or IRDAI filing — it **replaces** it. Establish where the entity is licensed before
+anything else, because "it is a bank" and "it is a bank in GIFT City" route to different regulators.
 
 **Second care point — the DPDP rows are the exception.** They are the one track here that is **not yet
 live**. Rule 7 and Act section 8 both commence on **13 May 2027**. Plan for them; do not file against
@@ -175,9 +189,15 @@ within six hours of detection on DAKSH platform."* From 461, para 141: *"The NBF
 incidents to RBI within six hours of detection on DAKSH platform."*
 
 **Within 410 (commercial banks).** State Bank of India is covered. Foreign banks operating in India
-through branch mode are covered, with modified "comply or explain" treatment on certain chapters. SFBs,
-Payments Banks and UCBs are *excluded from 410* precisely because each now has its own instrument above
-— an exclusion that means "file elsewhere", not "no obligation".
+through branch mode are covered, with modified "comply or explain" treatment on certain chapters.
+
+**Read 410's own scope wording, not the usual gloss.** It covers *"banking companies (other than Small
+Finance Banks, Payments Banks, and **Local Area Banks**)"*. The natural summary — "each excluded class
+has its own Directions" — is true of SFBs and Payments Banks and **false of Local Area Banks**, which
+have none in this family. **Urban Co-operative Banks are not in that carve-out at all**: they are
+Primary Co-operative Banks rather than banking companies, so they were never inside 410's definition to
+be excluded from it. They file under 437 because 437 is addressed to them, not because 410 sent them
+there. The distinction matters when someone asks *why* an entity files where it does.
 
 **Two entity classes with no instrument in this family.** **Regional Rural Banks** and **Local Area
 Banks** have none — LABs got a separate *(Local Area Banks – Miscellaneous) Supervisory Directions,
@@ -207,11 +227,20 @@ forensic analysis, if necessary" — for severity, impact and root cause; 461 ca
 duty immediately before para 141. The Directions do not set a separate deadline for the root-cause
 report; expect the supervisor to ask, and build the timeline from the start.
 
-**Care point:** these Directions do **not** absorb outsourcing governance. Vendor oversight for
-commercial banks sits in the **RBI (Commercial Banks – Managing Risks in Outsourcing) Directions,
-2025** (28 November 2025), which the 2026 cyber Directions expressly preserve and carve around. If
-the incident originated at a service provider, the outsourcing instrument's notification and
-oversight terms are in play alongside paragraph 182 — see `regulatory-map.md`.
+**Care point:** these Directions do **not** absorb outsourcing governance. Vendor oversight sits in a
+separate 2025 pair, which the 2026 cyber Directions expressly preserve and carve around:
+
+| Instrument | Reference | Source |
+| --- | --- | --- |
+| RBI (**Commercial Banks** – Managing Risks in Outsourcing) Directions, 2025 | RBI/DOR/2025-26/**171** | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13139 |
+| RBI (**Non-Banking Financial Companies** – Managing Risks in Outsourcing) Directions, 2025 | RBI/DOR/2025-26/**363** | https://www.rbi.org.in/scripts/BS_ViewMasDirections.aspx?id=12941 |
+
+Both issued 28 November 2025, both with existing IT outsourcing agreements to comply by 10 April 2026.
+The NBFC instrument reaches HFCs, CICs, standalone primary dealers and the account aggregator and P2P
+categories as well, and grades by scale-based layer — Base Layer takes the general outsourcing
+provisions only, Middle Layer and above pick up the IT-specific ones. If the incident originated at a
+service provider, the applicable outsourcing instrument's notification and oversight terms are in play
+alongside the cyber Directions' reporting paragraph — see `regulatory-map.md`.
 
 ---
 
@@ -259,7 +288,14 @@ clearing corporations, collective investment schemes, credit rating agencies, cu
 trustees, depositories and depository participants, DDPs, investment advisers and research analysts,
 KYC registration agencies, merchant bankers, mutual funds and AMCs, portfolio managers, RTAs, stock
 brokers, stock exchanges and venture capital funds. Obligations are graded by RE category (MIIs,
-Qualified REs, mid-size, small-size, self-certification).
+Qualified REs, Mid-size, Small-size, Self-certification).
+
+**The category is not stable, and the thresholds have been replaced twice.** Do not determine one from
+the August 2024 circular alone — the criteria were rewritten in April 2025 and again in August 2025,
+and two entity types were re-categorised in both rounds. The current tables, the amendment circulars
+and the April re-fixing rule are in [`cscrf-categories.md`](cscrf-categories.md). For incident
+reporting the category matters less than it does for the control obligations — the six-hour clock below
+is common to all REs — but a broker or DP owes an extra leg, so establish the registration type.
 
 **The clock — and it is more than one filing.** Verbatim: *"Any cyber-attack, cyber security incident
 and / or breach falling under CERT-In Cybersecurity directions shall be notified to SEBI and CERT-In
@@ -500,6 +536,106 @@ Kendra among the external parties an incident-notification process must identify
 
 ---
 
+## IFSCA — GIFT City IFSC entities
+
+**Confidence: Primary.** The circular and Guidelines were read directly from the published PDF on
+18 August 2026; every clause below is quoted verbatim.
+
+| | |
+| --- | --- |
+| **Instrument** | Guidelines on Cyber Security and Cyber Resilience for Regulated Entities in IFSCs |
+| **Reference** | IFSCA-CSD0MSC/13/2025-DCS |
+| **Issued** | 10 March 2025, signed by the General Manager & Chief Information Security Officer |
+| **In force** | **1 April 2025** |
+| **Statutory basis** | Sections 12 and 13, International Financial Services Centres Authority Act, 2019 |
+| **Source** | https://ifsca.gov.in/Document/Legal/guidelines-on-cyber-security-and-cyber-resilience-for-regulated-entities-in-ifscs-1-10032025064412.pdf |
+
+> ### ⚠️ An IFSC licence displaces the mainland regulator
+>
+> This is the fact the whole section turns on, and it is the one most likely to be missed, because
+> nothing about a GIFT City entity's *business* announces it. A banking unit in the IFSC is a bank. It
+> is not an RBI-regulated bank for this purpose: it is **licensed, recognised, registered or authorised
+> by IFSCA**, and it files here. A GIFT City fund does not take a CSCRF category. A GIFT City insurance
+> entity is not on the IRDAI clock.
+>
+> So the entity question in `incident-notify` is not "bank, NBFC, intermediary or insurer" — it is
+> **"where is it licensed?"** first, and the sectoral question second. Getting this wrong produces a
+> DAKSH filing under an instrument that does not bind the entity, while the six-hour clock that does
+> bind it runs out. **CERT-In still binds it**, as it binds nearly everyone.
+
+**Who it binds.** *"REs shall include any entity which is licensed, recognised, registered or authorised
+by IFSCA."* Deliberately wide, and it reaches entity types with no mainland analogue at all. The
+Guidelines are applied on a **principle of proportionality**, taking into account the scale and
+complexity of operations, the nature of the activity, interconnectedness with the financial ecosystem,
+and the corresponding cyber risks — so two REs of different size owe the same obligations at different
+depths. Proportionality is not an exemption; the four express exemptions are below.
+
+**The clock — four steps, and the tail is unique in this file.**
+
+| Step | Deadline | From | Goes to |
+| --- | --- | --- | --- |
+| Report the particulars of the incident | **6 hours** | **Detection** | `cyber-incidents@ifsca.gov.in`, **copied to the CISO, IFSCA** |
+| Interim report | **3 days** | Detection | IFSCA |
+| **Mitigation measures taken** | **7 days** | Detection | Internal, evidenced to IFSCA |
+| Detailed root cause analysis report | **30 days** | Detection | IFSCA |
+
+Para 19, verbatim: *"In case of occurrence of any cyber incident, the REs are required to report the
+particulars of the incident to the Authority on cyber-incidents@ifsca.gov.in with a copy to CISO,
+IFSCA, not later than six (6) hours from the detection of the incident."*
+
+Para 20, verbatim: *"Additionally, the REs shall submit the interim report within 3 days followed by a
+detailed root cause analysis report within 30 days. The REs shall take mitigation measures for the same
+within 7 days."*
+
+**Two things about this clock that are true of nothing else in this file.**
+
+1. **It runs from *detection*, not from noticing.** CERT-In, CSCRF and IRDAI all run from "noticing *or
+   being brought to notice*". IFSCA does not use that formula. Where both bind — and CERT-In always
+   does — a vendor's phone call can start the CERT-In clock before the entity has detected anything,
+   so the two are not necessarily running from the same moment. Record both.
+2. **Seven days is a deadline on the fix, not on a filing.** No other Indian cyber instrument puts a
+   clock on the remediation itself. It changes what the first week looks like: the technical work is
+   on a regulatory deadline, not merely on an internal one, and the thirty-day RCA means the incident
+   file stays open a month after the notifications stop. Build the timeline for a month, not a day.
+
+**The four exemptions — para 21, and they are easier to fall inside than they look.**
+
+> *"The following categories of REs are exempted from the requirements mentioned in these Guidelines:*
+> *a. The REs operating in the form of a branch of a regulated Indian or foreign entity.*
+> *b. The REs providing services to their group entities only e.g. Global In-House Centres (GICs).*
+> *c. The REs which have less than 10 employees.*
+> *d. Foreign universities set up in IFSCs."*
+
+**Exemption is conditional, and the conditions are substantive — para 22.** All three must hold:
+
+- the RE adopts the **parent entity's** Cyber Security and Cyber Resilience framework and IS Policy;
+- the **parent's CISO acts as the Designated Officer** for the RE in the IFSC;
+- the parent, in India or overseas, is **regulated by a financial-sector regulator in its home
+  jurisdiction**, and the parent's framework **includes the IFSC RE within its scope**.
+
+So the exemption relieves the RE of building its own programme; it does not relieve it of having one.
+
+**Two obligations that survive the exemption, and both are routinely missed:**
+
+- **An annual certification.** *"The Designated Officer of the RE shall certify that all the necessary
+  systems/processes have been put in place, which are in line with these Guidelines within 90 days of
+  the end of each financial year"*, submitted to the IFSCA department supervising the RE. An exempt RE
+  still files something every year.
+- **The exemptions expire.** *"These exemptions have been granted for a period of three years from the
+  date of the issuance of these guidelines"* — issued 10 March 2025, so they lapse on **10 March 2028**
+  unless extended. An RE relying on one is on a clock of a different kind. Say so.
+
+**And CERT-In binds an exempt RE anyway.** Para 21 exempts the RE from *these Guidelines*. It has no
+effect on the CERT-In Directions, which reach body corporates generally. An exempt GIFT City RE that
+suffers a reportable incident still owes CERT-In six hours from noticing.
+
+**Care point:** do not rule on whether an entity is inside an exemption, and in particular do not read
+"branch" or "group entities only" loosely — both are drafted narrowly and both are conditional on the
+parent-entity tests above. Put para 21 and para 22 in front of the entity's compliance team and let
+them determine it (global rules §7).
+
+---
+
 ## NCIIPC — protected systems and critical information infrastructure
 
 **Confidence: Secondary.** If the entity operates a declared protected system, its specific
@@ -528,16 +664,26 @@ size, and do not assume the whole estate is covered because part of it is.
 The real difficulty is rarely a single instrument — it is that several run at once, from different
 trigger events, to different recipients, in different formats. Work it in this order:
 
-1. **Fix the trigger time and write it down.** The moment of *noticing*, in IST, with the source
-   (alert, vendor call, researcher email, regulator enquiry). Every clock below is measured from
-   something; most are measured from this. Record it before anything else — it is the first thing
-   every regulator asks and the hardest thing to reconstruct afterwards.
-2. **Run the baseline.** CERT-In binds nearly every Indian entity. Start there.
-3. **Add the sectoral filing.** For an RBI-regulated entity this means **identifying which of the
-   seven 2026 Directions binds it** — commercial bank 410, SFB 419, Payments Bank 428, UCB 437, AIFI
-   456, NBFC 461, CIC 470 — all six hours from detection, all on DAKSH. For an NBFC, also establish
-   the **chapter**, since Base Layer below ₹500 crore carries no DAKSH clause. Otherwise: SEBI CSCRF
-   (SEBI-regulated entities), IRDAI (insurers and intermediaries). Ask which; never rule.
+1. **Fix the trigger time and write it down — both of them.** The moment of *noticing*, in IST, with
+   the source (alert, vendor call, researcher email, regulator enquiry), **and** the moment of
+   *detection* where they differ. Most clocks here run from noticing; the RBI's and IFSCA's run from
+   detection. Record it before anything else — it is the first thing every regulator asks and the
+   hardest thing to reconstruct afterwards.
+2. **Establish where the entity is licensed, before asking what it does.** A GIFT City entity files
+   with **IFSCA** and not with the RBI, SEBI or IRDAI, however mainland its business looks. If the
+   answer is IFSCA, go to step 3b and skip 3a entirely; if it is not, go to 3a. Asking this second,
+   after "what kind of entity is it", is how a GIFT City banking unit ends up with a DAKSH draft.
+3. **a — Add the mainland sectoral filing.** For an RBI-regulated entity this means **identifying
+   which of the seven 2026 Directions binds it** — commercial bank 410, SFB 419, Payments Bank 428,
+   UCB 437, AIFI 456, NBFC 461, CIC 470 — all six hours from detection, all on DAKSH. For an NBFC,
+   also establish the **chapter**, since Base Layer below ₹500 crore carries no DAKSH clause.
+   Otherwise: SEBI CSCRF (SEBI-regulated entities), IRDAI (insurers and intermediaries). Ask which;
+   never rule.
+
+   **b — Or add the IFSCA filing, which replaces it.** Six hours from detection to
+   `cyber-incidents@ifsca.gov.in`, then 3 days, 7 days and 30 days. Test the four para-21 exemptions
+   first: an exempt RE owes IFSCA nothing on this incident but still owes CERT-In, and still owes its
+   annual certification within 90 days of the financial-year end.
 4. **Add the personal-data track if personal data is in scope.** DPDP runs on its own clocks, to
    different recipients, and it reaches individuals — which no other instrument here does.
 5. **Add the market-disclosure track if the entity is listed.** SEBI LODR Reg. 30, on materiality,
@@ -587,18 +733,37 @@ above.
 | --- | --- | --- |
 | The RBI 2026 framework was presented as **one** commercial-banks instrument, with NBFCs sent to the 2023 IT Governance Master Direction | **Seven** parallel Directions issued 31 July 2026, one per entity class, each with the same six-hour DAKSH clock; the 2023 MD is largely superseded | **Primary** — all seven texts read at rbi.org.in; reference numbers, notification Ids and reporting paragraphs quoted |
 | NBFC Base Layer described as outside the instrument | 461 binds **all** RBI-registered NBFCs, with graded chapters; Base Layer below ₹500 crore has **no** DAKSH clause, only CERT-In's | **Primary** — applicability clause and Ch. IV/V paragraphs read directly |
-| IRDAI cited the **2023** Guidelines | The **2026** Guidelines (IRDAI/GA&HR/CIR/MISC/51/4/2026, 6 April 2026) replaced them | **Secondary** — recorded from an earlier reading; the clocks are **not** re-confirmed against the 2026 text and are flagged as such |
+| IRDAI cited the **2023** Guidelines | The **2026** Guidelines (IRDAI/GA&HR/CIR/MISC/51/4/2026, 6 April 2026) replaced them | **Primary** — the circular and the Guidelines inside the Annexure B ZIP were read directly on 13 August 2026. *(This row said Secondary until 18 August 2026, when it was found to have outlived the reading that superseded it — the row below records the same instrument as Primary.)* |
 | DPDP treated as a live clock | ⚠️ **Rule 7 and Act s.8 do not commence until 13 May 2027** — there is no DPDP breach clock running today | **Primary** — Rule 1(2)–(4) of G.S.R. 846(E) and the tranches in G.S.R. 843(E) read and quoted |
 | IRDAI shown as "6 hours, then 24 hours" | **6 hours only.** The 24-hour step is from the 2023 Guidelines and has no counterpart in the 2026 text | **Primary** — §3.6 quoted from the Guidelines inside the Annexure B ZIP; full-text search returns no 24-hour incident obligation |
 | SEBI CSCRF was Secondary, one filing, "from detection" | **Primary**, and it is three filings — 6h to SEBI + CERT-In, 24h to the SEBI portal, plus a 6h leg to exchanges/depositories for brokers and DPs — triggered by *noticing or being brought to notice* | **Primary** — circular SEBI/HO/ITD-1/ITD_CSC_EXT/P/CIR/2024/113 read directly |
 | SEBI LODR said **24 hours** for a cyber incident and **12 hours** for board decisions | **Reversed and corrected: 12 hours** for an incident (limb (ii), emanating from within), **30 minutes** for board decisions. Adds Reg. 27(2)(ba) — cyber incidents in the **quarterly CG report, with no materiality test** — and Reg. 21(4) | **Primary** — Reg. 30(6), 27(2)(ba) and 21(4) read from the consolidated PDF and quoted |
 
-**Nothing outstanding.** Every instrument in this file has been read at source. What remains is
-maintenance: instruments are amended, so re-verify before relying on any row, and treat the
-verification dates above as the freshness marker.
-
 *(The three missing RBI paragraph numbers — 419, 428, 437 — were filled on 13 August 2026 from the
 published texts. All seven RBI rows are now Primary and complete.)*
+
+---
+
+## Change note — 18 August 2026
+
+Reviewed against the corresponding registries on bitscore.in, which are maintained from the same
+primary sources by a separate verification pass. Four differences were found; all are fixed above.
+
+| What was wrong or missing | What it now says | How it was verified |
+| --- | --- | --- |
+| **IFSCA / GIFT City was absent entirely.** An IFSC-licensed entity would have been routed to the RBI, SEBI or IRDAI — silently, because the draft looks correct | A full IFSCA section: the displacement rule, the four-step clock (6h from detection · 3d interim · 7d mitigation · 30d RCA), the four para-21 exemptions with their para-22 conditions, the 90-day annual certification that survives an exemption, and the exemptions' own 10 March 2028 expiry | **Primary** — IFSCA-CSD0MSC/13/2025-DCS read from the published PDF on 18 August 2026; paras 19, 20, 21 and 22 quoted verbatim |
+| *"Every row in this file is now Primary"* — while NCIIPC and the RBI 2023 MD both still read **Secondary**, and the change note still marked IRDAI Secondary after the section itself had been re-verified | The header names the two Secondary sections and says why each is Secondary; the IRDAI change-note row is corrected to Primary | Read against the file's own section headers |
+| SFBs, Payments Banks and **UCBs** described as *excluded from 410* | 410's own scope excludes SFBs, Payments Banks and **Local Area Banks**. UCBs are Primary Co-operative Banks and were never inside the definition; LABs were excluded and have **no** instrument in the family | **Primary** — 410's applicability clause |
+| The NBFC outsourcing instrument referred to only as *"a parallel 2025 instrument"*, unnamed | Named: **RBI/DOR/2025-26/363**, 28 November 2025, with its scope and its scale-based grading, alongside 171 for commercial banks | **Primary** — RBI Master Directions index |
+
+**Nothing outstanding.** Every sectoral instrument in this file has been read at source; the two
+Secondary sections are marked where they sit and say why. What remains is maintenance: instruments are
+amended, so re-verify before relying on any row, and treat the verification dates above as the
+freshness marker.
+
+**Two facts recorded here are not yet on bitscore.in** — the IFSCA exemptions' three-year expiry
+(10 March 2028) and the 90-day annual certification an exempt RE still owes. Both were read from the
+Guidelines on 18 August 2026 and should be carried back to `lib/incident-clocks.ts`.
 
 ---
 
@@ -606,3 +771,9 @@ published texts. All seven RBI rows are now Primary and complete.)*
 this plugin is an independent integration and is not published by Bitsight. Regulatory references are
 indicative, are not legal advice, and must be confirmed against the current published text by the
 user's compliance and legal team.
+
+<!-- provenance
+mirrors: bitscore.in lib/incident-clocks.ts, lib/regulations.ts
+verified: 2026-08-18
+next-review: 2026-11-18
+-->

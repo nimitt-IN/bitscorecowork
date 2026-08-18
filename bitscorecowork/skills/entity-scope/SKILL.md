@@ -9,7 +9,7 @@ description: >
   wants the attributed estate confirmed before anyone acts on the findings (as
   opposed to analysing the findings themselves).
 metadata:
-  version: "0.4.2"
+  version: "0.5.0"
 ---
 
 # entity-scope — validating the Bitsight digital footprint
@@ -24,6 +24,32 @@ handling, no discrimination, India context).
 The attribution reference is [`../../reference/attribution-patterns.md`](../../reference/attribution-patterns.md).
 **Read it before categorising any asset**, including its opening caveats — the nine categories and
 their counter-cases are the substance of this skill.
+
+## Why this is worth doing before anything else
+
+An asset inventory fails silently. Nothing alerts on the entry that was never made, and the gap only
+becomes visible when something happens to the host nobody was watching.
+
+**SEBI's CDSL order, 20 July 2026**, is the clearest available illustration, and it is a regulator's
+own finding rather than a vendor claim. SEBI imposed a **₹1 crore penalty** over the November 2022
+LockBit ransomware attack. The order records many failures, but the one that enabled the rest was a
+missing entry rather than a missing control: an **internet-facing Active Directory Federation Services
+server was never classified as a critical asset**, and so fell outside the testing and monitoring
+regime that would have found it. The disaster recovery site was encrypted too.
+
+Two things follow, and both are this skill's argument:
+
+- **The controls were not absent — the asset was.** Testing, monitoring and patching all worked as
+  designed on the assets they had been pointed at. An inventory error is not one control failing; it
+  is every control silently skipping one host.
+- **An internet-facing asset that the organisation has forgotten is exactly what an external view
+  finds**, because attribution starts from what is observable rather than from what is listed. That is
+  the case for reconciling the attributed footprint against the internal inventory: the interesting
+  assets are the ones on one list and not the other, in **both** directions.
+
+Use it to frame the engagement where a customer questions why footprint validation is worth the time.
+Do not overreach: Bitsight would not have prevented that incident, and nothing here says it would.
+What an external view offers is a second, independently assembled list to reconcile against.
 
 ## What this skill can and cannot do
 
