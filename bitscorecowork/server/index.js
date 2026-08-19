@@ -21,11 +21,23 @@
  * the user provides their token through the `bitsight_set_token` tool, and it is
  * kept ONLY in this process's memory for the life of the session. Because the MCP
  * server is (re)started each time Claude starts, the token is required again every
- * time — it is never written to disk, logged, or echoed back in any tool result.
+ * time.
+ *
+ * THIS SERVER never writes the token to disk, never logs it, and never echoes it back
+ * in a tool result. That is a guarantee about this process and not about the whole
+ * path: the token reaches us as an argument to `bitsight_set_token`, so it passes
+ * through the conversation first, and Claude clients commonly persist transcripts —
+ * Claude Code writes them under ~/.claude. Nothing here can reach back and redact that.
+ *
+ * So treat a token pasted into chat as disclosed to whatever retains the transcript:
+ * prefer a short-lived, least-entitled Bitsight token, and rotate it when the work is
+ * done.
  *
  * Optional unattended mode: if BITSIGHT_ALLOW_ENV_TOKEN is set to "1"/"true" AND
  * BITSIGHT_API_TOKEN is present in the environment, that env token is used as a
- * fallback so scheduled/headless runs don't need the interactive prompt.
+ * fallback so scheduled/headless runs don't need the interactive prompt. For anything
+ * recurring this is also the more private path, not merely the more convenient one:
+ * the credential never enters the conversation at all.
  *
  * Data sensitivity: Bitsight data is confidential per Bitsight's Terms of Service
  * and often concerns third parties' security posture. Do not forward raw findings
@@ -91,6 +103,9 @@ function classifyStatus(status) {
   return null;
 }
 
+/** Bitsight answers well inside this; it exists to bound a stall, not to be a deadline. */
+const REQUEST_TIMEOUT_MS = 30_000;
+
 async function bitsightGet(path, params = {}) {
   const url = new URL(`${BASE_URL}${path}`);
   for (const [key, value] of Object.entries(params)) {
@@ -99,11 +114,14 @@ async function bitsightGet(path, params = {}) {
     }
   }
 
+  // Without a signal a hung connection hangs the tool call indefinitely, and an MCP
+  // client has no way to cancel it — the session just stops responding.
   const res = await fetch(url, {
     headers: {
       Authorization: authHeader(),
       Accept: "application/json",
     },
+    signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
   });
 
   const text = await res.text();
@@ -257,6 +275,7 @@ const TOOLS = [
       try {
         const res = await fetch(`${BASE_URL}/v2/portfolio?limit=1`, {
           headers: { Authorization: basicFor(candidate), Accept: "application/json" },
+          signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
         });
         // Only a 401 means the token itself is bad. A 403 on the probe endpoint
         // means the token is valid but this subscription doesn't include the
@@ -267,13 +286,27 @@ const TOOLS = [
             "That Bitsight API token was rejected as invalid or expired (HTTP 401) and was NOT stored. Ask the user to re-check the token and paste it again."
           );
         }
-        // Store on success; also store on a non-auth error (token may be valid but
-        // this probe endpoint restricted) but flag it so the user knows.
+
+        // 403 is the one non-OK status that still means "this credential works".
+        //
+        // This used to store on anything that was not a 401, which was too generous by
+        // accident rather than by intent: a typo'd token that happened to elicit a 500,
+        // or an HTML error page from a captive portal, was kept and reported as a
+        // warning. The user then saw every later data call fail for a reason the status
+        // line had already implied was fine. Anything outside {2xx, 403} is now a
+        // verification failure and stores nothing.
+        if (!res.ok && res.status !== 403) {
+          return errorResult(
+            `Could not verify that token: the check returned HTTP ${res.status}. It was NOT stored. If Bitsight is having an incident, retry shortly; otherwise re-check the token.`
+          );
+        }
+
         sessionToken = candidate;
         if (!res.ok) {
           return textResult({
             status: "stored_with_warning",
-            message: `Token stored in memory for this session, but the verification call returned HTTP ${res.status}. Data calls may still work; if they fail with an auth error, re-check the token.`,
+            message:
+              "Token stored in memory for this session. The verification endpoint returned HTTP 403, which means the credential is valid but this subscription does not include the portfolio endpoint. Calls to endpoints you ARE entitled to will work normally.",
           });
         }
         return textResult({
@@ -690,7 +723,7 @@ async function handleRequest(req) {
         sendResult(id, {
           protocolVersion: "2024-11-05",
           capabilities: { tools: {} },
-          serverInfo: { name: "bitsight", version: "0.4.0" },
+          serverInfo: { name: "bitsight", version: "0.5.0" },
         });
         return;
 

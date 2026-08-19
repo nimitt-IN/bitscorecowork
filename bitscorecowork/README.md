@@ -374,10 +374,14 @@ we compare?" is the board's first question.
    (token as username, blank password). **You are asked again every time the plugin starts** — the
    token is never saved.
 
-> **Optional — unattended / scheduled runs.** To skip the prompt for headless automation, set both
-> `BITSIGHT_ALLOW_ENV_TOKEN=1` and `BITSIGHT_API_TOKEN=<your-token>` in the environment the MCP
-> server runs in. The server then uses the env token as a fallback. Interactive sessions should use
-> the prompt flow above and leave these unset.
+> **Optional — unattended / scheduled runs, and the more private path.** To skip the prompt for
+> headless automation, set both `BITSIGHT_ALLOW_ENV_TOKEN=1` and `BITSIGHT_API_TOKEN=<your-token>`
+> in the environment the MCP server runs in. The server then uses the env token as a fallback.
+>
+> This is not only a convenience. The credential never passes through the conversation, so it never
+> reaches a transcript — which makes it the better choice for any token you use repeatedly, not just
+> for headless runs. The trade is that it now lives wherever you set environment variables, so put it
+> somewhere with file permissions you are happy with rather than in a shell profile.
 
 > **Plugin manifest location:** the manifest lives at `.claude-plugin/plugin.json` (the standard,
 > installable location Claude looks for). The logical layout is still exactly as documented:
@@ -388,11 +392,19 @@ we compare?" is the board's first question.
 ## 🔐 Security note on key handling (read this)
 
 - **The plugin asks for your token every time it starts** and keeps it **only in the MCP server's
-  process memory for the session.** It is **never** written to disk, logs, memory files, config, or
-  any generated document (report, deck, `.pptx`, `.docx`), and is discarded when the session ends.
+  process memory for the session.** The server **never** writes it to disk, logs, memory files,
+  config, or any generated document (report, deck, `.pptx`, `.docx`), and discards it when the
+  session ends.
 - When you paste the token, Claude uses it solely to call `bitsight_set_token` and will **not** echo
   it back in its replies. Say "clear my token" any time to wipe it from memory mid-session
   (`bitsight_clear_token`).
+- **One thing the server cannot promise for you.** The guarantee above is about the server process.
+  A token you paste into chat travels through the conversation to reach it, and Claude clients
+  commonly keep transcripts — Claude Code writes them under `~/.claude`. Nothing in this plugin can
+  reach back and redact that. So treat a pasted token as disclosed to whatever retains the
+  transcript: **use a short-lived, least-entitled Bitsight token and rotate it when you are done.**
+  For anything recurring, the environment-variable flow below avoids the problem entirely, because
+  the credential never enters the conversation at all.
 - Because the token is entered in chat, treat that message as sensitive per your own data-handling
   policy. If you prefer the token never appears in the conversation at all, use the unattended
   environment-variable mode above instead.
