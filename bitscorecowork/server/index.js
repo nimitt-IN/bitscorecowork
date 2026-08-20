@@ -106,6 +106,38 @@ function classifyStatus(status) {
 /** Bitsight answers well inside this; it exists to bound a stall, not to be a deadline. */
 const REQUEST_TIMEOUT_MS = 30_000;
 
+/**
+ * A value that is about to be interpolated into a request path, checked before it is.
+ *
+ * `encodeURIComponent` is not enough on its own, and the gap is easy to miss: it escapes `/`
+ * but leaves `.` alone, so a segment of `..` survives encoding intact and `new URL()` then
+ * resolves it away. Measured:
+ *
+ *   new URL(BASE_URL + "/v1/companies/" + encodeURIComponent(".."))
+ *     -> https://api.bitsighttech.com/ratings/v1/
+ *
+ * The blast radius is small — the host is a constant, so this is not SSRF, and any call still
+ * carries the caller's own token and can only reach what that token already entitles. But the
+ * values reaching these handlers are chosen by a model from conversation text, and a tool that
+ * silently queries a *different* endpoint from the one its name promises is a bad failure mode
+ * in a product whose whole job is reporting accurately on somebody's risk posture. It is one
+ * regex to remove the possibility.
+ *
+ * Deliberately an allowlist rather than a blocklist of `..`. Bitsight GUIDs and industry slugs
+ * are alphanumeric with hyphens and underscores; requiring the first character to be
+ * alphanumeric excludes `.` and `..` without having to enumerate the tricks.
+ */
+const SAFE_SEGMENT = /^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$/;
+
+function pathSegment(value, name) {
+  if (typeof value !== "string" || !SAFE_SEGMENT.test(value)) {
+    throw new Error(
+      `${name} is not a valid identifier. Expected a Bitsight GUID or slug — letters, digits, hyphens and underscores only. Do not retry with a different encoding; ask the user for the correct ${name}.`
+    );
+  }
+  return encodeURIComponent(value);
+}
+
 async function bitsightGet(path, params = {}) {
   const url = new URL(`${BASE_URL}${path}`);
   for (const [key, value] of Object.entries(params)) {
@@ -385,7 +417,7 @@ const TOOLS = [
       // `fields` param RESTRICTS the response to only the listed fields, so it
       // cannot be used to *add* industry_average/percentile — that requires a
       // second, targeted call which we then merge in.
-      const path = `/v1/companies/${encodeURIComponent(company_guid)}`;
+      const path = `/v1/companies/${pathSegment(company_guid, "company_guid")}`;
       const data = await bitsightGet(path);
       if (include_industry_comparison) {
         try {
@@ -415,7 +447,7 @@ const TOOLS = [
       required: ["company_guid"],
     },
     handler: async ({ company_guid }) => {
-      const data = await bitsightGet(`/v1/companies/${encodeURIComponent(company_guid)}/findings/summaries`, {
+      const data = await bitsightGet(`/v1/companies/${pathSegment(company_guid, "company_guid")}/findings/summaries`, {
         expand: "findings_severity_counts",
       });
       normalizeRiskVectorSlugs(data);
@@ -450,7 +482,7 @@ const TOOLS = [
       required: ["company_guid"],
     },
     handler: async ({ company_guid, risk_vector, severity_gte, affects_rating, limit, offset }) => {
-      const path = `/v1/companies/${encodeURIComponent(company_guid)}/findings`;
+      const path = `/v1/companies/${pathSegment(company_guid, "company_guid")}/findings`;
       const base = {
         severity_gte: severity_gte,
         affects_rating: affects_rating === undefined ? undefined : affects_rating ? "true" : "false",
@@ -493,7 +525,7 @@ const TOOLS = [
       required: ["company_guid"],
     },
     handler: async ({ company_guid, importance, limit, offset }) => {
-      const data = await bitsightGet(`/v1/companies/${encodeURIComponent(company_guid)}/assets`, {
+      const data = await bitsightGet(`/v1/companies/${pathSegment(company_guid, "company_guid")}/assets`, {
         limit: limit ?? 100,
         offset,
       });
@@ -608,7 +640,7 @@ const TOOLS = [
     },
     handler: async ({ industry_slug, add_sub_industries, show_all }) => {
       if (industry_slug) {
-        const data = await bitsightGet(`/v1/industries/${encodeURIComponent(industry_slug)}`);
+        const data = await bitsightGet(`/v1/industries/${pathSegment(industry_slug, "industry_slug")}`);
         return textResult(data);
       }
       const data = await bitsightGet("/v1/industries", {
@@ -665,7 +697,7 @@ const TOOLS = [
       required: ["threat_guid"],
     },
     handler: async ({ threat_guid, limit, offset }) => {
-      const data = await bitsightGet(`/v2/threats/${encodeURIComponent(threat_guid)}/companies`, {
+      const data = await bitsightGet(`/v2/threats/${pathSegment(threat_guid, "threat_guid")}/companies`, {
         limit: limit ?? 100,
         offset,
       });
@@ -688,7 +720,7 @@ const TOOLS = [
     },
     handler: async ({ threat_guid, company_guid, limit, offset }) => {
       const data = await bitsightGet(
-        `/v2/threats/${encodeURIComponent(threat_guid)}/companies/${encodeURIComponent(company_guid)}/evidence`,
+        `/v2/threats/${pathSegment(threat_guid, "threat_guid")}/companies/${pathSegment(company_guid, "company_guid")}/evidence`,
         { limit: limit ?? 100, offset }
       );
       return textResult(data);
