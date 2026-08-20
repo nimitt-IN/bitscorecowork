@@ -4,9 +4,9 @@
   "description": "BitScoreCoWork — pull and analyze Bitsight Security Ratings inside Claude Cowork, then produce executive reporting, vendor due-diligence briefs, remediation roadmaps, CVE exposure sweeps, framework evidence packs, financial exposure estimates, digital-footprint validation and attribution disputes, Indian regulatory incident notifications across CERT-In, RBI, SEBI, IRDAI and IFSCA, board-level crisis simulations, sector benchmarking, recurring change digests, customer questionnaire responses, and scoped, authorization-gated security-testing plans. An asset by BitScore Cybertech LLP.",
   "author": {
     "name": "BitScore Cybertech LLP",
-    "url": "https://bitscore.in"
+    "url": "https://www.bitscore.in"
   },
-  "homepage": "https://bitscore.in",
+  "homepage": "https://www.bitscore.in",
   "license": "MIT",
   "keywords": [
     "bitsight",
