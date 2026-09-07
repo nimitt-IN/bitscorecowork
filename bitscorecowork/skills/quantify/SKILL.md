@@ -8,7 +8,7 @@ description: >
   business case for security spend", or wants a rating expressed as money for a
   board, budget or insurance conversation.
 metadata:
-  version: "0.5.0"
+  version: "0.6.0"
 ---
 
 # quantify — indicative financial exposure from Bitsight posture

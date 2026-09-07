@@ -321,9 +321,14 @@ IST deadlines, a fact-gathering checklist, per-instrument drafts and a timeline 
 
 > 🏛 **If you are licensed in GIFT City, you file with IFSCA — not with the RBI, SEBI or IRDAI.** An
 > IFSC licence displaces the mainland regulator, however mainland the business looks, so say where you
-> are licensed before saying what kind of entity you are. IFSCA runs **six hours from detection**, then
-> an interim report at **3 days**, **mitigation measures within 7 days** and root cause analysis at
-> **30 days** — the seven-day step is a deadline on the fix itself. CERT-In binds you either way.
+> are licensed before saying what kind of entity you are. IFSCA runs **six hours**, then an interim
+> report at **3 days**, **mitigation measures within 7 days** and root cause analysis at **30 days** —
+> the seven-day step is a deadline on the fix itself. CERT-In binds you either way.
+>
+> **Say whether you are an MII**, because the first clock differs. An IFSC **stock exchange (including
+> the bullion exchange), clearing corporation or depository** reads the MII Guidelines of 20 April 2026
+> on top of the baseline: six hours from noticing, detecting **or being brought to notice**, to
+> **IFSCA *and* CERT-In**. Every other IFSC RE runs six hours from **detection**, to IFSCA.
 
 > ⚠️ **The clock runs from noticing, not from confirming.** "We're still investigating" does not pause
 > six hours. And a listed entity owes **SEBI LODR Reg. 30(6)** disclosure to the exchanges *in

@@ -8,7 +8,7 @@ description: >
   security posture", or needs an outbound assurance response (as opposed to an
   audit-facing framework evidence pack, which is `regmap`).
 metadata:
-  version: "0.5.0"
+  version: "0.6.0"
 ---
 
 # assurance-pack — answering inbound security questionnaires

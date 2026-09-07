@@ -11,7 +11,7 @@ description: >
   escalation matrix and notification drafts (as opposed to a simulated exercise,
   which is `tabletop`).
 metadata:
-  version: "0.5.0"
+  version: "0.6.0"
 ---
 
 # incident-notify — time-bound Indian regulatory notifications after an incident
@@ -72,15 +72,25 @@ determinations to make.
    - **Entity type** — commercial bank, Small Finance / Payments / Local Area Bank, co-operative bank,
      NBFC (and which Scale-Based Regulation layer), SEBI-regulated intermediary or MII, insurer or
      insurance intermediary, IFSCA-regulated IFSC entity, or none of these.
-   - **If IFSCA — test the four exemptions, and do not read them loosely.** Para 21 exempts REs
-     operating as a **branch** of a regulated Indian or foreign entity, REs serving **group entities
-     only** (e.g. GICs), REs with **fewer than 10 employees**, and **foreign universities** in IFSCs.
-     Each is conditional on para 22: the RE adopts the parent's framework and IS Policy, the parent's
-     CISO acts as its Designated Officer, and the parent is regulated by a financial-sector regulator
-     in its home jurisdiction with the IFSC RE inside that framework's scope. An exempt RE owes IFSCA
-     nothing on this incident — but still owes **CERT-In**, and still owes its annual certification
-     within 90 days of the financial-year end. Put paras 21 and 22 in front of their compliance team;
-     do not determine the exemption yourself.
+   - **If IFSCA — ask whether it is an MII before anything else.** An IFSC **stock exchange
+     (including the bullion exchange), clearing corporation or depository** reads the MII Guidelines of
+     20 April 2026 **on top of** the 2025 baseline, and its clock is not the baseline's: six hours on a
+     **noticing / detecting / brought-to-notice** trigger, to **IFSCA *and* CERT-In**, plus NCIIPC if a
+     Protected System is affected. Every other IFSC RE runs the baseline: six hours from **detection**,
+     to IFSCA. Carrying the baseline's narrower trigger onto an MII draft starts the clock late.
+   - **If IFSCA — test the exemptions on the current two-tier text.** The March 2026 amendment
+     substituted para 21 and inserted para 23; the pre-2026 "four exemptions at para 21" is wrong about
+     the count, the paragraph and the conditions. **Para 21** — branch of a regulated Indian or foreign
+     entity · RE serving **group entities only** (e.g. a GIC) · RE with **fewer than 10 employees** —
+     leans on a parent: it adopts the parent's framework and IS Policy, the **parent's CISO acts as
+     Designated Officer**, that parent is regulated by *"a regulator/ Government Body"* in its home
+     jurisdiction (**not** necessarily a financial-sector one), and it owes an **annual cyber security
+     audit report** to IFSCA. **Para 23** — foreign university · newly incorporated standalone RE with
+     **no parent** · **Credit Rating Agency** — has no parent to lean on and instead certifies measures
+     *"proportionate to its risk exposure"*. Never tell a para 23 entity to adopt its parent's
+     framework; by definition it has none. Either way an exempt RE owes IFSCA nothing on this incident
+     but still owes **CERT-In**, and still certifies within **90 days of the financial-year end**. Put
+     paras 21, 22 and 23 in front of their compliance team; do not determine the exemption yourself.
    - **Listed?** — SEBI LODR Regulation 30 reaches every listed entity regardless of sector, and it is
      the obligation most often forgotten in the first six hours.
    - **Personal data in scope?** — DPDP is the only track that reaches individuals, but **its breach
@@ -153,12 +163,18 @@ determinations to make.
    - **IRDAI** — six hours to CERT-In with a copy to IRDAI. **There is no 24-hour step in the 2026
      Guidelines**; do not carry one over from the 2023 text.
    - **IFSCA** if the entity is licensed in the IFSC — **and this replaces the RBI, SEBI or IRDAI
-     filing rather than adding to it.** Four steps, all measured from **detection** rather than from
-     noticing: particulars to `cyber-incidents@ifsca.gov.in` with a copy to the CISO, IFSCA within
-     **6 hours**; interim report at **3 days**; **mitigation measures taken within 7 days**; detailed
-     root cause analysis at **30 days**. The seven-day step is a deadline on the *fix*, not on a
-     filing — no other Indian instrument here puts a clock on remediation — so say so plainly, because
-     it changes what the first week is for. The matrix runs a month, not a day.
+     filing rather than adding to it.** Four steps: particulars to `cyber-incidents@ifsca.gov.in` with
+     a copy to the CISO, IFSCA within **6 hours**; interim report at **3 days**; **mitigation measures
+     taken within 7 days**; detailed root cause analysis at **30 days**. The seven-day step is a
+     deadline on the *fix*, not on a filing — no other Indian instrument here puts a clock on
+     remediation — so say so plainly, because it changes what the first week is for. The matrix runs a
+     month, not a day.
+     - **Baseline RE:** all four measured from **detection**, to IFSCA.
+     - **IFSC MII** (exchange incl. bullion, clearing corporation, depository): the first filing runs
+       from **noticing, detecting or being brought to notice** and goes to **IFSCA *and* CERT-In** —
+       and **NCIIPC** too where the affected system is a declared Protected System. Add the
+       **quarterly** report to IFSCA within 15 days of each quarter end to the post-incident checklist;
+       it is the IFSC counterpart of LODR Reg. 27(2)(ba) and it outlives the incident.
    - **DPDP** — ⚠️ **do not draft these as live filings.** Rule 7 and Act s.8 commence **13 May 2027**.
      If the user wants them, produce them clearly marked as **preparatory, not yet in force**: the
      intimation to each affected Data Principal (concise, clear, plain, with the consequences, the

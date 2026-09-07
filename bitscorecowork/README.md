@@ -1,4 +1,4 @@
-# BitScoreCoWork — v0.5.0
+# BitScoreCoWork — v0.6.0
 
 An asset by **BitScore Cybertech LLP** — [bitscore.in](https://bitscore.in), authorised India
 partner for [Bitsight](https://www.bitsight.com/).
@@ -73,6 +73,86 @@ attributed, and what a dispute needs).
 
 ---
 
+## What's new in 0.6.0
+
+**The IFSCA track was a year out of date, and it was wrong rather than merely thin.** 0.5.0 added GIFT
+City on the strength of the 2025 Guidelines. Since then IFSCA has issued **three more cyber
+instruments** — all of them before 0.5.0 shipped, and all of them missed. Two statements in the
+references were therefore false, not incomplete:
+
+- **The exemptions are two tiers, not one list of four.** The amendment of **10 March 2026**
+  (IFSCA-CSD0MSC/1/2026-DCS) **substituted** para 21 and **inserted** para 23. Foreign universities
+  moved out of para 21; **Credit Rating Agencies** and newly incorporated standalone REs became exempt
+  for the first time. The conditions differ in a way that matters: a para 23 RE is exempt *because it
+  has no parent*, so the old advice to "adopt the parent entity's framework and name its CISO as
+  Designated Officer" asked it for something it cannot do by definition. Para 21 also picked up a
+  **new obligation** — an annual cyber security audit report to IFSCA — which an RE that read only the
+  2025 text has not been filing. Two conditions were also **widened**: the parent need only be
+  regulated by *"a regulator/ Government Body"*, not a financial-sector regulator, and the requirement
+  that the parent's framework cover the IFSC RE is gone.
+- **IFSC market infrastructure institutions run a different clock.** The **MII Guidelines** of
+  **20 April 2026** (IFSCA-CSD/MSC/2/2026-DCS) sit *on top of* the baseline for IFSC stock exchanges
+  including the bullion exchange, clearing corporations and depositories. Their six-hour trigger is
+  **noticing, detecting *or being brought to notice*** — wider than the baseline's detection trigger —
+  and the first filing goes to **IFSCA *and* CERT-In**, plus **NCIIPC** for a declared Protected
+  System. Drafting an MII on the baseline's trigger starts the clock late. They also carry a
+  **quarterly** incident report to IFSCA within 15 days of each quarter end, a **120-day** audit
+  deadline against the baseline's 90, ISO 27001 by **20 April 2028** (two years from *issuance*), and
+  an annual Cryptographic Risk Assessment with express **post-quantum** readiness. And the date is a
+  trap: **in force 1 April 2026, twenty days before they were issued.**
+
+**A third IFSCA instrument, and the label understates it.** The **Advisory on Heightened Cyber Security
+Risks arising from Frontier Artificial Intelligence Models** (IFSCA-CSD/MSC/3/2026-DCS, 4 June 2026)
+says REs are "encouraged to comply" — and then drafts **six of its eleven Annexure A items with
+*shall***: SBOM coverage, a comprehensive API inventory with rate-limiting and a whitelist, frontier AI
+as a **named risk scenario placed before the Board** (the Standing Committee on Technology at an MII),
+critical-service-provider assurance, monitoring for sequences beyond "plausible human-operated
+timelines", and human oversight of AI-generated remediation code. It creates no clock, so it is in
+`regulatory-map.md` rather than the incident file, mapped honestly: two items speak to observed
+evidence, four are entirely internal. As far as these references are aware it is the first Indian
+financial-sector instrument to make frontier AI a board-level cyber scenario.
+
+**Both SEBI circulars of 24 August 2026 are now carried, and they are easy to confuse.** Same date,
+same subject area, entirely different populations:
+
+- **The FIRE realignment** (HO/(449)2026-ITD-5_DIV1/I/19448/2026) binds every RE reporting under CSCRF
+  and **moved no deadline** — six hours to `mkt_incidents@sebi.gov.in`, twenty-four to the portal,
+  unchanged. What changed is that the portal now follows the FSB's Format for Incident Reporting
+  Exchange and takes the report **in stages**: initial, intermediate updates, final closure. So
+  twenty-four hours *opens* the filing rather than closing it. **File once and stop and you have met
+  the clock and missed the obligation.** The portal is named: `https://siportal.sebi.gov.in`.
+- **The IT Resilience Index** (HO/47/18/11(1)2026-MRD-TPD1/I/19509/2026) binds **MIIs alone** — with
+  AMC Repo Clearing Ltd carved out **by name in the addressee list**, not in the operative text, so the
+  exclusion vanishes from any summary. It creates **no reporting clock**, and it is recorded here
+  chiefly so that `incident-notify` does not cite it and `tabletop` does not inject it. Nine weighted
+  parameters to 100, computation required to be **system-driven** — automatic, "non-discretionary and
+  fool proof", manual retrieval only after prior discussion with the MII's SCOT — which makes it an
+  engineering obligation rather than a reporting one. **ITRI is not the CCI**: same shape, different
+  instrument, different population, and an MII computes both.
+
+**One accuracy fix, and it fails in the expensive direction.** `cscrf-categories.md` contradicted
+itself on stock brokers at exactly 1,000. The band tables read "Up to 1,000 → Exempt"; the carve-out
+beside them quoted clause 2.1.2's *"less than 1,000"*. SEBI's Table 1 begins at *"More than 1,000"*, so
+**exactly 1,000 is categorised by neither limb, on either parameter** — a gap in the drafting that the
+August 2025 technical clarification does not close. The generous reading told a broker it was **outside
+CSCRF** on a basis the circular does not support. The file now states the gap and instructs against
+resolving it.
+
+**How the drift happened, which is the part worth keeping.** Three of the five missing instruments were
+issued *before* this plugin's last verification date and were still missed, because the check asked
+"has anything changed since?" rather than "what does the regulator's index list today?". IFSCA's own
+listing is a client-rendered POST search that returns an empty shell to `curl`, so those instruments
+were invisible to the method in use. `incident-reporting-map.md` now records the retrieval route that
+works — `/CommonDirect/DownloadFile?id=…`, with a session cookie picked up from the listing page — and
+the rule: **re-verification enumerates the regulator's index; it does not diff against the last
+reading.**
+
+All six instruments above were **read at source on 7 September 2026**, not copied from the counterpart
+registry on bitscore.in. Skills, tools and the taxonomy are otherwise unchanged from 0.5.0. Still
+sixteen skills.
+
+---
+
 ## What's new in 0.5.0
 
 **GIFT City was missing, and its absence was silent.** An entity licensed by **IFSCA** — the
@@ -86,15 +166,16 @@ looked wrong, which is what made it worth fixing first.
 The references now carry the **Guidelines on Cyber Security and Cyber Resilience for Regulated
 Entities in IFSCs** (IFSCA-CSD0MSC/13/2025-DCS, 10 March 2025, in force 1 April 2025), read at source:
 
-- **Four clocks, all from *detection* rather than from noticing** — particulars to
+- **Four clocks, from *detection* rather than from noticing** *(for a non-MII RE — the MII Guidelines
+  of 20 April 2026 use a wider trigger; see 0.6.0)* — particulars to
   `cyber-incidents@ifsca.gov.in` within **6 hours**, interim report at **3 days**, **mitigation
   measures taken within 7 days**, root cause analysis at **30 days**. The seven-day step is a deadline
   on the *fix*, not on a filing; no other Indian cyber instrument in these references puts a clock on
   remediation, and it means the incident file stays open for a month.
-- **The four para 21 exemptions** — branches, group-only GICs, REs with fewer than ten employees, and
-  foreign universities — with their para 22 conditions, the **90-day annual certification an exempt RE
-  still owes**, and the fact that the exemptions **expire on 10 March 2028**. CERT-In binds an exempt
-  RE either way.
+- **The para 21 exemptions** — with their para 22 conditions, the **90-day annual certification an
+  exempt RE still owes**, and the fact that the exemptions **expire on 10 March 2028**. CERT-In binds
+  an exempt RE either way. *(0.5.0 stated these as a single list of four. The amendment of 10 March
+  2026 had already replaced that with two tiers; 0.6.0 corrects it.)*
 - **A vector-by-vector mapping** in `regulatory-map.md`. Two provisions sit unusually close to what
   Bitsight observes: para 9(a)'s asset inventory *"including … interconnections with internal and
   external systems"*, and para 11's **express six-monthly review** of third parties supporting core
@@ -140,11 +221,20 @@ where an internet-facing ADFS server was never classified as critical, and so wa
 monitored, with the disaster recovery site encrypted too — is a regulator's own finding that an
 inventory error is not one control failing but every control silently skipping one host.
 
-**Keeping this current.** Each reference now carries a provenance block naming the bitscore.in registry
-it mirrors and the date it was verified. These references and the site's `lib/regulations.ts`,
-`lib/incident-clocks.ts` and `lib/cscrf-categories.ts` hold the same facts from the same primary
-sources; when one moves, the other is the counterpart to check. Re-verify at source rather than
-copying across, and stamp the date.
+**Keeping this current.** Each reference carries a provenance block naming the bitscore.in registry it
+mirrors, the date it was verified and a `next-review` date. These references and the site's
+`lib/regulations.ts`, `lib/incident-clocks.ts` and `lib/cscrf-categories.ts` hold the same facts from
+the same primary sources; when one moves, the other is the counterpart to check. Re-verify at source
+rather than copying across, and stamp the date.
+
+**And enumerate the regulator's own index — do not diff against the last reading.** 0.6.0 found five
+instruments missing, three of them issued *before* the previous verification date. They were missed
+because the check asked what had changed since August rather than what the regulator lists today. The
+indexes worth walking each review: RBI notifications
+(`rbi.org.in/scripts/SearchResults.aspx?search=cybersecurity`), SEBI circulars
+(`sebi.gov.in/sebiweb/home/HomeAction.do?doListing=yes&sid=1&ssid=7&smid=0`, server-rendered and
+greppable, unlike the individual landing pages), IFSCA **Legal › Circular** (client-rendered behind a
+POST search — see the retrieval note in `incident-reporting-map.md`), and IRDAI's circular listing.
 
 Skills, tools and the taxonomy are otherwise unchanged from 0.4.2. Still sixteen skills.
 
@@ -260,7 +350,7 @@ through the platform, Bitsight adjudicates, and the rating does not move while t
 **`incident-notify`** drafts the time-bound notifications an Indian entity owes after an incident,
 against the new [`incident-reporting-map.md`](reference/incident-reporting-map.md) — CERT-In's six
 hours, the RBI filings, SEBI CSCRF and LODR Reg. 30, IRDAI, IFSCA for GIFT City entities *(added in
-0.5.0)*, DPDP intimation to the Data Protection Board and to affected Data Principals, and NCIIPC.
+0.5.0; the 2026 amendment and the separate MII regime in 0.6.0)*, DPDP intimation to the Data Protection Board and to affected Data Principals, and NCIIPC.
 Every clock carries its reference number, issue date, source URL and a **Primary/Secondary** marker
 recording whether the published text was read directly — every **sectoral** instrument has been read
 at source; NCIIPC and the superseded RBI 2023 Master Direction remain Secondary and say so where they

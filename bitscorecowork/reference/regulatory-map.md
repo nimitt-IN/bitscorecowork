@@ -254,7 +254,8 @@ who decides.
 
 ## IFSCA — GIFT City, where a rating pack maps unusually well
 
-**Guidelines on Cyber Security and Cyber Resilience for Regulated Entities in IFSCs**
+**Guidelines on Cyber Security and Cyber Resilience for Regulated Entities in IFSCs** — the baseline,
+and **one of four IFSCA cyber instruments**. Verified at source 7 September 2026.
 
 | | |
 | --- | --- |
@@ -266,6 +267,18 @@ who decides.
 **Establish the licence before the sector.** An IFSC licence **displaces** the mainland regulator: a
 GIFT City banking unit is not mapped to the RBI's 2026 Directions and a GIFT City fund does not take a
 CSCRF category. Ask where the entity is licensed before asking what it does.
+
+**Then ask whether it is an MII**, because a second regime sits on top of this one:
+
+| Instrument | Reference | Issued | Adds |
+| --- | --- | --- | --- |
+| Amendment to the baseline Guidelines | IFSCA-CSD0MSC/1/2026-DCS | 10 Mar 2026 | Substitutes para 21 and inserts para 23 — **two exemption tiers**, not one list of four. See [`incident-reporting-map.md`](incident-reporting-map.md) |
+| Guidelines for **MIIs** in IFSC | IFSCA-CSD/MSC/2/2026-DCS | 20 Apr 2026, **in force 1 Apr 2026** | A prescriptive regime for IFSC exchanges, clearing corporations and depositories, layered on the baseline |
+| Advisory on **Frontier AI** Models | IFSCA-CSD/MSC/3/2026-DCS | 4 Jun 2026 | Six *shall* items in Annexure A, despite the "advisory" label |
+
+A `regmap` pack for an IFSC MII maps to **both** the baseline's five components and the MII Guidelines'
+seven functions — Govern, Identify, Protect, Detect, Respond, Recover, Resilience. Say which you have
+used.
 
 **Five key components**, and the pack should be organised on them: **I** Governance · **II** Cyber
 security and cyber resilience framework · **III** Third party risk management · **IV** Communication &
@@ -314,6 +327,39 @@ A pack that presents these as a flat checklist misrepresents the Guidelines. Say
 evidence shows and let the RE and its auditor set the depth. And note that Bitsight sees none of
 components I, IV or V at all: governance, training and audit are entirely internal records.
 
+### The MII layer, where it changes the mapping
+
+For an IFSC stock exchange, clearing corporation or depository, the MII Guidelines of 20 April 2026 are
+prescriptive where the baseline is principles-based, and three of their obligations change what a
+ratings pack can honestly claim:
+
+| Obligation (MII Guidelines) | What the pack can evidence | What it cannot |
+| --- | --- | --- |
+| Annual cyber security audit by a **CERT-In empanelled** IS auditor, to IFSCA within **120 days** of the financial-year end, with an **MD/CEO declaration** — one firm for at most three consecutive years, then a two-year cooling-off | Dated external evidence the auditor can take in evidence. Note the **120 days**, against the baseline's 90 — a pack built for a non-MII RE states the wrong deadline | The audit itself, the auditor's empanelment, and the declaration |
+| **ISO 27001 within two years of issuance** — **20 April 2028**, measured from issue, not from the 1 April commencement | Nothing. Certification status is a fact about a certificate | Everything |
+| **Annual Cryptographic Risk Assessment** with express **post-quantum** readiness | The TLS/SSL Configurations vector shows *deployed* protocol versions and cipher suites externally — the observable input to that assessment, and the only place in this map where Bitsight touches the PQC question at all | Key management, internal crypto inventory, and the assessment itself |
+| **Bi-annual VAPT** for NCIIPC-designated systems | Nothing — VAPT is an internal record | Everything |
+
+### The frontier-AI advisory, and the two items a ratings pack actually speaks to
+
+The advisory of 4 June 2026 is drafted as an advisory and reads as an instrument: six of its eleven
+Annexure A items say *shall*. Two of those six are unusually close to what Bitsight observes, and are
+worth mapping rather than summarising:
+
+| Annexure A item | Risk vector | What the evidence shows | What it cannot show |
+| --- | --- | --- | --- |
+| **§1** — presume newly disclosed critical vulnerabilities are exploitable **within hours**, and prepare for patch waves | Critical Vulnerability Management | Observed remediation latency against disclosed vulnerabilities, weighted by severity — the closest external proxy there is for whether an RE could survive a compressed window | Whether the RE has *planned* for a patch wave. The plan is internal |
+| **§7** — require **critical service providers** to assess frontier-AI risk and furnish evidence of preparedness | Portfolio monitoring (`watchtower`, `myportfolio`, `vendor-brief`) | That the RE monitors those providers' external posture, dated. Evidence the RE performed oversight | Whether the provider actually assessed frontier-AI risk. That is a document the provider furnishes, not an observable |
+
+The remaining four *shall* items — SBOM coverage, the API inventory with rate-limiting and whitelist,
+frontier AI as a **board-level named risk scenario** (the Standing Committee on Technology at an MII),
+and human oversight of AI-generated remediation code — are **entirely internal**. A pack that gestures
+at them is overclaiming. Name them as out of scope and say who holds the evidence.
+
+**One thing worth telling a client**, because it is true and few know it: this is, as far as this
+reference is aware, the first Indian financial-sector instrument to require frontier AI as a defined
+scenario put before a board.
+
 ---
 
 ## Indian regimes — orientation notes
@@ -357,6 +403,15 @@ Short, non-exhaustive context. Applicability is always entity-specific.
     cover cyber security"*; **Reg. 30(6)** governs market disclosure of material events. These reach
     listed entities in **any** sector, including ones with no financial-sector regulator at all. See
     [`incident-reporting-map.md`](incident-reporting-map.md) for the clocks.
+  - *Two circulars of 24 August 2026, same date, different populations.* The **FIRE realignment**
+    (HO/(449)2026-ITD-5_DIV1/I/19448/2026) binds every RE reporting under CSCRF and **moved no
+    deadline** — it made the 24-hour portal filing **staged**, so it opens the filing rather than
+    closing it. The **IT Resilience Index** (HO/47/18/11(1)2026-MRD-TPD1/I/19509/2026) binds **MIIs
+    alone**, with AMC Repo Clearing Ltd carved out by name, and creates no reporting clock at all —
+    nine weighted parameters computed **system-driven**, half-yearly, first submission for the half-year
+    ending 31 March 2027. Do not map a rating onto ITRI: its Security parameter is a **20% weighting in
+    an index the MII computes from its own systems**, not something an external observer contributes to.
+    Clocks and detail in [`incident-reporting-map.md`](incident-reporting-map.md).
 - **IRDAI** — Information and Cyber Security Guidelines, **2026** (IRDAI/GA&HR/CIR/MISC/51/4/2026,
   6 April 2026), which replaced the 2023 Guidelines, including outsourcing risk.
 - **IFSCA — and it displaces the three above.** Guidelines on Cyber Security and Cyber Resilience for
@@ -366,10 +421,17 @@ Short, non-exhaustive context. Applicability is always entity-specific.
   RBI's 2026 Directions, and a GIFT City fund does not take a CSCRF category. Applied on a **principle
   of proportionality** — scale and complexity of operations, nature of the activity, interconnectedness,
   and the corresponding cyber risks — so the same obligation binds two REs at different depths, which
-  is worth saying in a pack rather than presenting a flat checklist. Four express exemptions at para 21
-  (branches, group-only GICs, REs under ten employees, foreign universities) are conditional on
-  adopting the parent's framework and naming the parent's CISO as Designated Officer, and they expire
-  on 10 March 2028. CERT-In binds an IFSC entity either way. Clocks in
+  is worth saying in a pack rather than presenting a flat checklist. CERT-In binds an IFSC entity either
+  way.
+
+  **IFSCA is four instruments.** An amendment of 10 March 2026 restructured the exemptions into **two
+  tiers** — para 21 for REs that lean on a parent (branches, group-only GICs, under ten employees), para
+  23 for those with none (foreign universities, newly incorporated standalone REs, **Credit Rating
+  Agencies**) — and added an **annual cyber security audit report** to the para 21 conditions. MII
+  Guidelines of 20 April 2026 layer a prescriptive regime on IFSC exchanges, clearing corporations and
+  depositories, in force **1 April 2026, twenty days before they were issued**. A frontier-AI advisory
+  of 4 June 2026 reaches every RE. Do not state the pre-2026 "four exemptions at para 21" — it is wrong
+  about the count, the paragraph and the conditions. Detail and clocks in
   [`incident-reporting-map.md`](incident-reporting-map.md).
 
 For each of these, the correct output is *"here is the observed evidence relevant to this obligation
@@ -383,6 +445,6 @@ names are the property of their respective bodies; references here are indicativ
 
 <!-- provenance
 mirrors: bitscore.in lib/regulations.ts
-verified: 2026-08-18
-next-review: 2026-11-18
+verified: 2026-09-07
+next-review: 2026-12-07
 -->
