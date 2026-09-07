@@ -8,7 +8,7 @@ description: >
   or wants the delta since a previous run (as opposed to a full portfolio pull,
   which is `myportfolio`).
 metadata:
-  version: "0.5.0"
+  version: "0.6.0"
 ---
 
 # watchtower — what changed in the portfolio since last time

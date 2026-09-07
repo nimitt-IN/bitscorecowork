@@ -10,7 +10,7 @@ description: >
   findings (as opposed to drafting notifications for a real incident, which is
   `incident-notify`).
 metadata:
-  version: "0.5.0"
+  version: "0.6.0"
 ---
 
 # tabletop — board crisis simulation from the real attack surface
@@ -107,14 +107,21 @@ If an artefact would be convincing, it needs the stamp most.
      **twelve hours**, not twenty-four, because the event emanates from within the entity. Run it as a
      hard inject — it can fall due before some of the technical filings.
 
-   - **For an IFSCA entity, run the tail.** Six hours from **detection** to
-     `cyber-incidents@ifsca.gov.in`, then an interim report at **3 days**, **mitigation measures taken
-     within 7 days**, and root cause analysis at **30 days**. This is the most useful clock set in the
-     whole reference for an exercise, because it does not stop when the adrenaline does. Most
-     tabletops end at hour twelve and never test the week that follows — the seven-day mitigation
-     deadline is a **regulatory** deadline on the fix itself, and a board that has never rehearsed it
-     will assume remediation runs to an internal schedule. Consider a second, short session set at
-     day 3 to work the interim report and the mitigation commitment.
+   - **For an IFSCA entity, run the tail.** Six hours to `cyber-incidents@ifsca.gov.in`, then an
+     interim report at **3 days**, **mitigation measures taken within 7 days**, and root cause analysis
+     at **30 days**. This is the most useful clock set in the whole reference for an exercise, because
+     it does not stop when the adrenaline does. Most tabletops end at hour twelve and never test the
+     week that follows — the seven-day mitigation deadline is a **regulatory** deadline on the fix
+     itself, and a board that has never rehearsed it will assume remediation runs to an internal
+     schedule. Consider a second, short session set at day 3 to work the interim report and the
+     mitigation commitment.
+
+     **Set the trigger correctly, because it is itself an inject.** A baseline IFSC RE runs from
+     **detection**, to IFSCA. An **IFSC MII** — exchange including the bullion exchange, clearing
+     corporation, depository — runs from **noticing, detecting *or being brought to notice***, to
+     **IFSCA *and* CERT-In**, plus **NCIIPC** for a declared Protected System. Opening an MII exercise
+     with a *vendor's phone call* rather than an internal alert tests exactly that difference, and it
+     is the one an MII team is most likely to get wrong, because the baseline is the text they know.
 
    Put a visible countdown in the facilitator guide. A clock nobody can see does not create pressure.
 

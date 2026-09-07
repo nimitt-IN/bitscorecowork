@@ -84,7 +84,7 @@ Market Infrastructure Institutions sit in their own category and carry the frame
 
 | Band | Category |
 | --- | --- |
-| Up to 1,000 | **Exempt** |
+| **Below** 1,000 | **Exempt** *(from clause 2.1.2 — see the gap note below)* |
 | More than 1,000 and up to 10,000 | Self-certification RE |
 | More than 10,000 and up to 1 lakh | Small-size RE |
 | More than 1 lakh and up to 10 lakhs | Mid-size RE |
@@ -94,7 +94,7 @@ Market Infrastructure Institutions sit in their own category and carry the frame
 
 | Band | Category |
 | --- | --- |
-| Up to ₹1,000 crore | **Exempt** |
+| **Below** ₹1,000 crore | **Exempt** *(from clause 2.1.2 — see the gap note below)* |
 | More than ₹1,000 crore and up to ₹10,000 crore | Self-certification RE |
 | More than ₹10,000 crore and up to ₹1,00,000 crore | Small-size RE |
 | More than ₹1,00,000 crore and up to ₹10,00,000 crore | Mid-size RE |
@@ -104,7 +104,21 @@ Market Infrastructure Institutions sit in their own category and carry the frame
 
 Qualified Stock Brokers designated under the February 2023 QSB circular are Qualified REs regardless of either parameter.
 
-**Carve-out.** A broker with less than ₹1,000 crore of clientele trading volume in a year *and* fewer than 1,000 total registered clients is exempt from CSCRF. Both limbs must be satisfied.
+**Carve-out.** Clause 2.1.2, verbatim: *"Stock Brokers with less than 1,000 crores clientele trading
+volume (in a year) and less than 1,000 total registered clients are exempted from CSCRF."* Both limbs
+must be satisfied.
+
+> ⚠️ **Exactly 1,000 is categorised by neither limb, on either parameter — and that is SEBI's drafting,
+> not a close question.** Table 1's lowest band begins at *"More than 1,000"*; clause 2.1.2's exemption
+> reaches only *"less than 1,000"*. A broker at exactly 1,000 registered clients, or exactly ₹1,000
+> crore of clientele trading volume, falls in the gap between them. The August 2025 technical
+> clarification does not close it — it does not touch stock broker categorisation at all.
+>
+> **Say so rather than resolving it**, and in particular do not round down into Exempt. That fails in
+> the direction of *less* obligation, which is the expensive direction: it tells a broker it is outside
+> CSCRF on a reading clause 2.1.2 does not support. Answer from the other parameter if that one is
+> unambiguous and gives a category — the higher-of-two rule still applies — and otherwise return no
+> category and put the two clauses in front of the RE's compliance team.
 
 > ⚠️ **Superseded version still in circulation.** CSCRF v1.0 categorised brokers on active UCC client base and distinguished client-based from proprietary brokers. April 2025 replaced that table outright and the proprietary/client-based split no longer exists.
 
@@ -333,6 +347,6 @@ user's compliance and legal team.
 
 <!-- provenance
 mirrors: bitscore.in lib/cscrf-categories.ts (verified 2026-08-14), lib/regulations.ts
-verified: 2026-08-18
-next-review: 2026-11-18
+verified: 2026-09-07
+next-review: 2026-12-07
 -->

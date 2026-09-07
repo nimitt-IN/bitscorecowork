@@ -9,7 +9,7 @@ description: >
   are we", "map this to the RBI Cybersecurity Directions 2026", or wants ratings
   evidence organized for an audit, assessment or supervisory review.
 metadata:
-  version: "0.5.0"
+  version: "0.6.0"
 ---
 
 # regmap — framework evidence pack from Bitsight data
@@ -173,11 +173,25 @@ output — an auditor can work with it, and it doesn't assert something the data
    If the entity is **also listed**, it is in LODR as well as CSCRF — see the listed-entity question
    above.
 
-3b. **If IFSCA was chosen — map to the five components, and check the exemptions.**
-   The Guidelines (IFSCA-CSD0MSC/13/2025-DCS, 10 March 2025, in force 1 April 2025) are organised as
-   **I** Governance · **II** Cyber security and cyber resilience framework · **III** Third party risk
-   management · **IV** Communication & awareness · **V** Audit. Map to that structure, using the
-   vector table in [`regulatory-map.md`](../../reference/regulatory-map.md).
+3b. **If IFSCA was chosen — establish whether the RE is an MII, then map to the components.**
+   IFSCA is **four instruments**, and which ones the pack is built on changes its structure:
+   - **Every IFSC RE** reads the baseline Guidelines (IFSCA-CSD0MSC/13/2025-DCS, 10 March 2025, in
+     force 1 April 2025) **as amended on 10 March 2026**, organised as **I** Governance · **II** Cyber
+     security and cyber resilience framework · **III** Third party risk management · **IV**
+     Communication & awareness · **V** Audit.
+   - **An IFSC stock exchange (incl. the bullion exchange), clearing corporation or depository** also
+     reads the **MII Guidelines** (IFSCA-CSD/MSC/2/2026-DCS, 20 April 2026, in force **1 April 2026** —
+     twenty days before issue), organised on seven functions: **Govern · Identify · Protect · Detect ·
+     Respond · Recover · Resilience**. These are prescriptive where the baseline is principles-based.
+     Map to **both** structures and say which one each row comes from.
+   - **Every IFSC RE** also reads the **frontier-AI advisory** (IFSCA-CSD/MSC/3/2026-DCS, 4 June 2026).
+     Titled an advisory; six of its eleven Annexure A items say *shall*. Two speak to observed evidence
+     — §1 (assume exploitation within hours) maps to Critical Vulnerability Management, §7 (critical
+     service providers must furnish evidence of preparedness) maps to portfolio monitoring. The other
+     four *shall* items — SBOM, API inventory, board-level AI scenario, human oversight of AI-generated
+     code — are entirely internal. Name them as out of scope rather than gesturing at them.
+
+   Map using the vector tables in [`regulatory-map.md`](../../reference/regulatory-map.md).
 
    Three things this instrument does that change the pack:
    - **Para 11 sets an express six-monthly cadence** for reviewing third parties the RE depends on for
@@ -191,10 +205,14 @@ output — an auditor can work with it, and it doesn't assert something the data
    - **Proportionality runs through the whole instrument.** Depth is set by scale, complexity, nature
      of activity, interconnectedness and risk. Do not present a flat checklist.
 
-   **Ask whether the RE falls inside a para 21 exemption** (branch, group-only GIC, fewer than ten
-   employees, foreign university) — each conditional on para 22 — but do not determine it. Note that
-   an exempt RE still files an annual certification within 90 days of the financial-year end, and that
-   the exemptions expire on **10 March 2028**. Bitsight sees nothing of components I, IV or V.
+   **Ask whether the RE falls inside an exemption, on the current two-tier text** — **para 21**
+   (branch · group-only GIC · fewer than ten employees), each leaning on a parent and now also owing an
+   **annual cyber security audit report** to IFSCA; or **para 23** (foreign university · newly
+   incorporated standalone RE with no parent · **Credit Rating Agency**), which certifies measures
+   proportionate to its risk exposure instead. Do not state the pre-2026 list of four, and do not
+   determine the exemption yourself. Either way an exempt RE still files an annual certification within
+   90 days of the financial-year end, and the exemptions expire on **10 March 2028**. Bitsight sees
+   nothing of components I, IV or V.
 
 4. **Pull the evidence.**
    - `bitsight_get_company_details` with `include_industry_comparison: true` — rating, per-vector
