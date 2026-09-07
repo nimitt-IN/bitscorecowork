@@ -330,3 +330,9 @@ pending, and Bitsight may decline. A disputed asset is not a removed asset.
 © 2026 BitScore Cybertech LLP. "Bitsight" is a registered trademark of Bitsight Technologies, Inc.;
 this plugin is an independent integration and is not published by Bitsight. Attribution
 determinations rest with Bitsight and with the asset owner; nothing here binds either.
+
+<!-- provenance
+mirrors: the live Bitsight API — not a bitscore.in registry
+verified: 2026-08-13
+next-review: 2026-11-13
+-->
