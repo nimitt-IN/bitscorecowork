@@ -1,0 +1,51 @@
+name: checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  # The point of the provenance guard is that a reference goes stale while nobody is
+  # touching the repo. A check that only runs on push would report it on the next commit,
+  # which could be months after the review date passed.
+  schedule:
+    - cron: '17 4 * * 1'
+  workflow_dispatch:
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      # The MCP server is zero-dependency and ships as source, so there is nothing to
+      # install and nothing to build — a syntax error would otherwise reach a user's
+      # machine unexamined.
+      - name: Parse the MCP server
+        run: node --check bitscorecowork/server/index.js
+
+      - name: Versions agree
+        run: node scripts/check-version.mjs
+
+      - name: References are within their review date
+        run: node scripts/check-provenance.mjs
+
+      # The bundle is committed, so it can drift from the source it is a zip of — and the
+      # drift that matters is a file whose *contents* changed without a rebuild, which is
+      # invisible to a filename comparison. So unpack it and diff the trees.
+      #
+      # The zip itself is not byte-comparable: timestamps and entry order vary between
+      # machines, so two correct bundles built minutes apart differ. The unpacked contents
+      # do not.
+      - name: Bundle matches the current source tree
+        run: |
+          mkdir -p /tmp/unpacked
+          unzip -q bitscorecowork-*.plugin -d /tmp/unpacked
+          if ! diff -ru --exclude='.DS_Store' /tmp/unpacked/bitscorecowork bitscorecowork; then
+            echo "::error::The committed bundle does not match bitscorecowork/. Rebuild it — see README.md, 'Building the .plugin from source'."
+            exit 1
+          fi
+          echo "Bundle contents match the source tree."

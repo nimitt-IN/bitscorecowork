@@ -193,7 +193,8 @@ same facts as the registries behind [bitscore.in/resources](https://www.bitscore
 They are maintained separately, from the same primary sources, and that is how they drift: the IFSCA
 track existed on the site for months before it existed here.
 
-Each reference now ends with a provenance block naming what it mirrors and when it was verified:
+Each reference ends with a provenance block naming what it mirrors, when it was verified, and when
+it should next be checked:
 
 ```
 <!-- provenance
@@ -202,6 +203,23 @@ verified: 2026-09-07
 next-review: 2026-12-07
 -->
 ```
+
+**CI enforces the review date, because a date in a comment is not a control.**
+`scripts/check-provenance.mjs` fails the build once `next-review` has passed, and runs on a weekly
+schedule as well as on every push — a reference goes stale while nobody is touching the repo, so a
+check that only ran on commits would report it months late. It also rejects a missing or malformed
+block, a `verified` date in the future, and a `next-review` that is not after it.
+
+It cannot tell you whether a reference is *correct* — only whether anyone has claimed to look
+recently. **Bumping a date without re-reading turns a useful failure into a false pass**, and is
+worse than deleting the check.
+
+Two further checks run alongside it. `scripts/check-version.mjs` fails when `plugin.json`,
+`server/package.json`, the sixteen skills and the committed bundle's filename do not all state the
+same version — during the 0.6.0 release `server/package.json` was left behind and caught by a grep
+run for an unrelated reason. And the workflow unpacks the committed bundle and diffs it against
+`bitscorecowork/`, because the bundle is a build output that is committed, and a *content* change
+that never made it into a rebuild is invisible to a filename comparison.
 
 The working rule:
 
