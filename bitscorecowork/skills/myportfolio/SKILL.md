@@ -25,8 +25,8 @@ handling, no discrimination, India context).
    not authenticated, ask the user to paste their Bitsight API token and call `bitsight_set_token`
    (never echo it back). Proceed only once a token is set. (See global rules §1.)
 
-2. **Get the portfolio scope.** Prompt for the Portfolio GUID/ID if the user hasn't given one. If
-   the token has a single default portfolio, you may pull it directly — but say which one you used.
+2. **Know the scope.** The API token scopes the portfolio — there is no portfolio ID to ask for, and
+   `bitsight_get_portfolio` accepts none. Pull what the token sees, and say so.
 
 3. **Ask which vendors / supply-chain assets to prioritize or cross-analyze** — e.g. a named tier,
    the top-N critical suppliers, a specific industry, or "all". Use this to focus the read; still
@@ -38,9 +38,9 @@ handling, no discrimination, India context).
      risky; summarize the rest briefly.
    - **Comparative Stack Ranking** — all companies ranked best→worst by rating, banded by color.
 
-5. **Pull the portfolio with pagination.** Call `bitsight_get_portfolio` and **page through every
-   result** using `limit`/`offset` until you've collected the full set — do not stop at the first
-   page. Apply the user's prioritization filter (`rating_lt`, `industry_slug`, `tier`) where it
+5. **Pull the whole portfolio in one call.** Call `bitsight_get_portfolio` with `fetch_all: true`;
+   the server pages through every result itself. If the response says `fetched_all: false`, the
+   safety cap was reached — say the list is incomplete. Apply the user's prioritization filter (`rating_lt`, `industry_slug`, `tier`) where it
    maps cleanly to an API filter; otherwise pull all and filter in your summary. If the user gave a
    specific risk threshold, use it; otherwise use `rating_lt: 640` (the Basic/Intermediate boundary)
    as the default "high-risk" cut.
@@ -65,6 +65,5 @@ handling, no discrimination, India context).
 ## Error handling
 
 Follow the shared table in the global rules: 401 → re-prompt for the token and stop; **403 → valid token, unentitled endpoint: continue without that source and say what's missing** (never re-prompt);
-404 → bad portfolio ID, ask the user to re-confirm; 429 → back off and retry (be mindful when
-paginating large portfolios); empty result → say the portfolio returned no companies and do not
+404 → a filter value (tier GUID, industry slug) wasn't recognised, re-confirm it; 429 → the server has already retried with backoff; name the data that is missing rather than truncating silently; empty result → say the portfolio returned no companies and do not
 fabricate any.

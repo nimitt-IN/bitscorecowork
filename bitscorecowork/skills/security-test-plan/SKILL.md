@@ -8,6 +8,8 @@ description: >
   penetration-test plan", "MITRE ATT&CK scenario plan", or wants a complete
   test-plan + RoE + reporting template. Plan and template only — no working
   exploit code and no live execution.
+model: opus
+effort: high
 metadata:
   version: "0.6.0"
 ---
@@ -94,5 +96,5 @@ Section 5 (the **authorization gate**) and Section 7 (IT Act, 2000) are mandator
 ## Error handling
 
 Per the global-rules table: 401 → re-prompt for the token and stop; **403 → valid token, unentitled endpoint: continue without that source and say what's missing** (never re-prompt); 404 → bad GUID, re-confirm;
-429 → back off and retry; empty result → state plainly that no assets/findings were returned and do
+429 → the server has already retried with backoff; name the data that is missing rather than truncating silently; empty result → state plainly that no assets/findings were returned and do
 not fabricate any.

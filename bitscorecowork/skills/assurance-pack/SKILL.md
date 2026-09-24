@@ -156,7 +156,7 @@ document attached to a bid.
 ## Error handling
 
 Follow the shared table in the global rules: 401 → re-prompt and stop; **403 → the token is valid but the endpoint isn't in this subscription: carry on without it and name the gap** (never re-prompt for a token); 404 → re-confirm the
-GUID; 429 → back off and retry; empty result → mark the affected questions **not evidenced by this
+GUID; 429 → the server has already retried with backoff; name the data that is missing rather than truncating silently; empty result → mark the affected questions **not evidenced by this
 data** and route them for internal input. Never fill a gap in an outbound assurance document with an
 assumption — an invented answer to a customer's security questionnaire is the worst possible place for
 one.

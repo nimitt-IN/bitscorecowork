@@ -4,9 +4,11 @@ How to trigger each of the sixteen skills, what to have ready, and how to read A
 
 An asset by **BitScore Cybertech LLP** — [bitscore.in](https://bitscore.in).
 
-> **Before your first run — authentication:** the plugin asks for your Bitsight API token the first
-> time you use any skill in a session, holds it **in memory only**, and asks again every time it
-> starts. Just paste the token when prompted. No skill pulls data until a token is set, and none of
+> **Before your first run — authentication:** the simplest and most private option is to enter your
+> Bitsight API token in the plugin's settings when Claude Code offers it on enable — it goes to the OS
+> keychain and never into the chat. Otherwise the plugin asks for the token the first time you use
+> any skill in a session, holds it **in memory only**, and asks again every time it starts. Just
+> paste the token when prompted. No skill pulls data until a token is set, and none of
 > them ever write your token to a file, log, or report. Say **"clear my token"** to forget it
 > mid-session. (For headless/scheduled runs you can skip the prompt — see the README's unattended
 > mode.)
@@ -54,10 +56,10 @@ Executive Summary / Bulleted Technical Breakdown / Raw Data Object.
 - "Rank our third parties by Bitsight rating."
 
 **Example prompt**
-> "Pull all vendor ratings for portfolio `PF-1234`, prioritize our top-10 critical suppliers, and
-> give me a high-risk flag report."
+> "Pull all our vendor ratings, prioritize our top-10 critical suppliers, and give me a high-risk
+> flag report."
 
-**Expected inputs:** your **Portfolio GUID/ID**. It will ask which vendors/assets to prioritize and
+**Expected inputs:** none beyond the token, which scopes the portfolio. It will ask which vendors/assets to prioritize and
 the output format: Matrix Table / High-Risk Flag Report / Comparative Stack Ranking. It pages through
 the whole portfolio and surfaces every Basic-tier (🔴) vendor as high risk.
 
@@ -452,11 +454,11 @@ answer is dispositioned as *evidenced*, *partially evidenced*, *not evidenced by
 
 | What you see | HTTP | Meaning | What to do |
 | --- | --- | --- | --- |
-| "No Bitsight API token is set…" | — | You haven't provided a token yet this session | Paste your Bitsight token when prompted; Claude stores it via `bitsight_set_token`. |
+| "No Bitsight API token is set…" | — | You haven't provided a token yet this session | Paste your Bitsight token when prompted (Claude stores it via `bitsight_set_token`), or set it once in the plugin's settings so it isn't asked for again. |
 | "…token was rejected as invalid or expired…" | **401** | The pasted token is invalid, expired, or revoked | Get a valid token (Bitsight → Settings → Account → User Preferences) and paste it again when asked. |
 | "…not available to this token's subscription…" | **403** | **Your token is valid** — that endpoint just isn't in your Bitsight subscription. Finding summaries, assets and insights are the ones most often gated | Nothing to fix. The skill continues without that source and tells you what's missing. Don't re-paste the token; if you need the data, ask your Bitsight account team about entitlement. |
-| "Not found…" | **404** | Bad GUID / portfolio ID, or not in this token's portfolio | Re-confirm the identifier. Use `bitsight_search_portfolio_company` to look up a GUID; companies outside your portfolio must be added in the Bitsight platform first. |
-| "Rate limited…" | **429** | Too many requests too quickly | The skills back off and retry automatically; if it persists, wait ~a minute and retry. |
+| "Not found…" | **404** | Bad GUID or slug, or not in this token's portfolio | Re-confirm the identifier. Use `bitsight_search_portfolio_company` to look up a GUID; companies outside your portfolio must be added in the Bitsight platform first. |
+| "Rate limited…" | **429** | Too many requests too quickly | The server retries automatically with backoff; if it still appears, wait ~a minute and run it again. |
 | "No data returned" | — | Nothing matched your query/filter | Accepted as-is — the skills will **not** invent data. Broaden the filter or re-check the scope. |
 | "Input should be a valid number…" | **422** | A severity *category* was sent where a number belongs | Severity filters are numeric: `severity_gte` 9 = severe, 8 = material and above, 6 = moderate and above, 1 = everything. The skills do this for you. |
 | A risk vector reads zero findings but grades badly | **200** | A risk-vector slug Bitsight doesn't recognise returns an *empty set*, not an error — so it looks like a clean company | From 0.3.0 the server resolves the Critical Vulnerability Management slug automatically. If you hit it elsewhere, trust `bitsight_get_findings_summary` over a filtered pull. |

@@ -24,7 +24,7 @@ Security Ratings REST API (`https://api.bitsighttech.com/ratings`) as read-only 
 
 | Tool | Purpose |
 | --- | --- |
-| `bitsight_auth_status` / `bitsight_set_token` / `bitsight_clear_token` | Session auth — the plugin asks for your token each time it starts and holds it in memory only |
+| `bitsight_auth_status` / `bitsight_set_token` / `bitsight_clear_token` | Auth — uses the token from the plugin's settings if you set one; otherwise asks each time it starts and holds it in memory only |
 | `bitsight_search_portfolio_company` | Resolve a company name/domain to its Bitsight GUID |
 | `bitsight_get_company_details` | Rating, 1-year history, risk-vector grades, industry comparison |
 | `bitsight_get_findings_summary` | Open findings by risk vector and severity |
@@ -72,6 +72,34 @@ thresholds), and [`attribution-patterns.md`](reference/attribution-patterns.md) 
 attributed, and what a dispute needs).
 
 ---
+
+## Unreleased (on 0.6.0) — Opus 5.5 optimisations
+
+No version change: these land on 0.6.0 and ship in the next release.
+
+- **Keep the token out of the chat.** The plugin now declares an optional, sensitive
+  `bitsight_api_token` setting. Claude Code asks for it when the plugin is enabled, keeps it in the
+  OS keychain, and hands it to the server directly — so it never passes through a transcript. Paste-in
+  still works everywhere, and is what happens in clients that don't support plugin settings.
+- **A quarter to a third fewer tokens per tool result.** Results are compact JSON instead of
+  pretty-printed — measured at 26–33% smaller on a live tenant.
+- **The server retries rate limits itself.** A 429 (or 502/503/504) is retried up to three times,
+  honouring `Retry-After`. The skills used to say "back off and retry", which a model cannot do.
+- **`fetch_all` on `bitsight_get_portfolio`** returns the whole portfolio in one call, so a digest
+  can't be built from page one. `myportfolio`, `watchtower`, `peer-index`, `boardpack` and
+  `cve-sweep` use it.
+- **Modern MCP handshake.** Protocol 2025-06-18 negotiated, tool annotations (the thirteen data
+  tools are marked read-only), and the shared rules sent once as server instructions rather than
+  repeated in every tool description. `serverInfo` now reports the real version (it said 0.5.0).
+- **Model and effort.** `incident-notify`, `regmap`, `tabletop`, `security-test-plan` and `quantify`
+  ask for Opus at high effort — Opus 5.5 otherwise defaults to medium. Honoured in Claude Code;
+  ignored by clients that don't read the fields.
+- **Parallel calls.** Five skills say which of their calls are independent, so they go out together.
+- **`myportfolio` no longer asks for a Portfolio GUID** — the tool never accepted one; the token
+  scopes the portfolio.
+- **What moves the rating.** Global rules and `remediation-roadmap` now carry Bitsight's risk-category
+  weights (Diligence 71.5%, Compromised Systems 26%, User Behavior 2.5%) and DMARC's move to
+  rating-impacting on 16 July 2026, read at Bitsight's Knowledge Base on 24 September 2026.
 
 ## What's new in 0.6.0
 
@@ -458,7 +486,13 @@ we compare?" is the board's first question.
 2. **Install the plugin** (accept the `.plugin` file / add the plugin directory). The `bitsight` MCP
    server starts automatically — no environment variable or other configuration is required.
 
-3. **Provide your token when asked.** The first time you use any BitScoreCoWork skill in a session,
+3. **Recommended — set the token in the plugin's settings.** Claude Code asks for an optional
+   *Bitsight API token* when the plugin is enabled. It is stored in your OS keychain (macOS; other
+   platforms fall back to `~/.claude/.credentials.json`) and passed straight to the `bitsight`
+   server, so **it never enters the conversation** and you aren't asked again. Leave it blank to use
+   the paste-in flow below. Clients that don't support plugin settings skip this step.
+
+4. **Otherwise, provide your token when asked.** The first time you use any BitScoreCoWork skill in a session,
    the plugin asks you to paste your Bitsight API token. It's verified against Bitsight, then held
    **in memory for that session only** and used for HTTP Basic Auth against `api.bitsighttech.com`
    (token as username, blank password). **You are asked again every time the plugin starts** — the
@@ -481,7 +515,9 @@ we compare?" is the board's first question.
 
 ## 🔐 Security note on key handling (read this)
 
-- **The plugin asks for your token every time it starts** and keeps it **only in the MCP server's
+- **The best option is the plugin setting (Setup, step 3).** The token is kept in the OS keychain and
+  handed to the server directly, so it never appears in a transcript.
+- **Otherwise the plugin asks for your token every time it starts** and keeps it **only in the MCP server's
   process memory for the session.** The server **never** writes it to disk, logs, memory files,
   config, or any generated document (report, deck, `.pptx`, `.docx`), and discards it when the
   session ends.
@@ -493,11 +529,11 @@ we compare?" is the board's first question.
   commonly keep transcripts — Claude Code writes them under `~/.claude`. Nothing in this plugin can
   reach back and redact that. So treat a pasted token as disclosed to whatever retains the
   transcript: **use a short-lived, least-entitled Bitsight token and rotate it when you are done.**
-  For anything recurring, the environment-variable flow below avoids the problem entirely, because
-  the credential never enters the conversation at all.
+  The plugin setting, or the environment-variable flow for headless runs, avoids the problem
+  entirely, because the credential never enters the conversation at all.
 - Because the token is entered in chat, treat that message as sensitive per your own data-handling
-  policy. If you prefer the token never appears in the conversation at all, use the unattended
-  environment-variable mode above instead.
+  policy. If you prefer the token never appears in the conversation at all, use the plugin setting
+  or the unattended environment-variable mode above instead.
 - Rotate the token in Bitsight if you suspect exposure.
 
 ---
@@ -554,12 +590,12 @@ out separately by BitScore's licensed testers under the signed RoE.
 
 | Symptom | Likely cause & fix |
 | --- | --- |
-| **It keeps asking for my token** | Expected — the token is held in memory only and requested once per session (each time the plugin starts). For unattended runs, use the `BITSIGHT_ALLOW_ENV_TOKEN` mode in Setup. |
+| **It keeps asking for my token** | Expected with paste-in — the token is held in memory only and requested once per session. Set it in the plugin's settings instead (Setup, step 3) and it won't ask; for headless runs, use the `BITSIGHT_ALLOW_ENV_TOKEN` mode. |
 | **"No Bitsight API token is set"** | Paste your token when asked; Claude stores it via `bitsight_set_token`. If it was rejected, the token is invalid/expired — get a fresh one from Bitsight. |
 | **Authentication error (401)** | The token is invalid, expired, or revoked. Paste a valid token when prompted (re-check it in Bitsight → Settings → Account → User Preferences). |
 | **"Not available to this token's subscription" (403)** | **Your token is fine.** That endpoint isn't included in your Bitsight subscription — commonly `findings/summaries`, `assets` or `insights`. The skills carry on without it and tell you which part of the analysis is unavailable; re-pasting the token will not help. If you need that data, it's an entitlement question for your Bitsight account team. |
-| **Company / GUID not found (404)** | The GUID/portfolio ID is wrong or not in this token's portfolio. `bitsight_search_portfolio_company` only finds companies already monitored — add others via the Bitsight platform first. |
-| **Rate limited (429)** | Too many calls too fast. The skills back off and retry; if it persists, wait a minute and retry. |
+| **Company / GUID not found (404)** | The GUID or slug is wrong or not in this token's portfolio. `bitsight_search_portfolio_company` only finds companies already monitored — add others via the Bitsight platform first. |
+| **Rate limited (429)** | Too many calls too fast. The server has already retried with backoff; if it still appears, wait a minute and run it again. The skill names what it couldn't fetch. |
 | **Empty result** | No matching data — the skills say so rather than inventing numbers. |
 | **A vector shows zero findings but a poor grade** | Shouldn't happen from 0.3.0 on: the server resolves the Critical Vulnerability Management slug against whichever name the API currently answers. If you see it on another vector, the slug is being rejected silently (Bitsight returns 200 with an empty set, not an error) — cross-check `bitsight_get_findings_summary`, which is authoritative. |
 | **"Input should be a valid number" (422)** | A severity category word was passed where a number belongs. Severity filters use `severity_gte`: 9 severe, 8 material and above, 6 moderate and above, 1 everything. |

@@ -11,13 +11,21 @@ partner for [Bitsight](https://www.bitsight.com/).
 
 ## 1. Authentication first (prompt every session)
 
-No skill pulls Bitsight data until a valid API token is set for the session. The plugin holds **no
-token at startup** and asks for one **every time it starts** — so this is the first thing every
-skill does:
+No skill pulls Bitsight data until a valid API token is available. There are two ways one arrives:
+
+- **Plugin configuration (preferred where the client supports it).** The plugin declares a
+  `bitsight_api_token` setting marked sensitive. Claude Code asks for it when the plugin is enabled,
+  keeps it in the OS keychain, and hands it to the server without it ever entering the
+  conversation. `bitsight_auth_status` then reports `source: "plugin_config"`.
+- **Paste-in, every session.** Where no configured token exists, the plugin holds **no token at
+  startup** and asks for one **every time it starts**.
+
+So this is the first thing every skill does:
 
 1. **Call `bitsight_auth_status`.** If `authenticated` is `true`, proceed.
 2. If `authenticated` is `false`, **ask the user to paste their Bitsight API token.** Explain it is
-   held in memory for this session only and will be asked for again next time.
+   held in memory for this session only and will be asked for again next time — and that setting it
+   in the plugin's configuration instead keeps it out of the chat entirely.
 3. **Call `bitsight_set_token`** with the pasted token. The server verifies it with a lightweight
    call before storing:
    - On success → proceed.
@@ -43,8 +51,9 @@ authenticate Bitsight calls.
 - Note the limit of that promise. A token the user pastes has already passed through the
   conversation, and the client may persist the transcript — so if a user asks whether the token
   is safe, say what is true: **this plugin never stores it, and the transcript is outside the
-  plugin's control.** Recommend a short-lived, least-entitled token, and `BITSIGHT_ALLOW_ENV_TOKEN`
-  for recurring use, where the credential never enters the conversation. Never claim the token is
+  plugin's control.** Recommend the plugin-configuration token (keychain-stored, never in the
+  conversation), a short-lived, least-entitled token, and `BITSIGHT_ALLOW_ENV_TOKEN` for headless
+  recurring use. Never claim the token is
   unrecoverable once pasted.
 - Never paste it back into the conversation or echo it in a tool call other than `bitsight_set_token`.
 - It lives only in the server's memory and is **discarded when the session ends** — which is exactly
@@ -74,6 +83,25 @@ interpreted rather than merely reported — `peer-index` and `quantify` most of 
 | The mean rating across Bitsight's rated inventory is **720** | Sits in Intermediate. A 730 is above average and still not Advanced |
 | Roughly **60% of rated entities are Advanced** | **Advanced is the modal band, not an achievement.** A pack that congratulates a board on reaching the majority position is misleading, and a vendor at 740 is ordinary rather than strong |
 | Ratings are **rounded down in ten-point increments** | A displayed 730 is anything from 730 to 739. Never present a displayed score as exact, and never build arithmetic on a ten-point gap that may be one point wide |
+
+**What the rating is made of — the answer to "what actually moves our score".** Bitsight weights
+four risk categories, and the split is lopsided enough that most remediation advice misallocates
+against it:
+
+| Risk category | Weight |
+| --- | --- |
+| **Diligence** | **71.5%** |
+| Compromised Systems | 26% |
+| User Behavior | 2.5% |
+| Public Disclosures | Weighted only if one occurs — no standing share |
+
+Diligence is externally observable configuration — TLS and certificates, email authentication,
+open ports, software currency, vulnerability remediation — so a first remediation pass is
+configuration work. Within it, **DMARC became rating-impacting on 16 July 2026** at a 1% vector
+weight (like SPF and DKIM), which is why the split moved from 70.5 / 27 to 71.5 / 26; and SPF and
+DKIM now grade N/A rather than punitively for an entity with no domains. Source: Bitsight Knowledge
+Base, *How are Bitsight Security Ratings Calculated?* and *Ratings Algorithm Update (RAU26) — July
+16, 2026*, both read 24 September 2026.
 
 **The band-to-band breach multiples, for use in `quantify`.** These are Bitsight's own published
 comparative figures, and they are what the evidence will bear:
@@ -141,8 +169,8 @@ The MCP server already maps HTTP status codes to plain-language messages. Handle
 | --- | --- | --- |
 | **401** | Invalid, expired, or revoked token | Tell the user; re-prompt for a valid token; stop. |
 | **403** | **Token is valid**; this endpoint isn't in its subscription | **Do not re-prompt for a token and do not stop.** Carry on without that data source and name the gap. See below. |
-| **404** | Bad GUID / portfolio ID, or not in this token's portfolio | Tell the user the identifier wasn't found; ask them to re-confirm it. |
-| **429** | Rate limited | Back off briefly and retry; if it persists, tell the user to try again shortly. |
+| **404** | Bad GUID or slug, or not in this token's portfolio | Tell the user the identifier wasn't found; ask them to re-confirm it. |
+| **429** | Rate limited | The server has already retried with backoff. Don't retry at once; name the data that is missing and don't present a partial pull as complete. |
 | **Empty result** | No matching data | State plainly that nothing was returned. **Do not fabricate** ratings, findings, or assets. |
 
 Never invent Bitsight data to fill a gap. "No data returned" is a valid, correct answer.
