@@ -206,7 +206,7 @@ be told otherwise by their own rating tomorrow.
 ## Error handling
 
 Follow the shared table in the global rules: 401 → re-prompt and stop; **403 → the token is valid but the endpoint isn't in this subscription: carry on without it and name the gap** (never re-prompt for a token); 404 → the
-GUID isn't in this token's portfolio, re-confirm it; 429 → back off and retry; empty result → say the
+GUID isn't in this token's portfolio, re-confirm it; 429 → the server has already retried with backoff; name the data that is missing rather than truncating silently; empty result → say the
 footprint came back empty rather than reporting a clean or minimal estate, and check the GUID before
 concluding anything — an empty asset list is far more often a scope or entitlement problem than a
 company with no internet-facing infrastructure.

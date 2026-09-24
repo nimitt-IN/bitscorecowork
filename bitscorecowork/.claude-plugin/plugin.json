@@ -8,6 +8,15 @@
   },
   "homepage": "https://www.bitscore.in",
   "license": "MIT",
+  "userConfig": {
+    "bitsight_api_token": {
+      "type": "string",
+      "title": "Bitsight API token",
+      "description": "Optional. Stored in your OS keychain and passed to the plugin's Bitsight server, so the token never enters the conversation. Leave blank to paste it into chat each session instead. Use a least-entitled token.",
+      "sensitive": true,
+      "required": false
+    }
+  },
   "keywords": [
     "bitsight",
     "security-ratings",

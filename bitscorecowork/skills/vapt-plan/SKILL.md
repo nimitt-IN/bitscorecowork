@@ -84,5 +84,5 @@ Section 5 (the **authorization gate**) and Section 7 (IT Act, 2000) are mandator
 ## Error handling
 
 Per the global-rules table: 401 → re-prompt for the token and stop; **403 → valid token, unentitled endpoint: continue without that source and say what's missing** (never re-prompt); 404 → bad GUID, re-confirm;
-429 → back off and retry (mind pagination over large finding sets); empty result → state there are
+429 → the server has already retried with backoff; name the data that is missing rather than truncating silently; empty result → state there are
 no matching findings/assets and do not fabricate any.

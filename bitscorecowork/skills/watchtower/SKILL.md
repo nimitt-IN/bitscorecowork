@@ -59,8 +59,9 @@ its band is not news. Treat it as such, and say so.
    - **The threshold for "act now"** if the user has one. Absent that, use the defaults in step 5.
 
 4. **Pull the current state.**
-   - `bitsight_get_portfolio`, **paged through fully**, for every company's current rating, tier and
-     rating date. This is the delta's raw material and a partial page is a wrong digest.
+   - `bitsight_get_portfolio` with **`fetch_all: true`**, for every company's current rating, tier and
+     rating date. This is the delta's raw material and a partial page is a wrong digest — if the
+     response says `fetched_all: false`, say the digest covers only part of the portfolio.
    - `bitsight_get_alerts` over the window — the direct signal for what Bitsight itself flagged.
      **Fetch unfiltered and group by the `severity` field you actually get back.** The severity
      vocabulary varies by `alert_type` and is not fixed: verified live on 4 August 2026, this endpoint
@@ -143,7 +144,7 @@ its band is not news. Treat it as such, and say so.
 ## Error handling
 
 Follow the shared table in the global rules: 401 → re-prompt and stop; **403 → the token is valid but the endpoint isn't in this subscription: carry on without it and name the gap** (never re-prompt for a token); 404 → re-confirm the
-GUID; 429 → back off and retry — a full portfolio page-through is the most rate-limit-prone call in
-this plugin, so back off and complete rather than truncating; empty result → if the portfolio pull
+GUID; 429 → the server has already retried with backoff, and `fetch_all` pages the portfolio in one
+call; if a 429 still surfaces, say the digest is incomplete rather than truncating; empty result → if the portfolio pull
 returns nothing, say the pull failed and **do not report an empty portfolio as a quiet week**. A digest
 that reports calm because the data didn't arrive is the worst output this skill can produce.

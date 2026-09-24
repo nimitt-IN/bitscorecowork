@@ -46,7 +46,8 @@ contractual and financial due diligence).
    - **Any internal risk threshold** already set (e.g. "no vendor below 700 touches customer data").
      If the user has one, judge against theirs. If not, use the defaults in step 5 and say so.
 
-4. **Pull the evidence.**
+4. **Pull the evidence.** Once the GUID and industry slug are known, these calls are independent of
+   one another — issue them together rather than one at a time.
    - `bitsight_get_company_details` with `include_industry_comparison: true` — current rating, the
      1-year history (read the **trend**, not just today's number), risk-vector grades, percentile.
    - `bitsight_get_findings_summary` — issue counts by risk vector and severity, and the
@@ -120,5 +121,5 @@ contractual and financial due diligence).
 ## Error handling
 
 Follow the shared table in the global rules: 401 → re-prompt for the token and stop; **403 → valid token, unentitled endpoint: continue without that source and say what's missing** (never re-prompt); 404 → the
-GUID isn't in this token's portfolio, re-confirm it; 429 → back off and retry; empty result → say so
+GUID isn't in this token's portfolio, re-confirm it; 429 → the server has already retried with backoff; name the data that is missing rather than truncating silently; empty result → say so
 plainly and do not fabricate.

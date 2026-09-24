@@ -81,7 +81,7 @@ sanity-check a conclusion that feels too flattering.
      Resolve each via `bitsight_search_portfolio_company`. **Any that aren't in the portfolio can't be
      included** — say which are missing and why, rather than silently returning a smaller cohort.
    - **Portfolio segment** — everyone in the portfolio sharing an industry slug or tier, via
-     `bitsight_get_portfolio` with `industry_slug`. Convenient, and the most obviously
+     `bitsight_get_portfolio` with `industry_slug` and `fetch_all: true`. Convenient, and the most obviously
      convenience-sampled of the three.
 
    Then ask **who reads it**, because it decides the confidentiality mode in step 7.
@@ -98,7 +98,8 @@ sanity-check a conclusion that feels too flattering.
 
 5. **Pull the cohort.** For each peer, `bitsight_get_company_details` with
    `include_industry_comparison: true`, and `bitsight_get_findings_summary` where the comparison needs
-   open-issue counts rather than grades alone. Page fully through any portfolio pull. Note each peer's
+   open-issue counts rather than grades alone. Each peer's calls are independent of every other's —
+   issue them together. Use `fetch_all: true` on any portfolio pull. Note each peer's
    `rating_date` — comparing a fresh rating against a stale one is a real distortion on a small cohort.
 
 6. **Build the comparison, vector-first.** The overall number places them; the vectors tell them what
@@ -161,7 +162,7 @@ sanity-check a conclusion that feels too flattering.
 ## Error handling
 
 Follow the shared table in the global rules: 401 → re-prompt and stop; **403 → the token is valid but the endpoint isn't in this subscription: carry on without it and name the gap** (never re-prompt for a token); 404 → the peer
-isn't in this token's portfolio, drop it from the cohort and say so; 429 → back off and retry; empty
+isn't in this token's portfolio, drop it from the cohort and say so; 429 → the server has already retried with backoff; name the data that is missing rather than truncating silently; empty
 result → if the industry endpoint returns nothing for the slug, check the slug came from the
 top-level `industry_slug` field rather than the display string before concluding the sector has no
 data, and report the cohort comparison alone with the limitation stated.

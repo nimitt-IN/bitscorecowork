@@ -76,6 +76,11 @@ honest one isn't available, and give them the sequence and the reasoning instead
    - **Durability** — whether the fix holds. Closing one exposed port is a task; fixing the process
      that opened it is the improvement.
 
+   Weight the ranking by what the rating is made of: **Diligence is 71.5% of it** (global rules §3),
+   Compromised Systems 26%, User Behavior 2.5%. A roadmap that spends its first month on the 2.5% is
+   working hard in the wrong place. DMARC has counted since 16 July 2026, so a missing or unenforced
+   DMARC policy is now a cheap, rating-visible fix.
+
    In general, configuration-class vectors move fastest and process-class vectors (software currency
    and asset inventory hygiene above all) move slowest but matter most — sequence accordingly, and
    start the slow ones early rather than saving them for last.
@@ -127,5 +132,5 @@ honest one isn't available, and give them the sequence and the reasoning instead
 ## Error handling
 
 Follow the shared table in the global rules: 401 → re-prompt and stop; **403 → the token is valid but the endpoint isn't in this subscription: carry on without it and name the gap** (never re-prompt for a token); 404 → re-confirm the
-GUID; 429 → back off and retry (be mindful when paging large findings sets); empty result → say so
+GUID; 429 → the server has already retried with backoff; name the data that is missing rather than truncating silently; empty result → say so
 and do not invent work items.

@@ -7,6 +7,8 @@ description: >
   cyber risk", "financial exposure from our security posture", "build the
   business case for security spend", or wants a rating expressed as money for a
   board, budget or insurance conversation.
+model: opus
+effort: high
 metadata:
   version: "0.6.0"
 ---
@@ -141,6 +143,6 @@ still want the indicative version.
 ## Error handling
 
 Follow the shared table in the global rules: 401 → re-prompt and stop; **403 → the token is valid but the endpoint isn't in this subscription: carry on without it and name the gap** (never re-prompt for a token); 404 → re-confirm the
-GUID; 429 → back off and retry; empty result → say the posture data wasn't available and either
+GUID; 429 → the server has already retried with backoff; name the data that is missing rather than truncating silently; empty result → say the posture data wasn't available and either
 proceed on user-supplied inputs alone (labelled as such) or stop — never invent posture data to
 complete a model.

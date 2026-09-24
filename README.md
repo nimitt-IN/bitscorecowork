@@ -5,7 +5,7 @@ A Claude Cowork plugin for **Bitsight Security Ratings**, by
 [Bitsight](https://www.bitsight.com/).
 
 **Latest release: [v0.6.0](https://github.com/nimitt-IN/bitscorecowork/releases/tag/v0.6.0)** —
-sixteen skills, 15 read-only tools, verified against the live Bitsight API. 0.6.0 brings the
+sixteen skills and 15 tools (all read-only against Bitsight), verified against the live Bitsight API. 0.6.0 brings the
 regulatory references current: **IFSCA is four instruments, not one**, and both **SEBI circulars of
 24 August 2026** are now carried.
 [All releases →](https://github.com/nimitt-IN/bitscorecowork/releases)
@@ -73,7 +73,12 @@ one per entity class — and still cite the IRDAI 2023 Guidelines, replaced in A
 
 ## Current release
 
-**v0.6.0** — 16 skills, 15 read-only tools, five bundled references.
+**v0.6.0** — 16 skills, 15 tools (all read-only against Bitsight), five bundled references.
+
+**Unreleased, on 0.6.0:** a keychain-stored token that never enters the chat, compact tool output
+(26–33% fewer tokens), server-side rate-limit retry, a one-call full-portfolio fetch, MCP 2025-06-18
+with tool annotations, Opus at high effort on the five heaviest skills, and Bitsight's risk-category
+weights. Details in [`bitscorecowork/README.md`](bitscorecowork/README.md#unreleased-on-060--opus-55-optimisations).
 
 **IFSCA is four instruments, not one — and the old text was wrong, not merely thin.** 0.5.0 added GIFT
 City on the 2025 Guidelines alone. IFSCA had already issued three more cyber instruments, all of them

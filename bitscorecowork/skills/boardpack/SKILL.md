@@ -51,8 +51,9 @@ framework you're following:
      (for the 1-pager) via the `Skill` tool and build the file with it. Do **not** hand-assemble a
      binary Office file.
 
-6. **Gather the data** for the scoped set:
-   - `bitsight_get_portfolio` (paginated) for the rating distribution — count per tier band.
+6. **Gather the data** for the scoped set. The calls are independent across companies and across
+   tools — issue them together:
+   - `bitsight_get_portfolio` with `fetch_all: true` for the rating distribution — count per tier band.
    - `bitsight_get_alerts` for the period to surface what changed.
    - For each company below "needs attention" (rating < 640) or carrying a high-severity alert
      (read the severity values off the response rather than filtering for an assumed one):
@@ -91,6 +92,6 @@ framework you're following:
 
 ## Error handling & data care
 
-Follow the global-rules error table (401 stop; 403 → valid token but unentitled endpoint, continue without it and name the gap; 404 re-confirm id; 429 back off; empty → say so,
+Follow the global-rules error table (401 stop; 403 → valid token but unentitled endpoint, continue without it and name the gap; 404 re-confirm id; 429 → already retried by the server, name the gap; empty → say so,
 don't fabricate). The finished deck will contain sensitive third-party data — never persist the API
 token into it, and don't share/email the deck anywhere the user hasn't asked.

@@ -9,6 +9,8 @@ description: >
   our incident response", or wants a crisis exercise grounded in their real
   findings (as opposed to drafting notifications for a real incident, which is
   `incident-notify`).
+model: opus
+effort: high
 metadata:
   version: "0.6.0"
 ---
@@ -188,7 +190,7 @@ If an artefact would be convincing, it needs the stamp most.
 ## Error handling
 
 Follow the shared table in the global rules: 401 → re-prompt and stop; **403 → the token is valid but the endpoint isn't in this subscription: carry on without it and name the gap** (never re-prompt for a token); 404 → re-confirm the
-GUID; 429 → back off and retry; empty result → build the exercise from the risk vectors and grades
+GUID; 429 → the server has already retried with backoff; name the data that is missing rather than truncating silently; empty result → build the exercise from the risk vectors and grades
 that did return, and say the scenario is grounded in less data than usual. Never invent a finding or
 an asset to make a scenario more vivid — an exercise built on a fabricated weakness sends the
 organisation to fix something it does not have.

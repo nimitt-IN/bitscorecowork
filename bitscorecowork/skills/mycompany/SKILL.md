@@ -47,7 +47,7 @@ handling, no discrimination, India context). The steps below assume those rules 
    - **Bulleted Technical Breakdown** — risk vectors, grades, findings, trend as scannable bullets.
    - **Raw Data Object** — the structured JSON as returned, lightly labeled.
 
-5. **Pull the data:**
+5. **Pull the data.** The first two calls below don't depend on each other — issue them together.
    - `bitsight_get_company_details` with `include_industry_comparison: true`.
    - `bitsight_get_findings_summary` for the same GUID — the authoritative categorical counts. If
      the user wants the findings behind a category, fetch them with `bitsight_get_findings` and a
@@ -77,5 +77,5 @@ handling, no discrimination, India context). The steps below assume those rules 
 ## Error handling
 
 Follow the shared table in the global rules: 401 → re-prompt for the token and stop; **403 → valid token, unentitled endpoint: continue without that source and say what's missing** (never re-prompt);
-404 → bad GUID, ask the user to re-confirm; 429 → back off and retry; empty result → say so plainly
+404 → bad GUID, ask the user to re-confirm; 429 → the server has already retried with backoff; name the data that is missing rather than truncating silently; empty result → say so plainly
 and do not fabricate.
