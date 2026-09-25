@@ -1,13 +1,14 @@
 # BitScoreCoWork
 
 A Claude Cowork plugin for **Bitsight Security Ratings**, by
-**BitScore Cybertech LLP** — [bitscore.in](https://bitscore.in), authorised India partner for
-[Bitsight](https://www.bitsight.com/).
+**BitScore Cybertech LLP** — [bitscore.in](https://bitscore.in), an authorised [Bitsight](https://www.bitsight.com/)
+partner.
 
-**Latest release: [v0.6.0](https://github.com/nimitt-IN/bitscorecowork/releases/tag/v0.6.0)** —
-sixteen skills and 15 tools (all read-only against Bitsight), verified against the live Bitsight API. 0.6.0 brings the
-regulatory references current: **IFSCA is four instruments, not one**, and both **SEBI circulars of
-24 August 2026** are now carried.
+**Latest release: [v0.7.0](https://github.com/nimitt-IN/bitscorecowork/releases/tag/v0.7.0)** —
+sixteen skills and 15 tools (all read-only against Bitsight), verified against the live Bitsight API. 0.7.0 takes
+`incident-notify` and `regmap` **beyond India**: SEC, NYDFS, the US bank rule, HIPAA and the FTC in the
+US; NIS2, DORA, GDPR and the Cyber Resilience Act in the EU. It also ships the Opus 5.5 optimisations
+(keychain token, compact output, server-side retry).
 [All releases →](https://github.com/nimitt-IN/bitscorecowork/releases)
 
 Pull and analyze Bitsight Security Ratings from inside Claude, then turn them into executive-ready
@@ -26,11 +27,11 @@ tools, plus sixteen skills:
 | `vendor-brief` | Due-diligence brief with a go / no-go recommendation |
 | `remediation-roadmap` | Prioritized 30/60/90-day fix plan |
 | `cve-sweep` | Portfolio exposure to a named CVE, with evidence |
-| `regmap` | NIST CSF 2.0 / ISO 27001 / Indian-regime evidence pack, incl. the RBI Directions, 2026 |
+| `regmap` | NIST CSF 2.0 / ISO 27001 / Indian, US and EU regime evidence pack — incl. the RBI Directions 2026, NIS2, DORA, NYDFS and SEC Item 106 |
 | `assurance-pack` | Answers to an inbound customer security questionnaire or RFP section |
 | `quantify` | Indicative financial exposure range (**not** Bitsight FQ) |
 | `entity-scope` | Signed-off asset inventory + attribution-dispute submission |
-| `incident-notify` | Escalation matrix with IST deadlines + per-instrument notification drafts |
+| `incident-notify` | Escalation matrix and per-instrument notification drafts — India, US and EU, each clock from its own trigger |
 | `tabletop` | Board crisis simulation with injects, regulatory clocks and a facilitator guide |
 | `vapt-plan` | Findings report + assessment plan (identification only) |
 | `security-test-plan` | Test plan, RoE, ATT&CK scenarios, report scaffold |
@@ -44,7 +45,7 @@ usage and troubleshooting).
 | Path | What it is |
 | --- | --- |
 | [`bitscorecowork/`](bitscorecowork/) | The plugin source tree — edit here |
-| `bitscorecowork-0.6.0.plugin` | The current built, installable plugin (a zip of `bitscorecowork/`) |
+| `bitscorecowork-0.7.0.plugin` | The current built, installable plugin (a zip of `bitscorecowork/`) |
 | [`LICENSE`](LICENSE) | MIT License |
 
 Only the current bundle is kept at the repo root. Earlier bundles remain downloadable from their
@@ -52,7 +53,7 @@ Only the current bundle is kept at the repo root. Earlier bundles remain downloa
 
 ## Install
 
-Download **[`bitscorecowork-0.6.0.plugin` from the v0.6.0 release](https://github.com/nimitt-IN/bitscorecowork/releases/tag/v0.6.0)**
+Download **[`bitscorecowork-0.7.0.plugin` from the v0.7.0 release](https://github.com/nimitt-IN/bitscorecowork/releases/tag/v0.7.0)**
 (it's also committed at the repo root) and add it in Claude, or point at the `bitscorecowork/`
 directory as a local plugin. The `bitsight` MCP server starts automatically — no `npm install` and
 no configuration required.
@@ -73,12 +74,18 @@ one per entity class — and still cite the IRDAI 2023 Guidelines, replaced in A
 
 ## Current release
 
-**v0.6.0** — 16 skills, 15 tools (all read-only against Bitsight), five bundled references.
+**v0.7.0** — 16 skills, 15 tools (all read-only against Bitsight), seven bundled references.
 
-**Unreleased, on 0.6.0:** a keychain-stored token that never enters the chat, compact tool output
+**US and EU, new in 0.7.0.** `incident-notify` drafts SEC 8-K/6-K, NYDFS, US bank-rule, HIPAA, FTC,
+NIS2, DORA, GDPR and CRA filings, each from its own trigger — several run from a decision the entity
+makes, not from the incident. `regmap` maps to NIS2 Article 21(2), DORA chapters, NYDFS 500.11 and SEC
+Item 106. US state breach laws and Member State NIS2 additions are named as not covered. Details in
+[`bitscorecowork/README.md`](bitscorecowork/README.md#whats-new-in-070--us-and-eu).
+
+**Also in 0.7.0:** a keychain-stored token that never enters the chat, compact tool output
 (26–33% fewer tokens), server-side rate-limit retry, a one-call full-portfolio fetch, MCP 2025-06-18
 with tool annotations, Opus at high effort on the five heaviest skills, and Bitsight's risk-category
-weights. Details in [`bitscorecowork/README.md`](bitscorecowork/README.md#unreleased-on-060--opus-55-optimisations).
+weights. Details in [`bitscorecowork/README.md`](bitscorecowork/README.md#also-in-070--opus-55-optimisations).
 
 **IFSCA is four instruments, not one — and the old text was wrong, not merely thin.** 0.5.0 added GIFT
 City on the 2025 Guidelines alone. IFSCA had already issued three more cyber instruments, all of them
@@ -185,8 +192,8 @@ The `.plugin` file is just a zip of the `bitscorecowork/` directory. After chang
 `bitscorecowork/`, rebuild it so the shipped artifact matches:
 
 ```bash
-rm -f bitscorecowork-0.6.0.plugin
-zip -r -X bitscorecowork-0.6.0.plugin bitscorecowork \
+rm -f bitscorecowork-0.7.0.plugin
+zip -r -X bitscorecowork-0.7.0.plugin bitscorecowork \
   -x '*/.DS_Store' -x '*/node_modules/*'
 ```
 

@@ -4,8 +4,8 @@ These rules are binding for **all sixteen** BitScoreCoWork skills. Each `SKILL.m
 instead of repeating them. If anything in a skill appears to conflict with a rule below,
 the rule below wins.
 
-An asset by **BitScore Cybertech LLP** — [bitscore.in](https://bitscore.in), authorised India
-partner for [Bitsight](https://www.bitsight.com/).
+An asset by **BitScore Cybertech LLP** — [bitscore.in](https://bitscore.in), an authorised
+[Bitsight](https://www.bitsight.com/) partner.
 
 ---
 
@@ -273,6 +273,21 @@ specific duty on the user's behalf:
 Always add: this determination belongs to the user's compliance/legal team; BitScoreCoWork
 supports the evidence trail, it does not certify compliance.
 
+**US and EU context — the same rule, surface don't adjudicate.** Where the entity operates in, sells
+into or holds data from the US or the EU, the relevant instruments are in
+[`incident-reporting-map-us-eu.md`](incident-reporting-map-us-eu.md) (clocks) and
+[`regulatory-map-us-eu.md`](regulatory-map-us-eu.md) (scope and obligation areas). Three points carry
+into every skill:
+
+- **Incorporation is not the test.** GDPR follows the people whose data is processed, NIS2 the services
+  provided in the EU, US state breach laws residency. Ask where the entity operates and whose data it
+  holds, not where it is incorporated.
+- **DORA displaces NIS2 for EU financial entities.** Map and report a bank under DORA, not NIS2.
+- **Several US and EU clocks run from a decision** — SEC materiality, NYDFS cybersecurity incident, the
+  bank notification incident, DORA major classification. Never make that decision; name who does, and
+  timestamp it. US state breach laws and Member State NIS2 additions are **not** in the references —
+  say so rather than implying coverage.
+
 **Incident-reporting obligations — the clocks are in a dedicated reference.** The `incident-notify`
 skill, and the regulatory-clock injects in `tabletop`, work from
 [`incident-reporting-map.md`](incident-reporting-map.md): CERT-In's six hours, the RBI filings, SEBI
@@ -349,6 +364,11 @@ the user.
 - [`incident-reporting-map.md`](incident-reporting-map.md) — source-cited incident-notification
   instruments and clocks (CERT-In, RBI, SEBI CSCRF and LODR, IRDAI, DPDP, NCIIPC). Used by
   `incident-notify` and `tabletop`.
+- [`incident-reporting-map-us-eu.md`](incident-reporting-map-us-eu.md) — the US and EU clocks: SEC
+  8-K/6-K, NYDFS 500.17, the US bank rule, HIPAA, FTC Safeguards, CIRCIA (not in force), NIS2, DORA,
+  GDPR and the Cyber Resilience Act. Used by `incident-notify`.
+- [`regulatory-map-us-eu.md`](regulatory-map-us-eu.md) — US and EU scope, and risk vector → NIS2
+  Art. 21(2), DORA chapter, NYDFS section and SEC Item 106 obligation areas. Used by `regmap`.
 - [`attribution-patterns.md`](attribution-patterns.md) — why assets are attributed, the
   mis-attribution taxonomy, and what a dispute submission needs. Used by `entity-scope`.
 

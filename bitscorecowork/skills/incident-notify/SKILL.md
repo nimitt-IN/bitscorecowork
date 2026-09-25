@@ -1,42 +1,51 @@
 ---
 name: incident-notify
 description: >
-  Draft the time-bound regulatory notifications an Indian entity owes after a
-  cyber incident — CERT-In's 6-hour report, RBI reporting for banks and NBFCs,
-  SEBI CSCRF and LODR disclosure, IRDAI, IFSCA for GIFT City entities, and DPDP
-  breach intimation to the Data Protection Board and to affected Data Principals.
-  Use when the user says "we've had an incident", "draft our CERT-In report", "what
-  do we have to report and by when", "breach notification", "GIFT City incident
-  reporting", "DPDP breach intimation", or needs the fact-gathering checklist,
+  Draft the time-bound regulatory notifications an entity owes after a cyber
+  incident, in India, the US and the EU — CERT-In's 6-hour report, RBI, SEBI CSCRF
+  and LODR, IRDAI, IFSCA and DPDP in India; SEC Form 8-K/6-K, NYDFS Part 500, the
+  US bank 36-hour rule, HIPAA and the FTC Safeguards Rule in the US; NIS2, DORA,
+  GDPR and the Cyber Resilience Act in the EU. Use when the user says "we've had an
+  incident", "draft our CERT-In report", "what do we have to report and by when",
+  "breach notification", "8-K cyber disclosure", "DORA major incident", "NIS2 early
+  warning", "GDPR 72 hours", "GIFT City incident reporting", or needs the fact-gathering checklist,
   escalation matrix and notification drafts (as opposed to a simulated exercise,
   which is `tabletop`).
 model: opus
 effort: high
 metadata:
-  version: "0.6.0"
+  version: "0.7.0"
 ---
 
-# incident-notify — time-bound Indian regulatory notifications after an incident
+# incident-notify — time-bound regulatory notifications after an incident (India, US, EU)
 
 Work out which notification clocks are running, gather the facts each one needs, and draft the
-filings — so the six-hour deadline is met with a defensible document rather than missed while someone
+filings — so the first deadline is met with a defensible document rather than missed while someone
 finds the template.
 
 **Before anything else, read and apply [`../../reference/bitscore-global-rules.md`](../../reference/bitscore-global-rules.md)**
 (authentication-first, never persist the token, the shared error handling, no discrimination, India
 context — §7 in particular).
 
-The instrument reference is [`../../reference/incident-reporting-map.md`](../../reference/incident-reporting-map.md).
-**Read it before drafting anything**, including its opening caveats and the per-instrument confidence
-markers, which apply to every clock you quote.
+The instrument references are [`../../reference/incident-reporting-map.md`](../../reference/incident-reporting-map.md)
+for India and [`../../reference/incident-reporting-map-us-eu.md`](../../reference/incident-reporting-map-us-eu.md)
+for the US and the EU. **Read the one for each jurisdiction in play before drafting anything**,
+including the opening caveats and the per-instrument confidence markers, which apply to every clock you
+quote.
 
 ## Say this before you start
 
 **Three things, plainly, in the first response:**
 
-**The clocks run from noticing, not from confirming.** Six hours starts when the incident was noticed
-or someone brought it to notice — a vendor call, a researcher's email, a regulator's enquiry. "We are
-still investigating" does not pause it. This is the most common and most expensive failure.
+**The clocks run from noticing, not from confirming.** In India, six hours starts when the incident was
+noticed or someone brought it to notice — a vendor call, a researcher's email, a regulator's enquiry.
+GDPR, NIS2, HIPAA and the FTC also run from awareness or discovery. "We are still investigating" pauses
+none of them. This is the most common and most expensive failure.
+
+**And some clocks run from a decision.** The SEC, NYDFS and the US bank rule run from determining the
+incident is material, has occurred, or is a notification incident; DORA runs from classifying it as
+major, capped at 24 hours from awareness. None of those decisions may wait. Name who makes each one and
+timestamp it.
 
 **Bitsight contributes very little here, and this skill is mostly not about Bitsight.** It can confirm
 whether an affected host sits in the observed footprint, and whether findings or alerts preceded the
@@ -56,14 +65,36 @@ determinations to make.
    of this skill needs no Bitsight data at all. Say what will be missing and move to step 2. An
    incident response is not the moment to block on a credential.
 
-2. **Fix the trigger time. Do this first and write it down.** The moment the incident was noticed, in
-   IST, and how — own alerting, a vendor, a researcher, a customer, a regulator. Every clock is
+2. **Fix the trigger time. Do this first and write it down.** The moment the incident was noticed —
+   in IST for Indian clocks, and in UTC plus the entity's local time where US or EU clocks run — and how:
+   own alerting, a vendor, a researcher, a customer, a regulator. For US and EU regimes, also record each
+   **determination** as it is made (materiality, cybersecurity incident, notification incident, major
+   classification) with its time, owner and basis. Every clock is
    measured from something and most are measured from this. It is the first thing every regulator
    asks and the hardest fact to reconstruct afterwards. If it is uncertain, record the range and the
    basis, and say which end you are working the clocks from.
 
-3. **Establish the entity, because it decides which instruments are in play.** Ask; never rule
-   (global rules §7):
+3. **Establish the jurisdictions first, then the entity.** Ask which apply — India, the US, the EU, or
+   several — because an entity with operations or customers in more than one reads more than one
+   reference. For the **US and EU**, ask (never rule; global rules §7):
+   - **SEC status** — registrant (Form 8-K, Item 1.05) or foreign private issuer (Form 6-K, driven by the
+     home disclosure).
+   - **NYDFS-regulated?** · **A US banking organisation, or a service provider to one?** · **HIPAA
+     covered entity or business associate?** · **A non-bank financial institution under the FTC
+     Safeguards Rule?** · **Critical infrastructure?** (CIRCIA — not yet in force; say so.)
+   - **An EU financial entity under DORA?** Ask this **before** NIS2: for a financial entity DORA's
+     reporting applies instead of NIS2 Article 23. If DORA applies, ask whether it is a credit
+     institution, CCP, trading venue or NIS2 essential/important entity — those get **no weekend
+     relief** on the initial and intermediate reports.
+   - **An NIS2 essential or important entity, and in which Member State?** The recipient and channel
+     come from national transposing law.
+   - **GDPR controller or processor** for the affected data? · **A manufacturer of a product with digital
+     elements** sold in the EU (Cyber Resilience Act, Article 14, from 11 September 2026)?
+   - **Whose personal data, resident where?** US state breach laws follow residency. This skill does
+     **not** resolve them — say so in the matrix.
+
+   **For India**, establish the entity, because it decides which instruments are in play. Ask; never
+   rule (global rules §7):
    - **Where is it licensed? Ask this first, before what it does.** If the entity is licensed,
      recognised, registered or authorised by **IFSCA** — that is, it is a **GIFT City / IFSC** entity —
      it files with **IFSCA and not with the RBI, SEBI or IRDAI**. An IFSC licence displaces the
@@ -106,9 +137,12 @@ determinations to make.
      someone else's contractual notification clock is running.
 
 4. **Build the escalation matrix.** From the instrument reference, one row per applicable instrument:
-   the recipient, the deadline expressed as **a wall-clock time in IST** derived from the trigger time
-   (not "6 hours" — "by 14:30 IST today"), the channel, the format, and who inside the organisation
-   owns the filing. Put it at the top of everything you produce. A CISO at hour four needs the
+   the recipient, the deadline expressed as **a wall-clock time** derived from its own trigger (not "6
+   hours" — "by 14:30 IST today"; not "4 business days" — "by end of Thursday 8 October, New York"),
+   what starts that clock, the channel, the format, and who inside the organisation owns the filing.
+   Indian clocks in IST; US and EU clocks in the entity's local time with UTC alongside. Count SEC
+   business days in New York, skipping US federal holidays. Rows whose trigger is a decision not yet
+   made say so rather than inventing a time. Put it at the top of everything you produce. A CISO at hour four needs the
    deadline, not the citation.
 
    Mark each row's confidence from the reference — **Primary** where the published text was read,
@@ -116,12 +150,13 @@ determinations to make.
    filing.
 
 5. **Run the fact-gathering checklist.** What each notification needs, and what is still unknown:
-   - **Timeline** — noticed, believed started, contained, resolved. In IST, with sources.
+   - **Timeline** — noticed, believed started, contained, resolved, and each reportability decision.
+     With time zone and sources.
    - **What was affected** — systems, applications, data categories, and whether personal data of Data
      Principals is involved. **Categories and counts, never values.**
    - **Scale** — records, individuals, customers, geographies. Ranges where the number is not yet firm.
-   - **Nature** — mapped to the CERT-In Annexure I categories in the reference. Present the list and
-     let the user determine which apply.
+   - **Nature** — for India, mapped to the CERT-In Annexure I categories in the reference. Present the
+     list and let the user determine which apply.
    - **Current status** — contained or live, and what is running.
    - **Actions taken** — containment, mitigation, preservation of logs and evidence.
    - **Third parties** — vendors involved, and whether they have notified or been notified.
@@ -177,6 +212,38 @@ determinations to make.
        and **NCIIPC** too where the affected system is a declared Protected System. Add the
        **quarterly** report to IFSCA within 15 days of each quarter end to the post-incident checklist;
        it is the IFSC counterpart of LODR Reg. 27(2)(ba) and it outlives the incident.
+   - **SEC Form 8-K, Item 1.05** — four business days from the materiality determination. The material
+     aspects of nature, scope and timing, and the material or reasonably likely material impact. Not
+     specific technical detail of the response. State what is not yet determined and plan the 8-K/A.
+     **Never draft the materiality conclusion** — draft the disclosure for the determination the
+     registrant has made. A foreign private issuer furnishes on **Form 6-K** promptly after its home
+     disclosure instead.
+   - **NYDFS 500.17** — 72 hours from determining a cybersecurity incident occurred, including at an
+     affiliate or third-party service provider; electronic, on the DFS form. If an extortion payment is
+     made: notice within 24 hours, and the written explanation, alternatives considered and sanctions
+     diligence within 30 days.
+   - **US bank rule** — 36 hours from determining a notification incident, to the primary federal
+     regulator. A **bank service provider** notifies each affected bank's designated contact as soon as
+     possible when covered services are disrupted for four hours or more.
+   - **HIPAA** — without unreasonable delay, 60 days at the outside, from discovery (including when it
+     would have been known with reasonable diligence). Individuals; HHS; media above 500 residents of a
+     State. A business associate notifies the covered entity.
+   - **FTC Safeguards** — 30 days from discovery where unencrypted information of 500 or more consumers
+     was acquired without authorisation.
+   - **NIS2 Article 23** — early warning within 24 hours of becoming aware of a significant incident;
+     notification within 72 hours; final report one month after the notification. **Not for a DORA
+     financial entity.**
+   - **DORA** — initial notification four hours from classification as major, **never later than 24 hours
+     from awareness**; intermediate report 72 hours after the initial one, even if nothing has changed;
+     final report one month after the latest intermediate report. Apply the weekend rule only where it
+     is available to this entity.
+   - **GDPR** — controller to the supervisory authority within 72 hours of awareness where feasible,
+     with reasons if later, detail in phases if needed; data subjects without undue delay where the risk
+     is high. A processor notifies the controller without undue delay.
+   - **Cyber Resilience Act** — early warning at 24 hours and notification at 72 hours of becoming aware
+     of an actively exploited vulnerability or severe incident in the product, to the coordinating CSIRT
+     and ENISA through the single reporting platform.
+   - **CIRCIA** — not in force. Never put it in the matrix as a running clock.
    - **DPDP** — ⚠️ **do not draft these as live filings.** Rule 7 and Act s.8 commence **13 May 2027**.
      If the user wants them, produce them clearly marked as **preparatory, not yet in force**: the
      intimation to each affected Data Principal (concise, clear, plain, with the consequences, the
@@ -188,7 +255,7 @@ determinations to make.
    contact. Mark each one **DRAFT — NOT FILED**.
 
 8. **Produce the incident timeline log** — a running record of what was known when, and what was
-   filed when, in IST. It becomes the spine of the root-cause report, the supervisory response and any
+   filed when, with time zones. It becomes the spine of the root-cause report, the supervisory response and any
    subsequent inspection. Start it now rather than reconstructing it later.
 
 9. **Offer the output format:** Markdown by default so it can be edited fast under time pressure;
@@ -208,13 +275,18 @@ determinations to make.
   there, not with the RBI, SEBI or IRDAI. Establish where the entity is licensed before you establish
   what it does — this is the one routing error in this skill that produces a draft which looks
   entirely correct and is filed with the wrong authority.
-- **Never determine materiality** for a SEBI LODR disclosure. That is the authorised KMP's call on
-  advice, and it carries consequences in both directions.
+- **Never determine materiality** for a SEBI LODR disclosure or an SEC Form 8-K. That is the
+  authorised KMP's, or the registrant's, call on advice, and it carries consequences in both
+  directions. The same goes for NYDFS, the US bank rule's notification-incident test and DORA's major
+  classification: surface the test, name who decides, timestamp the decision.
+- **Say what is not covered.** US state breach-notification laws and Member State additions to NIS2
+  are outside the references. Every US or EU matrix names them as open items rather than implying
+  completeness.
 - **Nothing is filed or sent from here.** Every draft is marked `DRAFT — NOT FILED` and handed to a
   named accountable officer.
 - **Never invent a fact to complete a draft.** An unknown marked *under investigation* is correct and
   expected; a plausible-sounding record count in a regulatory filing is not recoverable.
-- **Apply DPDP minimisation to the drafts themselves.** Categories and counts of affected records —
+- **Apply data minimisation (DPDP, GDPR) to the drafts themselves.** Categories and counts of affected records —
   never credential values, account numbers, or named individuals in a document that will circulate.
 - **Quote no clock you have not checked against the reference**, and pass through its confidence
   marker. A wrong deadline in an incident is worse than no deadline, because it will be relied on.

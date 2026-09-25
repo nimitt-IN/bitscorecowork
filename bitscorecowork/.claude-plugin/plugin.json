@@ -1,7 +1,7 @@
 {
   "name": "bitscorecowork",
-  "version": "0.6.0",
-  "description": "BitScoreCoWork — pull and analyze Bitsight Security Ratings inside Claude Cowork, then produce executive reporting, vendor due-diligence briefs, remediation roadmaps, CVE exposure sweeps, framework evidence packs, financial exposure estimates, digital-footprint validation and attribution disputes, Indian regulatory incident notifications across CERT-In, RBI, SEBI, IRDAI and IFSCA, board-level crisis simulations, sector benchmarking, recurring change digests, customer questionnaire responses, and scoped, authorization-gated security-testing plans. An asset by BitScore Cybertech LLP.",
+  "version": "0.7.0",
+  "description": "BitScoreCoWork — pull and analyze Bitsight Security Ratings inside Claude Cowork, then produce executive reporting, vendor due-diligence briefs, remediation roadmaps, CVE exposure sweeps, framework evidence packs, financial exposure estimates, digital-footprint validation and attribution disputes, regulatory incident notifications across India (CERT-In, RBI, SEBI, IRDAI, IFSCA), the US (SEC, NYDFS, bank regulators, HIPAA, FTC) and the EU (NIS2, DORA, GDPR, CRA), board-level crisis simulations, sector benchmarking, recurring change digests, customer questionnaire responses, and scoped, authorization-gated security-testing plans. An asset by BitScore Cybertech LLP.",
   "author": {
     "name": "BitScore Cybertech LLP",
     "url": "https://www.bitscore.in"
@@ -34,6 +34,11 @@
     "ifsca",
     "cert-in",
     "dpdp",
+    "nis2",
+    "dora",
+    "gdpr",
+    "nydfs",
+    "sec-cyber-disclosure",
     "incident-response",
     "attack-surface",
     "attribution",
