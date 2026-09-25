@@ -1,7 +1,7 @@
-# BitScoreCoWork — v0.6.0
+# BitScoreCoWork — v0.7.0
 
-An asset by **BitScore Cybertech LLP** — [bitscore.in](https://bitscore.in), authorised India
-partner for [Bitsight](https://www.bitsight.com/).
+An asset by **BitScore Cybertech LLP** — [bitscore.in](https://bitscore.in), an authorised
+[Bitsight](https://www.bitsight.com/) partner.
 
 Pull and analyze **Bitsight Security Ratings** from inside your Claude Cowork environment, then turn
 them into executive-ready reporting and **scoped, authorization-gated** security-testing plans —
@@ -12,7 +12,7 @@ your own organization, portfolio-wide vendor/third-party monitoring, recurring c
 footprint validation and attribution disputes, vendor due-diligence briefs, remediation roadmaps,
 CVE exposure sweeps, framework evidence packs, customer questionnaire responses, sector benchmarking,
 indicative financial exposure estimates, board briefings, board-level crisis simulations, the
-time-bound Indian regulatory notifications an incident triggers, and VAPT/BAS *planning* artifacts
+time-bound regulatory notifications an incident triggers in India, the US and the EU, and VAPT/BAS *planning* artifacts
 your licensed testers execute manually.
 
 ---
@@ -73,9 +73,33 @@ attributed, and what a dispute needs).
 
 ---
 
-## Unreleased (on 0.6.0) — Opus 5.5 optimisations
+## What's new in 0.7.0 — US and EU
 
-No version change: these land on 0.6.0 and ship in the next release.
+**`incident-notify` and `regmap` now work outside India.** Until 0.7.0 both skills were India-only,
+while bitscore.in had begun publishing US and EU tools that named them as their full versions. That
+claim was false, and this release makes it true.
+
+- **`incident-notify` drafts US and EU filings.** SEC Form 8-K Item 1.05 (four business days from the
+  materiality determination, counted in New York) and Form 6-K for foreign private issuers; NYDFS
+  500.17 (72 hours, plus the 24-hour and 30-day extortion-payment filings); the OCC/Fed/FDIC 36-hour
+  rule and its service-provider limb; HIPAA; the FTC Safeguards Rule; NIS2 Article 23; DORA's
+  initial, intermediate and final reports; GDPR Articles 33 and 34; and Cyber Resilience Act Article 14.
+  CIRCIA is carried as **not in force**. It asks which jurisdictions apply before anything else, and
+  resolves DORA before NIS2.
+- **Half these clocks run from a decision, and the skill says so.** SEC materiality, the NYDFS
+  cybersecurity incident, the bank notification incident and DORA's major classification each start
+  a clock. The skill never makes those decisions; it names who does, and timestamps them.
+- **`regmap` maps to NIS2 Article 21(2), DORA by chapter, NYDFS 500.11 and SEC Item 106**, and can list
+  which US and EU instruments are *likely* in play, with the reason for each — never that one binds.
+- **Two new references**, both Primary and read at source on 25 September 2026:
+  [`incident-reporting-map-us-eu.md`](reference/incident-reporting-map-us-eu.md) and
+  [`regulatory-map-us-eu.md`](reference/regulatory-map-us-eu.md). Each carries a provenance block
+  that `check-provenance` enforces.
+- **What is deliberately not covered:** US state breach-notification laws, and Member State additions
+  to NIS2. Every US or EU output names them as open items.
+- **BitScore is described as an authorised Bitsight partner**, without a territory.
+
+## Also in 0.7.0 — Opus 5.5 optimisations
 
 - **Keep the token out of the chat.** The plugin now declares an optional, sensitive
   `bitsight_api_token` setting. Claude Code asks for it when the plugin is enabled, keeps it in the
@@ -375,7 +399,8 @@ brand-bearing assets operated by someone else. Because Bitsight exposes no dispu
 plugin is read-only, the skill says plainly that it cannot change a footprint: submissions are filed
 through the platform, Bitsight adjudicates, and the rating does not move while that is pending.
 
-**`incident-notify`** drafts the time-bound notifications an Indian entity owes after an incident,
+**`incident-notify`** drafts the time-bound notifications an entity owes after an incident — in India,
+and since 0.7.0 in the US and the EU against [`incident-reporting-map-us-eu.md`](reference/incident-reporting-map-us-eu.md) —
 against the new [`incident-reporting-map.md`](reference/incident-reporting-map.md) — CERT-In's six
 hours, the RBI filings, SEBI CSCRF and LODR Reg. 30, IRDAI, IFSCA for GIFT City entities *(added in
 0.5.0; the 2026 amendment and the separate MII regime in 0.6.0)*, DPDP intimation to the Data Protection Board and to affected Data Principals, and NCIIPC.

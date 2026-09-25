@@ -157,6 +157,9 @@ order, and draft vendor outreach — **drafts only, nothing is sent.**
 - "ISO 27001 evidence from our ratings."
 - "Show this against the SEBI framework for our review."
 - "Map this to the RBI Cybersecurity Directions 2026."
+- "Map our ratings to NIS2 Article 21."
+- "DORA third-party evidence for our ICT providers."
+- "Which US and EU regulations apply to us?"
 
 **Example prompt**
 > "Build a regmap evidence pack for our org against NIST CSF 2.0 and ISO 27001:2022, as an .xlsx —
@@ -309,6 +312,9 @@ responsibility** with the evidence, plus a submission draft.
 - "Draft our CERT-In report."
 - "DPDP breach intimation."
 - "We're a GIFT City entity — who do we report this to?"
+- "Do we need an 8-K for this, and by when?"
+- "DORA major incident — when is the initial notification due?"
+- "NIS2 early warning and GDPR — what do we owe in the EU?"
 - "What are our notification deadlines?"
 
 **Example prompt**

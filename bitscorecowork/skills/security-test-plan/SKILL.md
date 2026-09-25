@@ -11,7 +11,7 @@ description: >
 model: opus
 effort: high
 metadata:
-  version: "0.6.0"
+  version: "0.7.0"
 ---
 
 # security-test-plan — engagement plan & reporting scaffold (planning only)

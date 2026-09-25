@@ -2,16 +2,19 @@
 name: regmap
 description: >
   Build a framework evidence pack from Bitsight data — map risk vectors and
-  findings to NIST CSF 2.0, ISO/IEC 27001:2022 and Indian regulatory obligation
-  areas (RBI, SEBI CSCRF, IRDAI, IFSCA, CERT-In, DPDP). Use when the user asks to
-  "map our Bitsight data to NIST", "ISO 27001 evidence from our ratings", "show
-  this against the SEBI/RBI framework", "control mapping", "which CSCRF category
-  are we", "map this to the RBI Cybersecurity Directions 2026", or wants ratings
+  findings to NIST CSF 2.0, ISO/IEC 27001:2022, Indian regulatory obligation
+  areas (RBI, SEBI CSCRF, IRDAI, IFSCA, CERT-In, DPDP), and US and EU obligation
+  areas (NIS2 Article 21, DORA, NYDFS Part 500, SEC Item 106). Use when the user
+  asks to "map our Bitsight data to NIST", "ISO 27001 evidence from our ratings",
+  "show this against the SEBI/RBI framework", "map this to NIS2", "DORA third-party
+  evidence", "NYDFS 500.11", "Item 106 evidence", "which regulations apply to us",
+  "control mapping", "which CSCRF category are we", "map this to the RBI
+  Cybersecurity Directions 2026", or wants ratings
   evidence organized for an audit, assessment or supervisory review.
 model: opus
 effort: high
 metadata:
-  version: "0.6.0"
+  version: "0.7.0"
 ---
 
 # regmap — framework evidence pack from Bitsight data
@@ -23,9 +26,10 @@ be filed in an audit pack, an internal assessment, or a supervisory response.
 (authentication-first, never persist the token, the 250–900 tier/color bands, the shared error
 handling, no discrimination, India context — §7 in particular).
 
-The mapping reference is [`../../reference/regulatory-map.md`](../../reference/regulatory-map.md).
-**Read it before producing any mapping**, including its opening caveats, which apply to every row
-you output.
+The mapping references are [`../../reference/regulatory-map.md`](../../reference/regulatory-map.md)
+(NIST, ISO and the Indian regimes) and [`../../reference/regulatory-map-us-eu.md`](../../reference/regulatory-map-us-eu.md)
+(US and EU scope and obligation areas). **Read the relevant one before producing any mapping**,
+including its opening caveats, which apply to every row you output.
 
 ## What this skill is, and what it is not
 
@@ -50,10 +54,15 @@ output — an auditor can work with it, and it doesn't assert something the data
 2. **Establish the scope.**
    - **Subject** — the user's own organization, one third party, or the portfolio as a whole (for
      evidencing third-party monitoring as a control activity in its own right).
-   - **Framework(s)** — NIST CSF 2.0, ISO/IEC 27001:2022, and/or an Indian regime (RBI, SEBI,
-     IRDAI, **IFSCA**, CERT-In, DPDP). Mapping to two frameworks at once is normal; more than that
-     produces an unreadable table, so ask which matter. **If RBI is one of them, go to step 3 before
-     pulling any data. If SEBI, go to step 3a. If IFSCA, go to step 3b.**
+   - **Framework(s)** — NIST CSF 2.0, ISO/IEC 27001:2022, an Indian regime (RBI, SEBI, IRDAI,
+     **IFSCA**, CERT-In, DPDP), and/or a US or EU regime (NIS2, DORA, NYDFS Part 500, SEC Item 106).
+     Mapping to two frameworks at once is normal; more than that produces an unreadable table, so ask
+     which matter. **If RBI is one of them, go to step 3 before pulling any data. If SEBI, go to step
+     3a. If IFSCA, go to step 3b. If NIS2, DORA, NYDFS or SEC, go to step 3c.**
+   - **If the user does not know which regimes apply**, use the scope tables in
+     `regulatory-map-us-eu.md` and the Indian references to list the ones **likely** in play, with the
+     reason for each — whose data, which services, where listed, which sector — and let them confirm.
+     Never state that an instrument binds them.
    - **Where is the entity licensed?** Ask before mapping to any Indian regime. An entity licensed by
      **IFSCA** — a **GIFT City / IFSC** entity — is mapped to the IFSCA Guidelines, **not** to the
      RBI's Directions or to CSCRF, however mainland its business looks. An IFSC licence displaces the
@@ -216,6 +225,24 @@ output — an auditor can work with it, and it doesn't assert something the data
    90 days of the financial-year end, and the exemptions expire on **10 March 2028**. Bitsight sees
    nothing of components I, IV or V.
 
+3c. **If a US or EU regime was chosen — settle scope and the displacement rule first.**
+   - **DORA before NIS2.** For an EU financial entity DORA's ICT risk management and third-party
+     provisions apply instead of NIS2's (NIS2 Recital 28, Art. 4). Map a bank to DORA's chapters, not to
+     NIS2 Article 21. Mapping both duplicates the pack; mapping only NIS2 maps the wrong instrument.
+   - **NIS2 — essential or important, and which Member State.** Ask; the Member State keeps the list.
+     The obligations and penalties come from national transposing law, so cite Article 21(2) measures by
+     letter and say the national text governs.
+   - **DORA — chapter level only.** The portfolio is the strongest evidence here: Chapter V, Article 28
+     (due diligence and concentration before contracting, termination rights on circumstances found
+     through monitoring, exit strategies for critical or important functions).
+   - **NYDFS** — 500.11(a) periodic assessment of third-party service providers is what a dated
+     portfolio pack speaks to most directly.
+   - **SEC Item 106** — evidences the *process* for assessing cyber risk, and whether third-party risk is
+     overseen (106(b)(1)(iii)). **Never map a rating movement to Item 1.05**; Bitsight does not observe
+     incidents and materiality is the registrant's determination.
+   - **An ICT provider to EU financial entities** meets DORA mostly through its customers' contracts.
+     Map the pack as evidence the provider can hand those customers, and say that is what it is.
+
 4. **Pull the evidence.**
    - `bitsight_get_company_details` with `include_industry_comparison: true` — rating, per-vector
      grades, trend. The per-vector grades are the backbone of the mapping.
@@ -246,6 +273,10 @@ output — an auditor can work with it, and it doesn't assert something the data
    Fill the **evidence strength** column honestly. Most rows are *partially evidenced* — Bitsight
    sees the external surface of a control, not its design or operation. A pack where everything is
    "evidenced" is not credible and will not survive an auditor.
+
+   **For a US or EU pack**, the Control area column carries the NIS2 Art. 21(2) letter, DORA chapter,
+   NYDFS section or Item 106 paragraph from `regulatory-map-us-eu.md` — never a finer reference than it
+   gives.
 
    **For an RBI pack**, add an **Evidence source** column — *Bitsight-observed* / *client-supplied* /
    *not evidenced* — and map to the RBI 2026 chapters using the dedicated section of the mapping
@@ -304,7 +335,7 @@ output — an auditor can work with it, and it doesn't assert something the data
   decides, stop there.
 - Where the pack covers a third party, it contains that party's confidential security posture under
   Bitsight's Terms of Service — don't forward it beyond the user's stated purpose.
-- Where findings touch personal data (exposed credentials in particular), apply DPDP minimisation:
+- Where findings touch personal data (exposed credentials in particular), apply DPDP and GDPR minimisation:
   report counts and categories, never credential values, and avoid naming individuals.
 
 ## Error handling
