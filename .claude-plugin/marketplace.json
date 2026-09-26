@@ -1,0 +1,21 @@
+{
+  "name": "bitscorecowork",
+  "owner": {
+    "name": "BitScore Cybertech LLP",
+    "url": "https://www.bitscore.in"
+  },
+  "metadata": {
+    "description": "BitScoreCoWork — Bitsight Security Ratings inside Claude. An asset by BitScore Cybertech LLP."
+  },
+  "plugins": [
+    {
+      "name": "bitscorecowork",
+      "source": "./bitscorecowork",
+      "description": "Pull and analyse Bitsight Security Ratings inside Claude — board packs, vendor briefs, remediation roadmaps, CVE sweeps, framework evidence and regulatory incident notifications for India, the US and the EU.",
+      "category": "security",
+      "homepage": "https://www.bitscore.in/ai",
+      "repository": "https://github.com/nimitt-IN/bitscorecowork",
+      "license": "MIT"
+    }
+  ]
+}

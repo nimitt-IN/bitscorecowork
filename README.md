@@ -46,6 +46,7 @@ usage and troubleshooting).
 | --- | --- |
 | [`bitscorecowork/`](bitscorecowork/) | The plugin source tree — edit here |
 | `bitscorecowork-0.7.0.plugin` | The current built, installable plugin (a zip of `bitscorecowork/`) |
+| [`.claude-plugin/marketplace.json`](.claude-plugin/marketplace.json) | Marketplace manifest, so the repo URL installs the plugin |
 | [`LICENSE`](LICENSE) | MIT License |
 
 Only the current bundle is kept at the repo root. Earlier bundles remain downloadable from their
@@ -57,6 +58,14 @@ Download **[`bitscorecowork-0.7.0.plugin` from the v0.7.0 release](https://githu
 (it's also committed at the repo root) and add it in Claude, or point at the `bitscorecowork/`
 directory as a local plugin. The `bitsight` MCP server starts automatically — no `npm install` and
 no configuration required.
+
+Or add the repo as a marketplace in Claude Code — the root `.claude-plugin/marketplace.json` points at
+`bitscorecowork/`:
+
+```
+/plugin marketplace add nimitt-IN/bitscorecowork
+/plugin install bitscorecowork@bitscorecowork
+```
 
 **Upgrade from any earlier bundle.** Releases before 0.6.0 carry the **pre-amendment IFSCA
 exemptions** — one list of four at para 21, rather than the two tiers the amendment of 10 March 2026
