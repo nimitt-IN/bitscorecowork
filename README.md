@@ -47,6 +47,7 @@ usage and troubleshooting).
 | [`bitscorecowork/`](bitscorecowork/) | The plugin source tree — edit here |
 | `bitscorecowork-0.7.0.plugin` | The current built, installable plugin (a zip of `bitscorecowork/`) |
 | [`.claude-plugin/marketplace.json`](.claude-plugin/marketplace.json) | Marketplace manifest, so the repo URL installs the plugin |
+| [`.claude-plugin/plugin.json`](.claude-plugin/plugin.json) | Root plugin manifest for tools that read only the repo root, such as the Claude directory. Points into `bitscorecowork/`; `check-version` keeps it identical to the inner one |
 | [`LICENSE`](LICENSE) | MIT License |
 
 Only the current bundle is kept at the repo root. Earlier bundles remain downloadable from their

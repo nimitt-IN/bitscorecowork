@@ -1,0 +1,63 @@
+{
+  "name": "bitscorecowork",
+  "version": "0.7.0",
+  "description": "BitScoreCoWork — pull and analyze Bitsight Security Ratings inside Claude Cowork, then produce executive reporting, vendor due-diligence briefs, remediation roadmaps, CVE exposure sweeps, framework evidence packs, financial exposure estimates, digital-footprint validation and attribution disputes, regulatory incident notifications across India (CERT-In, RBI, SEBI, IRDAI, IFSCA), the US (SEC, NYDFS, bank regulators, HIPAA, FTC) and the EU (NIS2, DORA, GDPR, CRA), board-level crisis simulations, sector benchmarking, recurring change digests, customer questionnaire responses, and scoped, authorization-gated security-testing plans. An asset by BitScore Cybertech LLP.",
+  "author": {
+    "name": "BitScore Cybertech LLP",
+    "url": "https://www.bitscore.in"
+  },
+  "homepage": "https://www.bitscore.in",
+  "license": "MIT",
+  "icon": "./bitscorecowork/.claude-plugin/icon.svg",
+  "skills": "./bitscorecowork/skills/",
+  "mcpServers": {
+    "bitsight": {
+      "command": "node",
+      "args": [
+        "${CLAUDE_PLUGIN_ROOT}/bitscorecowork/server/index.js"
+      ]
+    }
+  },
+  "userConfig": {
+    "bitsight_api_token": {
+      "type": "string",
+      "title": "Bitsight API token",
+      "description": "Optional. Stored in your OS keychain and passed to the plugin's Bitsight server, so the token never enters the conversation. Leave blank to paste it into chat each session instead. Use a least-entitled token.",
+      "sensitive": true,
+      "required": false
+    }
+  },
+  "keywords": [
+    "bitsight",
+    "security-ratings",
+    "vendor-risk",
+    "third-party-risk",
+    "vapt",
+    "board-pack",
+    "due-diligence",
+    "remediation",
+    "cve",
+    "nist-csf",
+    "iso-27001",
+    "rbi",
+    "sebi",
+    "ifsca",
+    "cert-in",
+    "dpdp",
+    "nis2",
+    "dora",
+    "gdpr",
+    "nydfs",
+    "sec-cyber-disclosure",
+    "incident-response",
+    "attack-surface",
+    "attribution",
+    "tabletop-exercise",
+    "benchmarking",
+    "regulatory-compliance",
+    "cyber-risk-quantification",
+    "cybersecurity",
+    "bitscore",
+    "india"
+  ]
+}
