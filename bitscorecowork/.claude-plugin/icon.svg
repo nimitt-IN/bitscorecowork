@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 64 64" shape-rendering="geometricPrecision">
+  <title>BitScore</title>
+  <defs>
+    <clipPath id="bs-screen">
+      <rect x="5" y="5" width="54" height="54" rx="11" ry="11"></rect>
+    </clipPath>
+  </defs>
+  <g clip-path="url(#bs-screen)">
+    <rect width="64" height="64" fill="#1C99D9"></rect>
+    <path d="M -2 40 Q 32 30 66 40 L 66 66 L -2 66 Z" fill="#003866"></path>
+    <path d="M 14 31 L 27 44 L 52 14" fill="none" stroke="#FFFFFF" stroke-width="8" stroke-linejoin="miter" stroke-linecap="square" stroke-miterlimit="4"></path>
+  </g>
+  <rect x="5" y="5" width="54" height="54" rx="11" ry="11" fill="none" stroke="#0A1F3D" stroke-width="3"></rect>
+</svg>
