@@ -56,6 +56,28 @@ for (const skill of skills) {
   }
 }
 
+// The repo root carries a second plugin.json so that tools given only the repo URL — the
+// Claude directory submission among them — find a plugin there. It points into
+// bitscorecowork/ for its components, and every other field must match the inner manifest,
+// which is the one the bundle ships.
+const inner = readJson('bitscorecowork/.claude-plugin/plugin.json');
+const root = readJson('.claude-plugin/plugin.json');
+const ROOT_ONLY = { icon: './bitscorecowork/.claude-plugin/icon.svg', skills: './bitscorecowork/skills/' };
+for (const key of new Set([...Object.keys(inner), ...Object.keys(root)])) {
+  if (key === 'mcpServers') continue;
+  const want = key in ROOT_ONLY ? ROOT_ONLY[key] : inner[key];
+  if (JSON.stringify(root[key]) !== JSON.stringify(want)) {
+    problems.push(`.claude-plugin/plugin.json: "${key}" differs from bitscorecowork/.claude-plugin/plugin.json`);
+  }
+}
+const innerMcp = readJson('bitscorecowork/.mcp.json').mcpServers;
+const rootMcp = JSON.parse(
+  JSON.stringify(root.mcpServers ?? {}).replaceAll('${CLAUDE_PLUGIN_ROOT}/bitscorecowork/', '${CLAUDE_PLUGIN_ROOT}/'),
+);
+if (JSON.stringify(rootMcp) !== JSON.stringify(innerMcp)) {
+  problems.push('.claude-plugin/plugin.json: mcpServers differs from bitscorecowork/.mcp.json');
+}
+
 // The bundle is a build output, but it is committed, and its filename is the version a
 // reader downloading it will believe. Exactly one may be present.
 const bundles = readdirSync('.').filter((f) => f.endsWith('.plugin')).sort();
@@ -78,4 +100,4 @@ if (problems.length > 0) {
   process.exit(1);
 }
 
-console.log(`${NAME}: ${expected} in plugin.json, server/package.json, ${skills.length} skills and the bundle.`);
+console.log(`${NAME}: ${expected} in both plugin.json files, server/package.json, ${skills.length} skills and the bundle.`);
