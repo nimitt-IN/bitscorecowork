@@ -142,7 +142,7 @@ company is the *only* tenant, or bought a dedicated plan, the findings are their
 `*.fastly.net`, `*.cloudflare.*`, `*.azureedge.net`, `*.edgekey.net`, `*.edgesuite.net`,
 `*.llnwd.net`, `*.stackpath*`. Addresses shared across enormous numbers of unrelated companies.
 
-**Usual outcome:** the *address* is disputable; the **configuration often is not.** A TLS or header
+**Usual outcome:** the *address* is disputable; the **configuration often is not.** A TLS or web-application
 finding on a CDN edge serving the company's site frequently reflects the company's own CDN
 configuration, which it controls and can fix. Separate the two before disputing.
 

@@ -64,7 +64,7 @@ Evidence about configuration and maintenance of internet-facing systems.
 | TLS/SSL Certificates | Certificate validity, expiry, and trust chain | PR.DS | A.8.24 | Sectoral data-in-transit protection expectations |
 | TLS/SSL Configurations | Protocol versions and cipher suites in use | PR.DS | A.8.24 | Sectoral data-in-transit protection expectations |
 | Open Ports | Services exposed to the internet | PR.IR, PR.AA | A.8.20, A.8.21 | Sectoral network-security expectations |
-| Web Application Headers | Browser-side protections on web applications | PR.PS | A.8.9, A.8.26 | Sectoral application-security expectations |
+| Web Application Security | Weaknesses observed as a browser loads each web application — known-vulnerable components, authentication and access control, sensitive-data exposure, cross-site scripting defences, misconfiguration | PR.PS, PR.DS | A.8.8, A.8.9, A.8.26 | Sectoral application-security expectations |
 | Insecure Systems | Systems reaching endpoints indicating unsupported/insecure configuration | PR.PS, ID.AM | A.8.9 | Sectoral configuration-management expectations |
 | Server Software | Versions and support status of observed server software | ID.AM, PR.PS | A.8.8, A.8.9 | Sectoral asset & patch-management expectations |
 | Desktop / Mobile Software | Versions and support status of observed endpoint software | ID.AM, PR.PS | A.8.8 | Sectoral endpoint-management expectations |
@@ -200,7 +200,7 @@ Systems Audit · VIII Repeal and Other Provisions.
 | Critical Vulnerability Management | V | Vulnerability management and remediation within defined timeframes; secure configuration and patch management | The VA/PT programme itself — six-monthly VA and annual PT on critical systems, by independent trained assessors, is an internal record |
 | TLS/SSL Certificates · TLS/SSL Configurations | V | Protection of data in transit | Data-at-rest and endpoint DLP, which are internal |
 | Open Ports · DNSSEC | V | Secure configuration; network security of internet-facing infrastructure | Internal segmentation and the internal network entirely |
-| Web Application Headers · Mobile Application Security | V | Application security controls on customer-facing channels | Application source, SDLC and pre-release testing |
+| Web Application Security · Mobile Application Security | V | Application security controls on customer-facing channels | Application source, SDLC and pre-release testing |
 | Insecure Systems · Server Software · Desktop / Mobile Software | IV, V | Information asset inventory and criticality classification; software currency; unauthorised-software controls | Whether whitelisting or blocking of unauthorised installation is actually enforced |
 | Botnet Infections · Malware Servers · Potentially Exploited · Spam Propagation · Unsolicited Communications | VI | Continuous surveillance; detection capability of the Cyber Security Operations Centre | The CSOC's own design, staffing, SIEM coverage and L1/L2/L3 escalation |
 | Exposed Credentials | V | Multi-factor authentication and credential protection; customer and staff awareness | Whether MFA is enforced on privileged and critical systems — internal only |
@@ -306,7 +306,7 @@ what Bitsight actually observes:
 | Critical Vulnerability Management | II, §9(b) | Protection — security controls aligned with NIST / ISO 27000 to minimise likelihood and impact | The control selection process itself, and everything internal |
 | TLS/SSL Certificates · TLS/SSL Configurations · Open Ports · DNSSEC | II, §9(b) | Protection of IT assets and data; secure configuration of internet-facing infrastructure | Internal segmentation, key management, data at rest |
 | Insecure Systems · Server Software · Desktop / Mobile Software | II, §9(a) | Identification and classification of IT assets, and their configurations | Whether the inventory itself is complete — Bitsight sees what is externally observable, not what the RE has listed |
-| Web Application Headers · Mobile Application Security | II, §9(b) | Protection of customer-facing channels | SDLC, source review, pre-release testing |
+| Web Application Security · Mobile Application Security | II, §9(b) | Protection of customer-facing channels | SDLC, source review, pre-release testing |
 | Botnet Infections · Malware Servers · Potentially Exploited · Spam Propagation · Unsolicited Communications | II | Ability to anticipate, withstand, contain and recover from cyber-attacks — detection outcomes | The detection capability itself, and the incident-response process |
 | Exposed Credentials | II, IV | Credential protection; employee awareness and reporting channels | Whether MFA is enforced, and whether training happened |
 | Security Incidents (public disclosure) | II, and the para 19–20 clocks | Incident response and the reporting obligation | Whether the RE actually filed within six hours of detection |
