@@ -102,7 +102,7 @@ be told otherwise by their own rating tomorrow.
      sample is biased towards `critical` assets and is not representative.
    - `bitsight_get_company_details` for `primary_domain` and the current rating, so the effect of any
      successful dispute has a baseline.
-   - `bitsight_get_findings` with `severity_gte: 1` across the estate — here you want everything, not
+   - `bitsight_get_findings` with no `min_severity` across the estate — here you want everything, not
      a material-and-above worklist, because an asset with a single minor finding is exactly the kind
      that turns out not to be theirs. Read the **`attributed_companies`** expansion on each finding,
      and **read the names, not just the count** — that distinction is in the attribution reference and

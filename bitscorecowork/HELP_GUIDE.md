@@ -466,7 +466,7 @@ answer is dispositioned as *evidenced*, *partially evidenced*, *not evidenced by
 | "Not found…" | **404** | Bad GUID or slug, or not in this token's portfolio | Re-confirm the identifier. Use `bitsight_search_portfolio_company` to look up a GUID; companies outside your portfolio must be added in the Bitsight platform first. |
 | "Rate limited…" | **429** | Too many requests too quickly | The server retries automatically with backoff; if it still appears, wait ~a minute and run it again. |
 | "No data returned" | — | Nothing matched your query/filter | Accepted as-is — the skills will **not** invent data. Broaden the filter or re-check the scope. |
-| "Input should be a valid number…" | **422** | A severity *category* was sent where a number belongs | Severity filters are numeric: `severity_gte` 9 = severe, 8 = material and above, 6 = moderate and above, 1 = everything. The skills do this for you. |
+| "min_severity must be one of…" | — | A severity value Bitsight doesn't have | Severity filters take a category: `severe`, `material`, `moderate` or `minor`, each meaning that category and above. The skills do this for you. |
 | A risk vector reads zero findings but grades badly | **200** | A risk-vector slug Bitsight doesn't recognise returns an *empty set*, not an error — so it looks like a clean company | From 0.3.0 the server resolves the Critical Vulnerability Management slug automatically. If you hit it elsewhere, trust `bitsight_get_findings_summary` over a filtered pull. |
 | Server won't start | — | Node.js missing/old | Ensure Node.js 18+ is installed. No `npm install` needed. |
 

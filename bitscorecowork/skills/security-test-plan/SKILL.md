@@ -51,8 +51,8 @@ Section 5 (the **authorization gate**) and Section 7 (IT Act, 2000) are mandator
 4. **Fetch attack-surface / asset data** (in-scope only):
    - `bitsight_search_portfolio_company` to resolve a name → GUID if needed.
    - `bitsight_get_assets` for the internet-facing inventory (domains, IP ranges, importance).
-   - `bitsight_get_findings` (paginated; filter by `risk_vector` / **`severity_gte`**, which takes a
-     number — `severity_gte: 8` for material and severe, the scenarios worth a tester's day) and
+   - `bitsight_get_findings` (paginated; filter by `risk_vector` / **`min_severity`**, which takes a
+     Bitsight category — `min_severity: "material"` for material and severe, the scenarios worth a tester's day) and
      `bitsight_get_findings_summary` for the risk-vector/severity picture that seeds scenarios.
      Thresholds and the vector vocabulary are in global rules §3a; vulnerability findings sit under
      `critical_vulnerability_management`.

@@ -56,9 +56,9 @@ honest one isn't available, and give them the sequence and the reasoning instead
    - `bitsight_get_findings` with `affects_rating: true`, paged through fully — the actual work items.
      Group them by risk vector and by affected asset; a single misconfigured host often generates
      several findings and is one fix.
-   - **Sequence the fetch by severity** (global rules §3a). Start with `severity_gte: 8` — material
-     and severe — because that is the roadmap's first 30 days; widen to `severity_gte: 6` for the
-     60/90-day tail. On a large estate a full `severity_gte: 1` pull is tens of thousands of findings
+   - **Sequence the fetch by severity** (global rules §3a). Start with `min_severity: "material"` — material
+     and severe — because that is the roadmap's first 30 days; widen to `min_severity: "moderate"` for the
+     60/90-day tail. On a large estate a full unfiltered pull is tens of thousands of findings
      and will truncate before it is useful.
    - For the vulnerability work specifically, use `risk_vector: "critical_vulnerability_management"`.
    - `bitsight_get_industry_benchmark` for the company's industry slug — to identify vectors where

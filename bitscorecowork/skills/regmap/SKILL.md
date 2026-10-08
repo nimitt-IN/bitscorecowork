@@ -248,7 +248,7 @@ output — an auditor can work with it, and it doesn't assert something the data
      grades, trend. The per-vector grades are the backbone of the mapping.
    - `bitsight_get_findings_summary` — open issues per vector, which becomes the "gaps" column.
      Quote its categorical counts rather than deriving your own.
-   - `bitsight_get_findings` with `affects_rating: true` and **`severity_gte: 8`** for the vectors in
+   - `bitsight_get_findings` with `affects_rating: true` and **`min_severity: "material"`** for the vectors in
      scope, where the pack needs a named specific rather than a grade. An assessor wants the material
      and severe rows evidenced by asset and date; a full pull buries them. Thresholds are in global
      rules §3a. Where the pack covers vulnerability remediation, the vector is

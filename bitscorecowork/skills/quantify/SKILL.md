@@ -54,8 +54,8 @@ still want the indicative version.
    - `bitsight_get_company_details` with `include_industry_comparison: true` — rating, band, trend,
      per-vector grades, industry percentile.
    - `bitsight_get_findings_summary` — open findings by vector and severity. Use its categorical
-     counts as the model input; if you need the underlying findings, pull them with a numeric
-     `severity_gte` (8 = material and above) per global rules §3a.
+     counts as the model input; if you need the underlying findings, pull them with
+     `min_severity: "material"` (material and above) per global rules §3a.
    - `bitsight_get_industry_benchmark` — where the sector sits, so relative posture is grounded.
    - `bitsight_get_alerts` over the last 12 months — a deteriorating trend is itself an input.
 
