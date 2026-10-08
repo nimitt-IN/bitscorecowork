@@ -415,6 +415,10 @@ so a reader can't tell which is which.
   out on their own schedule. Never promise that a given remediation yields a given number of points,
   or that a target score will be reached by a given date. Express expected impact as direction and
   relative magnitude, and say what that judgement rests on.
+- **Bitsight's own projections are Bitsight's, and narrow.** `remediation-plan` reads Bitsight's Risk
+  Remediation Plan, whose grade steps ("Fix to obtain C") and CVM scenario scores are Bitsight's model of
+  **one vector's grade**. Attribute them to Bitsight with the plan date, keep them apart from our own
+  modelled figures, and never convert them into overall-rating points or a date for reaching a score.
 - **Not advice.** Modelled financial output is not investment, insurance, or actuarial advice; point
   the user to their broker, actuary or insurer where decisions turn on it.
 
@@ -439,6 +443,9 @@ so a reader can't tell which is which.
 | `bitsight_list_threats` | Bitsight's catalog of threats (CVEs and vulnerability groups); resolve a CVE to its threat GUID. `GET /ratings/v2/threats`. |
 | `bitsight_get_threat_companies` | Portfolio companies observably affected by a given threat. `GET /ratings/v2/threats/{threat_guid}/companies`. |
 | `bitsight_get_threat_evidence` | The observed assets/evidence behind one threat-company pairing. `GET /ratings/v2/threats/{threat_guid}/companies/{company_guid}/evidence`. |
+| `bitsight_get_remediation_plan` | Bitsight's own Risk Remediation Plan: fix order and grade steps (or CVM scenarios) for seven vectors; own organisation and subsidiaries only. `GET /ratings/v1/companies/{guid}/risk-remediation-plan/`. |
+| `bitsight_get_exposed_credentials` | Credential leaks tied to portfolio companies: leak, dates, data types, record counts; never credential values. `GET /ratings/v1/exposed-credentials/*`. |
+| `bitsight_get_threat_attestations` | Companies' statements about threats (Unreviewed, Under review, Not vulnerable, Risk accepted). `GET /ratings/v1/threats/attestations/`. |
 
 All tools are **read-only** — nothing in this plugin can modify a Bitsight portfolio, tiers, or
 subscriptions, and nothing performs an active scan.

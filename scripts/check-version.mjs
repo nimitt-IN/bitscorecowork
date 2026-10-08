@@ -5,7 +5,7 @@
  * ## Why this exists
  *
  * A release bump touches four kinds of file: `.claude-plugin/plugin.json`,
- * `server/package.json`, the `metadata.version` of all sixteen skills, and the name of the
+ * `server/package.json`, the `metadata.version` of every skill, and the name of the
  * built bundle at the repo root. Nothing connects them, so they are kept in step by hand.
  *
  * During the 0.6.0 release `server/package.json` was left at 0.5.0 and caught by a grep run

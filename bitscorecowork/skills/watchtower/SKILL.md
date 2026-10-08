@@ -8,7 +8,7 @@ description: >
   or wants the delta since a previous run (as opposed to a full portfolio pull,
   which is `myportfolio`).
 metadata:
-  version: "0.7.0"
+  version: "0.8.0"
 ---
 
 # watchtower — what changed in the portfolio since last time
@@ -119,7 +119,8 @@ its band is not news. Treat it as such, and say so.
    table to work through. Save to the user's working folder and present it.
 
 9. **Offer next steps:** `vendor-brief` on anything in *act now* that needs a decision,
-   `cve-sweep` if an alert points at a named vulnerability, or `boardpack` if the quarter's digests
+   `cve-sweep` if an alert points at a named vulnerability, `credential-exposure` with the last
+   digest's date for leaks added since, or `boardpack` if the quarter's digests
    add up to something leadership should see. If the user wants this to run on a cadence, the
    `schedule` skill sets it up — weekly is the usual right answer.
 

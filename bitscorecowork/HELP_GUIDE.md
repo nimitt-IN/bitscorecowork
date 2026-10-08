@@ -1,6 +1,6 @@
 # BitScoreCoWork — Help Guide
 
-How to trigger each of the sixteen skills, what to have ready, and how to read API errors.
+How to trigger each of the nineteen skills, what to have ready, and how to read API errors.
 
 An asset by **BitScore Cybertech LLP** — [bitscore.in](https://bitscore.in).
 
@@ -456,6 +456,77 @@ answer is dispositioned as *evidenced*, *partially evidenced*, *not evidenced by
 
 ---
 
+## Skill 17 — `remediation-plan`
+
+**Use it for:** seeing the order Bitsight itself says to fix your findings in, and how many fixes take
+a vector to its next grade.
+
+**Trigger phrases**
+- "What does Bitsight say we should fix first?"
+- "How many fixes to get our TLS grade to a B?"
+- "Show our remediation plan for web application security."
+
+**Example prompt**
+> "Pull Bitsight's remediation plans for our two weakest planned vectors, tell me how many fixes each
+> grade step takes, and give me the first twenty items as a ticket list."
+
+**Expected inputs:** usually nothing. It defaults to your own organisation; name a subsidiary or a
+vector if you want one. Plans exist for **seven vectors** (TLS/SSL certificates and configurations,
+Web Application Security, Critical Vulnerability Management, DMARC, desktop and mobile software) and
+for **your own organisation and subsidiaries only**. For a vendor, use `vendor-brief`.
+
+> ⚠️ **A grade step is Bitsight's model of one vector's grade, not your rating.** "Fix to obtain C" says
+> what Bitsight expects once those findings are re-observed or age out. It is never turned into rating
+> points or a date.
+
+---
+
+## Skill 18 — `credential-exposure`
+
+**Use it for:** finding which companies, yours included, have accounts in known credential leaks,
+and what to do about the recent ones.
+
+**Trigger phrases**
+- "Are our credentials in any breaches?"
+- "Which vendors have leaked credentials?"
+- "What new leaks have appeared since last month?"
+
+**Example prompt**
+> "Show me credential leaks Bitsight has added in the last 90 days across the portfolio, triage them,
+> and tell me what we should do for our own domains and what to ask our critical vendors."
+
+**Expected inputs:** the **window** ("since our last review", default 90 days) and which companies
+matter most. You get *act now* / *review* / *background* bands, actions, and vendor questions.
+
+> 🔒 **No credential is ever returned or requested.** Bitsight supplies leak names, dates, data types
+> and record counts. If there's evidence the leaked accounts were **used** against you, the skill hands
+> off to `incident-notify`, because a CERT-In clock may be running.
+
+---
+
+## Skill 19 — `threat-attestation`
+
+**Use it for:** knowing who has said what about a CVE (your own review backlog, or which vendors have
+answered) set against what Bitsight observes.
+
+**Trigger phrases**
+- "Which flagged CVEs haven't we reviewed?"
+- "What have our vendors said about CVE-2024-3400?"
+- "Who still needs chasing after the sweep?"
+
+**Example prompt**
+> "After the sweep on CVE-2024-3400, show me which exposed vendors have made a statement, who says
+> they're not vulnerable but is still observed as exposed, and draft chase notes for the rest."
+
+**Expected inputs:** the **CVE or threat** (or nothing, for your own backlog). You get each exposed
+company in one bucket (*no statement*, *in review*, *says not vulnerable but still observed*, *risk
+accepted*), plus draft chase notes. **Drafts only, nothing is sent.**
+
+> ⚠️ **An attestation is a claim, and silence isn't denial.** Vendors' public statements are shown;
+> their private ones aren't visible to you. The skill reads only and never records an attestation.
+
+---
+
 ## API-error troubleshooting
 
 | What you see | HTTP | Meaning | What to do |
@@ -468,6 +539,7 @@ answer is dispositioned as *evidenced*, *partially evidenced*, *not evidenced by
 | "No data returned" | — | Nothing matched your query/filter | Accepted as-is — the skills will **not** invent data. Broaden the filter or re-check the scope. |
 | "min_severity must be one of…" | — | A severity value Bitsight doesn't have | Severity filters take a category: `severe`, `material`, `moderate` or `minor`, each meaning that category and above. The skills do this for you. |
 | A risk vector reads zero findings but grades badly | **200** | A risk-vector slug Bitsight doesn't recognise returns an *empty set*, not an error — so it looks like a clean company | From 0.3.0 the server resolves the Critical Vulnerability Management slug automatically. If you hit it elsewhere, trust `bitsight_get_findings_summary` over a filtered pull. |
+| "…not available to this token's subscription…" on a remediation plan | **403** | Remediation plans cover **your own organisation and subsidiaries only** — a vendor always returns this | Expected for a vendor. Use `vendor-brief` or `remediation-roadmap` instead. |
 | Server won't start | — | Node.js missing/old | Ensure Node.js 18+ is installed. No `npm install` needed. |
 
 ---
@@ -481,7 +553,10 @@ answer is dispositioned as *evidenced*, *partially evidenced*, *not evidenced by
 - How do we compare to our sector? → **`peer-index`**
 - Should we sign with this vendor? → **`vendor-brief`**
 - What do we fix, in what order? → **`remediation-roadmap`**
+- What does Bitsight itself say to fix first? → **`remediation-plan`**
 - Who's exposed to this CVE? → **`cve-sweep`**
+- Who has answered on this CVE, and who hasn't? → **`threat-attestation`**
+- Are our (or our vendors') credentials in a leak? → **`credential-exposure`**
 - Evidence for an auditor or a framework → **`regmap`**
 - Answers for a customer's questionnaire → **`assurance-pack`**
 - What's it worth in money? → **`quantify`**
@@ -502,6 +577,11 @@ anything it puts in *act now*. `boardpack` → `peer-index`, because "how do we 
 first question. `tabletop` → `incident-notify`, so the notification drafts exist before the real
 incident rather than being improvised during it. `assurance-pack` → `remediation-roadmap` for whatever
 the customer's questionnaire exposed.
+
+**Chains through the 0.8.0 skills.** `cve-sweep` → `threat-attestation` → chase notes, so a sweep ends
+in follow-up rather than a list. `remediation-roadmap` → `remediation-plan` for Bitsight's own item
+order on the vectors it plans. `watchtower` → `credential-exposure` with the last digest's date, then
+`incident-notify` if any leaked account was used against you.
 
 ---
 

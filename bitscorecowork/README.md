@@ -1,4 +1,4 @@
-# BitScoreCoWork — v0.7.0
+# BitScoreCoWork — v0.8.0
 
 An asset by **BitScore Cybertech LLP** — [bitscore.in](https://bitscore.in), an authorised
 [Bitsight](https://www.bitsight.com/) partner.
@@ -9,8 +9,9 @@ without leaving Claude.
 
 Built for BitScore's enterprise customers who are Bitsight subscribers: quick rating lookups for
 your own organization, portfolio-wide vendor/third-party monitoring, recurring change digests,
-footprint validation and attribution disputes, vendor due-diligence briefs, remediation roadmaps,
-CVE exposure sweeps, framework evidence packs, customer questionnaire responses, sector benchmarking,
+footprint validation and attribution disputes, vendor due-diligence briefs, remediation roadmaps
+and Bitsight's own remediation plans, CVE exposure sweeps and vendor attestation tracking, exposed-credential
+triage, framework evidence packs, customer questionnaire responses, sector benchmarking,
 indicative financial exposure estimates, board briefings, board-level crisis simulations, the
 time-bound regulatory notifications an incident triggers in India, the US and the EU, and VAPT/BAS *planning* artifacts
 your licensed testers execute manually.
@@ -32,11 +33,14 @@ Security Ratings REST API (`https://api.bitsighttech.com/ratings`) as read-only 
 | `bitsight_get_assets` | Internet-facing assets (domains, IP ranges) with importance |
 | `bitsight_get_portfolio` | List/filter monitored companies (paginated) |
 | `bitsight_get_alerts` | Recent rating changes and risk events |
-| `bitsight_get_rating_change_insights` | What drove a significant rating change |
+| `bitsight_get_rating_change_insights` | What drove each rating change, rises and drops |
 | `bitsight_get_industry_benchmark` | Industry ratings, or one industry's 1-year history with percentile bands |
 | `bitsight_list_threats` | Bitsight's threat catalog — resolve a CVE to its threat GUID |
 | `bitsight_get_threat_companies` | Which portfolio companies are observably affected by a threat |
 | `bitsight_get_threat_evidence` | The observed assets behind one threat-company pairing |
+| `bitsight_get_threat_attestations` | What companies have stated about a threat: unreviewed, under review, not vulnerable, risk accepted |
+| `bitsight_get_remediation_plan` | Bitsight's Risk Remediation Plan for your organisation: fix order and grade steps |
+| `bitsight_get_exposed_credentials` | Credential leaks tied to portfolio companies (leak metadata and counts, never credentials) |
 
 Everything is **read-only** — nothing here can modify your Bitsight portfolio or run an active scan.
 
@@ -49,7 +53,10 @@ Everything is **read-only** — nothing here can modify your Bitsight portfolio 
 | **boardpack** | "build a board pack on our ratings" | Executive slide deck (+ optional 1-page brief) |
 | **vendor-brief** | "should we onboard this vendor?" | Due-diligence brief, go/no-go call, contract clauses, re-review date |
 | **remediation-roadmap** | "how do we get from 690 to 740?" | Prioritized 30/60/90-day fix plan with owners and effort |
+| **remediation-plan** | "what does Bitsight say we should fix first?" | Bitsight's own fix order and fixes-per-grade-step; CVM grade scenarios at 30/60/90 days |
 | **cve-sweep** | "who's exposed to CVE-XXXX?" | Portfolio exposure list, evidence, triage order, outreach drafts |
+| **threat-attestation** | "which vendors haven't answered on CVE-XXXX?" | Statements set against observed exposure; your review backlog or a vendor chase list |
+| **credential-exposure** | "are our credentials in any breaches?" | Leaks by company, triaged act now / review / background, with actions |
 | **regmap** | "map this to NIST CSF / ISO 27001 / the RBI Directions" | Framework evidence pack — evidenced / partially / not evidenced |
 | **quantify** | "what's our exposure in rupees?" | Indicative financial exposure range with every assumption shown |
 | **vapt-plan** | "build a VAPT / vulnerability-assessment plan" | Findings report + assessment plan (identification only) |
@@ -72,6 +79,36 @@ thresholds), and [`attribution-patterns.md`](reference/attribution-patterns.md) 
 attributed, and what a dispute needs).
 
 ---
+
+## What's new in 0.8.0 — three new skills
+
+**Three Bitsight data sources the plugin didn't read before, each turned into a finished output.**
+All three only read. None records, runs or changes anything in Bitsight.
+
+**`remediation-plan`** reads Bitsight's own **Risk Remediation Plan** for your organisation and its
+subsidiaries. For TLS/SSL certificates and configurations, Web Application Security, DMARC, and
+desktop and mobile software, it gives the fix order and how many fixes each grade step takes
+(*"12 fixes take TLS Certificates from F to D"*). For Critical Vulnerability Management it shows
+the grade Bitsight projects at 30, 60 and 90 days under each remediation scenario, against doing
+nothing. Plans are Bitsight's, run on Bitsight's schedule, and cover your own organisation only.
+The skill attributes every step to Bitsight and never turns a grade step into rating points.
+
+**`credential-exposure`** reads Bitsight's exposed-credentials data across the portfolio: which
+breach or dump, when it leaked, when Bitsight added it, which data types, and how many records per
+company. It sorts leaks into *act now* (recent, with passwords or other authentication data),
+*review* (recent, identity data only) and *background* (old dumps). It gives actions for your
+organisation and questions to put to vendors, and flags when evidence of **use** may make it a
+reportable incident under CERT-In, handing off to `incident-notify`. No credential is ever returned
+or requested.
+
+**`threat-attestation`** reads companies' statements about threats (*unreviewed*, *under review*,
+*not vulnerable*, *risk accepted*) and sets them against what Bitsight observes. For your organisation
+that gives the review backlog, ordered by severity and live exposure. For a CVE across vendors, it
+sorts every exposed company into *no statement*, *in review*, *says not vulnerable but still observed*,
+and *risk accepted*, and drafts the chase notes. It is the step after `cve-sweep`.
+
+**Three new tools** back them: `bitsight_get_remediation_plan`, `bitsight_get_exposed_credentials`
+and `bitsight_get_threat_attestations`.
 
 ## What's new in 0.7.0 — US and EU
 
@@ -379,7 +416,10 @@ Skills, tools and the taxonomy are otherwise unchanged from 0.4.0.
 
 ---
 
-## The sixteen skills
+## The nineteen skills
+
+**Three skills arrived in 0.8.0, taking the plugin from sixteen to nineteen:** `remediation-plan`,
+`credential-exposure` and `threat-attestation`, described under [What's new in 0.8.0](#whats-new-in-080--three-new-skills).
 
 **Six skills arrived in 0.4.0, taking the plugin from ten to sixteen.** The first ten all answer some
 version of *"what does Bitsight say?"*. These six answer questions the platform raises but doesn't

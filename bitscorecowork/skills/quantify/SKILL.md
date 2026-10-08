@@ -10,7 +10,7 @@ description: >
 model: opus
 effort: high
 metadata:
-  version: "0.7.0"
+  version: "0.8.0"
 ---
 
 # quantify — indicative financial exposure from Bitsight posture

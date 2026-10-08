@@ -4,18 +4,18 @@ A Claude Cowork plugin for **Bitsight Security Ratings**, by
 **BitScore Cybertech LLP** — [bitscore.in](https://bitscore.in), an authorised [Bitsight](https://www.bitsight.com/)
 partner.
 
-**Latest release: [v0.7.0](https://github.com/nimitt-IN/bitscorecowork/releases/tag/v0.7.0)** —
-sixteen skills and 15 tools (all read-only against Bitsight), verified against the live Bitsight API. 0.7.0 takes
-`incident-notify` and `regmap` **beyond India**: SEC, NYDFS, the US bank rule, HIPAA and the FTC in the
-US; NIS2, DORA, GDPR and the Cyber Resilience Act in the EU. It also ships the Opus 5.5 optimisations
-(keychain token, compact output, server-side retry).
+**Latest release: [v0.8.0](https://github.com/nimitt-IN/bitscorecowork/releases/tag/v0.8.0)** —
+nineteen skills and 18 tools (all read-only against Bitsight), verified against the live Bitsight API. 0.8.0 adds
+three skills on Bitsight data the plugin didn't read before: **`remediation-plan`** (Bitsight's own
+fix order, grade by grade), **`credential-exposure`** (leaked credentials across the portfolio, triaged)
+and **`threat-attestation`** (who has said what about a CVE, set against the observed exposure).
 [All releases →](https://github.com/nimitt-IN/bitscorecowork/releases)
 
 Pull and analyze Bitsight Security Ratings from inside Claude, then turn them into executive-ready
 reporting, vendor decisions, remediation plans, audit evidence, footprint validation, regulatory
 incident notifications, crisis simulations, and scoped, authorization-gated security-testing plans.
-It ships a zero-dependency MCP server (Node.js 18+) wrapping the Bitsight REST API as 15 read-only
-tools, plus sixteen skills:
+It ships a zero-dependency MCP server (Node.js 18+) wrapping the Bitsight REST API as 18 read-only
+tools, plus nineteen skills:
 
 | Skill | What it produces |
 | --- | --- |
@@ -26,7 +26,10 @@ tools, plus sixteen skills:
 | `peer-index` | Sector position by industry percentile and peer cohort, vector by vector |
 | `vendor-brief` | Due-diligence brief with a go / no-go recommendation |
 | `remediation-roadmap` | Prioritized 30/60/90-day fix plan |
+| `remediation-plan` | Bitsight's own fix order and grade steps for your organisation (CVM: 30/60/90-day grade scenarios) |
 | `cve-sweep` | Portfolio exposure to a named CVE, with evidence |
+| `threat-attestation` | Who has stated what about a threat, against observed exposure — your backlog or a vendor chase list |
+| `credential-exposure` | Leaked credentials across the portfolio, triaged into act now / review / background |
 | `regmap` | NIST CSF 2.0 / ISO 27001 / Indian, US and EU regime evidence pack — incl. the RBI Directions 2026, NIS2, DORA, NYDFS and SEC Item 106 |
 | `assurance-pack` | Answers to an inbound customer security questionnaire or RFP section |
 | `quantify` | Indicative financial exposure range (**not** Bitsight FQ) |
@@ -83,6 +86,19 @@ entity to the 2023 IT Governance Master Direction — there are in fact **seven 
 one per entity class — and still cite the IRDAI 2023 Guidelines, replaced in April 2026.
 
 ## Current release
+
+**v0.8.0** — 19 skills, 18 tools (all read-only against Bitsight), seven bundled references.
+
+**Three new skills, new in 0.8.0.** `remediation-plan` reads Bitsight's Risk Remediation Plan for your
+own organisation: which findings to fix first on seven vectors, and how many fixes each grade step
+takes (for Critical Vulnerability Management, the grade Bitsight projects at 30, 60 and 90 days).
+`credential-exposure` reads Bitsight's leak data across the portfolio and sorts it by date and data
+type, and flags when leaked accounts may have become a reportable incident. `threat-attestation`
+lines up companies' statements about a CVE with what Bitsight observes, so a sweep ends in a chase
+list. All three only read; none records, runs or changes anything. Details in
+[`bitscorecowork/README.md`](bitscorecowork/README.md#whats-new-in-080--three-new-skills).
+
+### Carried from 0.7.0
 
 **v0.7.0** — 16 skills, 15 tools (all read-only against Bitsight), seven bundled references.
 
@@ -237,7 +253,7 @@ recently. **Bumping a date without re-reading turns a useful failure into a fals
 worse than deleting the check.
 
 Two further checks run alongside it. `scripts/check-version.mjs` fails when `plugin.json`,
-`server/package.json`, the sixteen skills and the committed bundle's filename do not all state the
+`server/package.json`, every skill and the committed bundle's filename do not all state the
 same version — during the 0.6.0 release `server/package.json` was left behind and caught by a grep
 run for an unrelated reason. And the workflow unpacks the committed bundle and diffs it against
 `bitscorecowork/`, because the bundle is a build output that is committed, and a *content* change

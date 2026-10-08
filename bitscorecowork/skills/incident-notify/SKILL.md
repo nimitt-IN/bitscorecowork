@@ -14,7 +14,7 @@ description: >
 model: opus
 effort: high
 metadata:
-  version: "0.7.0"
+  version: "0.8.0"
 ---
 
 # incident-notify — time-bound regulatory notifications after an incident (India, US, EU)
