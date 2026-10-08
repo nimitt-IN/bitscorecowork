@@ -620,13 +620,18 @@ const EXPOSED_CREDS_ROW_CAP = 10_000;
 
 /**
  * Leak descriptions arrive as HTML. The result is read as plain text, never rendered, but one
- * tag-stripping pass can leave a fragment such as "<script" behind, so drop every angle bracket
- * that survives it as well.
+ * tag-stripping pass can leave a fragment such as "<script" behind. So strip until nothing
+ * changes, then drop any angle bracket that is left.
  */
 function stripHtml(s) {
-  return typeof s === "string"
-    ? s.replace(/<[^>]*>/g, "").replace(/[<>]/g, "").replace(/\s+/g, " ").trim()
-    : s;
+  if (typeof s !== "string") return s;
+  let out = s;
+  let previous;
+  do {
+    previous = out;
+    out = out.replace(/<[^<>]*>/g, "");
+  } while (out !== previous);
+  return out.replace(/[<>]/g, "").replace(/\s+/g, " ").trim();
 }
 
 /** Follow `offset` paging to the end (or the cap). Returns { rows, count, complete }. */
