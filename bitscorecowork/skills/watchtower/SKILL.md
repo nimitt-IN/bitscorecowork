@@ -64,9 +64,9 @@ its band is not news. Treat it as such, and say so.
      response says `fetched_all: false`, say the digest covers only part of the portfolio.
    - `bitsight_get_alerts` over the window — the direct signal for what Bitsight itself flagged.
      **Fetch unfiltered and group by the `severity` field you actually get back.** The severity
-     vocabulary varies by `alert_type` and is not fixed: verified live on 4 August 2026, this endpoint
-     returned `CRITICAL` and `INCREASE` on `RATING_THRESHOLD` alerts, while `MATERIAL`, `DANGER`,
-     `WARN` and `INFO` each matched nothing. An unmatched severity filter returns an **empty set, not
+     vocabulary varies by `alert_type` and by portfolio, and is not fixed: on `RATING_THRESHOLD`
+     alerts this endpoint returned `CRITICAL` and `INCREASE` on 4 August 2026, and `WARN` as well on
+     8 October 2026. An unmatched severity filter returns an **empty set, not
      an error** — so a filtered pull is indistinguishable from a quiet week, which is exactly the
      failure this skill must not produce. Read `alert_type` and `trigger` alongside severity; a
      threshold crossing tells you more than the label does.
