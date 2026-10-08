@@ -69,7 +69,7 @@ Evidence about configuration and maintenance of internet-facing systems.
 | Server Software | Versions and support status of observed server software | ID.AM, PR.PS | A.8.8, A.8.9 | Sectoral asset & patch-management expectations |
 | Desktop / Mobile Software | Versions and support status of observed endpoint software | ID.AM, PR.PS | A.8.8 | Sectoral endpoint-management expectations |
 | DNSSEC | Whether DNS responses are cryptographically validated | PR.DS, PR.IR | A.8.20, A.8.21 | Sectoral network-integrity expectations |
-| Domain Squatting | Look-alike domains registered against the organization's brand | ID.RA, DE.CM | A.5.7 | Sectoral fraud/brand-abuse monitoring expectations |
+| Domain Squatting (Bitsight module; does not affect the rating) | Look-alike domains registered against the organization's brand | ID.RA, DE.CM | A.5.7 | Sectoral fraud/brand-abuse monitoring expectations |
 
 **Care point:** Diligence vectors are where remediation is most visible and where a rating moves most
 readily — which makes them the easiest place to improve a number without materially improving risk.
@@ -204,7 +204,7 @@ Systems Audit · VIII Repeal and Other Provisions.
 | Botnet Infections · Malware Servers · Potentially Exploited · Spam Propagation · Unsolicited Communications | VI | Continuous surveillance; detection capability of the Cyber Security Operations Centre | The CSOC's own design, staffing, SIEM coverage and L1/L2/L3 escalation |
 | Exposed Credentials | V | Multi-factor authentication and credential protection; customer and staff awareness | Whether MFA is enforced on privileged and critical systems — internal only |
 | Security Incidents (public disclosure) | V | Cyber incident response and recovery; reporting of incidents | Whether an incident was reported to DAKSH within six hours of detection, or notified to CERT-In |
-| Domain Squatting | V, VI | Brand-abuse and phishing monitoring; customer education on phishing | Take-down action actually taken |
+| Domain Squatting (Bitsight module; does not affect the rating) | V, VI | Brand-abuse and phishing monitoring; customer education on phishing | Take-down action actually taken |
 
 ### Portfolio and vendor activity → RBI 2026 obligation area
 
@@ -309,7 +309,7 @@ what Bitsight actually observes:
 | Botnet Infections · Malware Servers · Potentially Exploited · Spam Propagation · Unsolicited Communications | II | Ability to anticipate, withstand, contain and recover from cyber-attacks — detection outcomes | The detection capability itself, and the incident-response process |
 | Exposed Credentials | II, IV | Credential protection; employee awareness and reporting channels | Whether MFA is enforced, and whether training happened |
 | Security Incidents (public disclosure) | II, and the para 19–20 clocks | Incident response and the reporting obligation | Whether the RE actually filed within six hours of detection |
-| Domain Squatting | II, IV | Brand-abuse monitoring; customer and employee phishing awareness | Take-down action taken |
+| Domain Squatting (Bitsight module; does not affect the rating) | II, IV | Brand-abuse monitoring; customer and employee phishing awareness | Take-down action taken |
 
 ### Portfolio and vendor activity → IFSCA obligation area
 
