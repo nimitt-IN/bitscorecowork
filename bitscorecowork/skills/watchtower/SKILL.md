@@ -8,7 +8,7 @@ description: >
   or wants the delta since a previous run (as opposed to a full portfolio pull,
   which is `myportfolio`).
 metadata:
-  version: "0.7.0"
+  version: "0.8.0"
 ---
 
 # watchtower — what changed in the portfolio since last time
@@ -48,6 +48,10 @@ its band is not news. Treat it as such, and say so.
    - **If there is none, say so plainly and run a baseline pass instead.** Report current state, write
      the snapshot, and tell the user the next run will show movement. **Never present a first run as
      though nothing changed** — no baseline means no delta, not a quiet week.
+   - **Keep a first run cheap.** Don't reconstruct the week by calling
+     `bitsight_get_rating_change_insights` for every company; on a large portfolio that is hundreds of
+     calls. Call it only for the critical companies (step 3) and for any company with an alert in the
+     window, and say the rest were not checked for movement.
    - If the baseline is old, say how old. A "weekly" digest against a six-week-old snapshot is a
      six-week digest, and the reader should know that.
 
@@ -60,8 +64,9 @@ its band is not news. Treat it as such, and say so.
 
 4. **Pull the current state.**
    - `bitsight_get_portfolio` with **`fetch_all: true`**, for every company's current rating, tier and
-     rating date. This is the delta's raw material and a partial page is a wrong digest — if the
-     response says `fetched_all: false`, say the digest covers only part of the portfolio.
+     rating date. This is the delta's raw material and a partial page is a wrong digest: while
+     `next_offset` is not null, call again with `fetch_all: true` and that `offset`, and build the
+     snapshot only once you hold every company.
    - `bitsight_get_alerts` over the window — the direct signal for what Bitsight itself flagged.
      **Fetch unfiltered and group by the `severity` field you actually get back.** The severity
      vocabulary varies by `alert_type` and by portfolio, and is not fixed: on `RATING_THRESHOLD`
@@ -119,7 +124,8 @@ its band is not news. Treat it as such, and say so.
    table to work through. Save to the user's working folder and present it.
 
 9. **Offer next steps:** `vendor-brief` on anything in *act now* that needs a decision,
-   `cve-sweep` if an alert points at a named vulnerability, or `boardpack` if the quarter's digests
+   `cve-sweep` if an alert points at a named vulnerability, `credential-exposure` with the last
+   digest's date for leaks added since, or `boardpack` if the quarter's digests
    add up to something leadership should see. If the user wants this to run on a cadence, the
    `schedule` skill sets it up — weekly is the usual right answer.
 
@@ -144,7 +150,7 @@ its band is not news. Treat it as such, and say so.
 ## Error handling
 
 Follow the shared table in the global rules: 401 → re-prompt and stop; **403 → the token is valid but the endpoint isn't in this subscription: carry on without it and name the gap** (never re-prompt for a token); 404 → re-confirm the
-GUID; 429 → the server has already retried with backoff, and `fetch_all` pages the portfolio in one
-call; if a 429 still surfaces, say the digest is incomplete rather than truncating; empty result → if the portfolio pull
+GUID; 429 → the server has already retried with backoff, and `fetch_all` pages the portfolio
+server-side; if a 429 still surfaces, say the digest is incomplete rather than truncating; empty result → if the portfolio pull
 returns nothing, say the pull failed and **do not report an empty portfolio as a quiet week**. A digest
 that reports calm because the data didn't arrive is the worst output this skill can produce.

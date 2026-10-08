@@ -7,7 +7,7 @@ description: >
   at 690, how do we get to 740", "what should we fix first", "rating improvement
   plan", or wants findings turned into a prioritized, ownable work plan.
 metadata:
-  version: "0.7.0"
+  version: "0.8.0"
 ---
 
 # remediation-roadmap — a sequenced plan to improve a rating
@@ -113,7 +113,8 @@ honest one isn't available, and give them the sequence and the reasoning instead
    tracked as a work plan, `.docx` via the `docx` skill if it's a document for sign-off. Save it and
    present it.
 
-8. **Offer next steps:** `boardpack` if the roadmap needs leadership sign-off or funding, `vapt-plan`
+8. **Offer next steps:** `remediation-plan` for Bitsight's own fix order on the vectors it plans
+   (TLS, web app security, CVM, DMARC, desktop and mobile software; own organisation only), `boardpack` if the roadmap needs leadership sign-off or funding, `vapt-plan`
    if the user wants the findings validated by testers before committing effort, or `regmap` if the
    remediation needs to be evidenced against a framework.
 

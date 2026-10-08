@@ -156,6 +156,14 @@ it. **Mobile Software** (`mobile_software`) is a different vector and is still g
 `risk_vector_slug` and `risk_vector_name` the server adds to each reason, never the raw id. The tool
 returns rises and drops alike unless asked otherwise.
 
+**Paging: follow `next_offset`, always.** List tools return compact rows sized to fit in the
+conversation, and say where the next page starts. `bitsight_get_findings` returns at most 30 per page,
+`bitsight_get_assets` 50, and `bitsight_get_portfolio` with `fetch_all: true` 300 companies per call.
+Keep calling with `offset: next_offset` until it is null; never step the offset by your own `limit`,
+because the server may have applied a smaller one. Findings come back with long text trimmed (marked
+`…` or `(+N more)`); pass `full_detail: true` (at most 5 per page) when one finding's raw
+evidence matters.
+
 **Filter severity with `min_severity`, always.** It takes a Bitsight severity **category**, and
 the server sends it as Bitsight's own `severity_category` filter, so the findings returned match
 the `bitsight_get_findings_summary` counts exactly. Never pass a numeric threshold. The category
@@ -199,13 +207,19 @@ Bitsight gates endpoints by subscription. A token that works perfectly for `/v2/
 `/v2/threats` may still return **403** on `findings/summaries`, `assets`, or `insights`. This is
 observed behaviour on real subscriptions, not an edge case.
 
+**A 403 is often about one company, not the whole account.** Entitlement follows each company's
+subscription type in the portfolio, so the same endpoint can answer for nine vendors and refuse the
+tenth. Name the gap at the level it occurred — *"finding summaries aren't available for PanAmerican
+Trust Group"* — and only say a source is missing from the subscription when it failed for every
+company you asked about.
+
 Treating that as an authentication failure is a bug: it sends the user off to rotate a credential
 that was never the problem, and abandons a workflow that could have completed. So when a single
 call 403s:
 
 1. **Keep going.** Complete every part of the skill that doesn't depend on that call.
-2. **Say what's missing and why**, once, in plain language — *"finding summaries aren't included in
-   this Bitsight subscription, so severity is counted from the individual findings instead"* — not
+2. **Say what's missing and why**, once, in plain language — *"finding summaries aren't available for
+   this company, so severity is counted from the individual findings instead"* — not
    as an error dump.
 3. **Substitute where an honest substitute exists.** `bitsight_get_findings` can be aggregated when
    `bitsight_get_findings_summary` is unavailable; company details carry rating history when
@@ -267,7 +281,9 @@ specific duty on the user's behalf:
   within **6 hours** of noticing them, and to retain logs. Fast-moving, material risk changes may
   need faster internal escalation.
 - **DPDP Act, 2023** — if outputs touch personal data of data principals, handle it under the
-  Digital Personal Data Protection Act (purpose limitation, minimisation, breach notification).
+  Digital Personal Data Protection Act (purpose limitation, minimisation). Its **breach duties
+  (section 8 and Rule 7) do not commence until 13 May 2027**: never say a DPDP breach notification
+  or penalty applies to an incident today. Mention it only as something to plan for.
 - Sectoral third-party/vendor-risk regimes may also apply (e.g. **RBI** outsourcing/IT norms,
   **SEBI** cybersecurity framework, **IRDAI** guidelines). The RBI Cybersecurity, Technology: Risk,
   Resilience and Assurance Framework Directions, 2026 — all issued 31 July 2026, in force immediately
@@ -415,6 +431,10 @@ so a reader can't tell which is which.
   out on their own schedule. Never promise that a given remediation yields a given number of points,
   or that a target score will be reached by a given date. Express expected impact as direction and
   relative magnitude, and say what that judgement rests on.
+- **Bitsight's own projections are Bitsight's, and narrow.** `remediation-plan` reads Bitsight's Risk
+  Remediation Plan, whose grade steps ("Fix to obtain C") and CVM scenario scores are Bitsight's model of
+  **one vector's grade**. Attribute them to Bitsight with the plan date, keep them apart from our own
+  modelled figures, and never convert them into overall-rating points or a date for reaching a score.
 - **Not advice.** Modelled financial output is not investment, insurance, or actuarial advice; point
   the user to their broker, actuary or insurer where decisions turn on it.
 
@@ -439,6 +459,9 @@ so a reader can't tell which is which.
 | `bitsight_list_threats` | Bitsight's catalog of threats (CVEs and vulnerability groups); resolve a CVE to its threat GUID. `GET /ratings/v2/threats`. |
 | `bitsight_get_threat_companies` | Portfolio companies observably affected by a given threat. `GET /ratings/v2/threats/{threat_guid}/companies`. |
 | `bitsight_get_threat_evidence` | The observed assets/evidence behind one threat-company pairing. `GET /ratings/v2/threats/{threat_guid}/companies/{company_guid}/evidence`. |
+| `bitsight_get_remediation_plan` | Bitsight's own Risk Remediation Plan: fix order and grade steps (or CVM scenarios) for seven vectors; own organisation and subsidiaries only. `GET /ratings/v1/companies/{guid}/risk-remediation-plan/`. |
+| `bitsight_get_exposed_credentials` | Credential leaks tied to portfolio companies: leak, dates, data types, record counts; never credential values. `GET /ratings/v1/exposed-credentials/*`. |
+| `bitsight_get_threat_attestations` | Companies' statements about threats (Unreviewed, Under review, Not vulnerable, Risk accepted). `GET /ratings/v1/threats/attestations/`. |
 
 All tools are **read-only** — nothing in this plugin can modify a Bitsight portfolio, tiers, or
 subscriptions, and nothing performs an active scan.

@@ -7,7 +7,7 @@ description: >
   security rating", "portfolio-wide security ratings", or wants ratings across a
   whole monitored portfolio rather than a single company.
 metadata:
-  version: "0.7.0"
+  version: "0.8.0"
 ---
 
 # MyPortfolio — ratings across a managed portfolio
@@ -38,9 +38,10 @@ handling, no discrimination, India context).
      risky; summarize the rest briefly.
    - **Comparative Stack Ranking** — all companies ranked best→worst by rating, banded by color.
 
-5. **Pull the whole portfolio in one call.** Call `bitsight_get_portfolio` with `fetch_all: true`;
-   the server pages through every result itself. If the response says `fetched_all: false`, the
-   safety cap was reached — say the list is incomplete. Apply the user's prioritization filter (`rating_lt`, `industry_slug`, `tier`) where it
+5. **Pull the whole portfolio.** Call `bitsight_get_portfolio` with `fetch_all: true`; the server
+   pages through Bitsight itself and returns compact rows (`columns` names each field). A large
+   portfolio comes back in chunks: while `next_offset` is not null, call again with `fetch_all: true`
+   and that `offset`. Only report once you hold every company. Apply the user's prioritization filter (`rating_lt`, `industry_slug`, `tier`) where it
    maps cleanly to an API filter; otherwise pull all and filter in your summary. If the user gave a
    specific risk threshold, use it; otherwise use `rating_lt: 640` (the Basic/Intermediate boundary)
    as the default "high-risk" cut.

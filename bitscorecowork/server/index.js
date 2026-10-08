@@ -4,8 +4,9 @@
  *
  * Wraps the Bitsight Security Ratings REST API (https://api.bitsighttech.com/ratings)
  * as MCP tools so Claude can look up company ratings, findings, portfolio data,
- * attack-surface assets, alerts, rating-change insights, industry benchmarks, and
- * threat (CVE) exposure across the portfolio.
+ * attack-surface assets, alerts, rating-change insights, industry benchmarks,
+ * threat (CVE) exposure and attestations across the portfolio, exposed credentials,
+ * and Bitsight's own risk remediation plans.
  *
  * Every tool is read-only: this server issues GET requests only and cannot modify
  * a Bitsight portfolio, and nothing here performs an active scan.
@@ -171,6 +172,12 @@ function pathSegment(value, name) {
     );
   }
   return encodeURIComponent(value);
+}
+
+/** The same check for an identifier sent as a query parameter, returned as given. */
+function checkedId(value, name) {
+  pathSegment(value, name);
+  return value;
 }
 
 /**
@@ -505,6 +512,292 @@ function threatNameMatches(name, q) {
   return new RegExp(`(^|[^A-Za-z0-9-])${needle}(?![A-Za-z0-9])`, "i").test(name);
 }
 
+// ---- Risk Remediation Plans ---------------------------------------------
+//
+// Bitsight's Risk Remediation Plan API (added 31 August 2026) orders a company's
+// findings by the grade each fix unlocks. Plans are run on a schedule, so the
+// latest completed one can be read without creating anything. Verified on
+// 8 October 2026: plans exist for seven vectors only, and only for companies in
+// the SPM portfolio (own organisation and subsidiaries); a vendor answers 403. Any other risk_vector,
+// a bogus one included, returns 200 with count 0, so the list is enforced here.
+// `patching_cadence_cvm` answers 404 "no longer supported".
+
+const RRP_VECTORS = {
+  ssl_certificates: "ssl_certificates",
+  ssl_configurations: "ssl_configurations",
+  web_appsec: "web_appsec",
+  [CVM]: CVM_LEGACY,
+  dmarc: "dmarc",
+  desktop_software: "desktop_software",
+  mobile_software: "mobile_software",
+};
+
+/** Canonical risk-vector name for an RRP request, or throw with the supported list. */
+function rrpVector(riskVector) {
+  const raw = String(riskVector ?? "").trim().toLowerCase();
+  const [wire] = riskVectorWireCandidates(raw);
+  const canonical = wire === CVM_LEGACY ? CVM : wire;
+  if (!canonical || !(canonical in RRP_VECTORS)) {
+    throw new Error(
+      `Bitsight produces remediation plans only for: ${Object.keys(RRP_VECTORS).join(", ")}. "${riskVector}" has none. Use bitsight_get_findings for other vectors.`
+    );
+  }
+  return canonical;
+}
+
+/** "D (Fix to obtain B)" -> { from: "D", to: "B", maintain: false } */
+function parseGradeStep(label) {
+  const m = /^([A-F])\s*\((Fix|Maintain) to (?:obtain|keep) ([A-F])\)/i.exec(String(label ?? ""));
+  if (!m) return { from: null, to: null, maintain: false };
+  return { from: m[1], to: m[3], maintain: m[2].toLowerCase() === "maintain" };
+}
+
+/** Item-style plans: consecutive runs of the same grade step, in plan order. */
+function summariseGradeSteps(items) {
+  const steps = [];
+  for (const it of items) {
+    const last = steps.at(-1);
+    if (last && last.grade_improvement === it.grade_improvement) {
+      last.items += 1;
+      last.last_order = it.order;
+    } else {
+      const g = parseGradeStep(it.grade_improvement);
+      steps.push({
+        grade_improvement: it.grade_improvement,
+        from_grade: g.from,
+        to_grade: g.to,
+        kind: g.maintain ? "maintain" : "fix",
+        items: 1,
+        first_order: it.order,
+        last_order: it.order,
+      });
+    }
+  }
+  let cumulative = 0;
+  for (const s of steps) {
+    if (s.kind === "fix") cumulative += s.items;
+    s.cumulative_fixes = s.kind === "fix" ? cumulative : null;
+  }
+  return steps;
+}
+
+const round = (n, dp = 0) => (typeof n === "number" && Number.isFinite(n) ? Number(n.toFixed(dp)) : n);
+
+/** CVM plans are scenario projections, not an item list; keep what a reader can use. */
+function summariseCvmPlan(body, limit, offset) {
+  const scenarios = (Array.isArray(body.plan) ? body.plan : []).map((s) => ({
+    scenario_id: s?.findings_subset?.scenario_id,
+    findings_remediated: s?.findings_count,
+    projection: (Array.isArray(s?.grade) ? s.grade : []).map((g) => ({
+      days: g.days,
+      grade: g.letter,
+      score: round(g.score),
+      percentile: round(g.percentile, 1),
+    })),
+  }));
+  const results = Array.isArray(body.results) ? body.results : [];
+  return {
+    shape: "scenarios",
+    date: body.date,
+    total_unremediated_findings: body.total_unremediated_findings,
+    total_remediated_findings: body.total_remediated_findings,
+    scenarios,
+    findings_total: results.length,
+    findings: results.slice(offset, offset + limit).map(({ rolledup_observation_id, bucket, ...rest }) => rest),
+    next_offset: offset + limit < results.length ? offset + limit : null,
+  };
+}
+
+// ---- Exposed credentials ------------------------------------------------
+//
+// /v1/exposed-credentials/affected-companies has one row per company and leak,
+// and IGNORES a company filter: company_guid=<x> returned all 952 rows on
+// 8 October 2026. So the per-company view is built here from a full pass.
+// Page size is capped at 100 by the API (422 above it). No credential values
+// are ever returned by these endpoints, only leak metadata and counts.
+
+const EXPOSED_CREDS_ROW_CAP = 10_000;
+
+/**
+ * Leak descriptions arrive as HTML. The result is read as plain text, never rendered, but one
+ * tag-stripping pass can leave a fragment such as "<script" behind. So strip until nothing
+ * changes, then drop any angle bracket that is left.
+ */
+function stripHtml(s) {
+  if (typeof s !== "string") return s;
+  let out = s;
+  let previous;
+  do {
+    previous = out;
+    out = out.replace(/<[^<>]*>/g, "");
+  } while (out !== previous);
+  return out.replace(/[<>]/g, "").replace(/\s+/g, " ").trim();
+}
+
+/** Follow `offset` paging to the end (or the cap). Returns { rows, count, complete }. */
+async function fetchAllPages(path, params, cap) {
+  const rows = [];
+  let count = null;
+  for (let offset = 0; rows.length < cap; ) {
+    const page = await bitsightGet(path, { ...params, limit: 100, offset });
+    const batch = Array.isArray(page?.results) ? page.results : [];
+    count ??= page?.count ?? null;
+    rows.push(...batch);
+    offset += batch.length;
+    if (batch.length === 0 || !page?.links?.next) break;
+  }
+  return { rows: rows.slice(0, cap), count, complete: count === null || rows.length >= count };
+}
+
+// ---- Threat attestations ------------------------------------------------
+//
+// A company's own statement about a threat: UNREVIEWED, UNDER_REVIEW,
+// NOT_VULNERABLE or RISK_ACCEPTED, public or private. An unknown slug returns
+// 200 with count 0 (verified 8 October 2026), so the values are enforced.
+
+const ATTESTATION_SLUGS = ["UNREVIEWED", "UNDER_REVIEW", "NOT_VULNERABLE", "RISK_ACCEPTED"];
+const ATTESTATION_ROW_CAP = 2_000;
+
+// ---- Keeping results inside the client's limit ---------------------------
+//
+// Claude clients refuse a tool result over about 25,000 tokens (Claude Code's
+// default). Bitsight's objects are heavy: measured on 8 October 2026, a page of
+// 100 findings was 435 KB, two thirds of it in `details` (full CVE help text,
+// HTTP headers, MX records, DH primes), and a page of 100 assets was 256 KB, a
+// third of it in `threats.rolledup_observation_ids`. Both were refused outright.
+// So list tools return a compact projection that keeps what the skills read,
+// and pages are sized to stay well under the limit.
+
+/** Long strings and long arrays are cut, not dropped, so the reader knows there was more. */
+function trimDeep(value, depth = 0) {
+  if (typeof value === "string") return value.length > 200 ? `${value.slice(0, 200)}…` : value;
+  if (Array.isArray(value)) {
+    const kept = value.slice(0, 4).map((v) => trimDeep(v, depth + 1));
+    if (value.length > 4) kept.push(`(+${value.length - 4} more)`);
+    return kept;
+  }
+  if (value && typeof value === "object") {
+    if (depth >= 4) return "(nested detail omitted)";
+    const out = {};
+    for (const [k, v] of Object.entries(value)) out[k] = trimDeep(v, depth + 1);
+    return out;
+  }
+  return value;
+}
+
+// Raw evidence that runs to kilobytes and that no skill reads; the rest of `details` is kept,
+// trimmed. Asking for full_detail returns Bitsight's object untouched.
+const FINDING_DETAIL_NOISE = new Set([
+  "finalResponseHeaders", "certchain", "dhPrime", "mxRecords", "sample_records",
+  "sample_user_agent_strings", "annotation_tokens", "annotationToken", "searchable_details", "references",
+  "previouslyObserved",
+]);
+
+function stripNoise(value) {
+  if (Array.isArray(value)) return value.map(stripNoise);
+  if (value && typeof value === "object") {
+    const out = {};
+    for (const [k, v] of Object.entries(value)) if (!FINDING_DETAIL_NOISE.has(k)) out[k] = stripNoise(v);
+    return out;
+  }
+  return value;
+}
+
+/**
+ * Bitsight repeats the same help text and remediation tip on every finding of a kind, and on a
+ * page of TLS or CVE findings that repetition was half the payload. Each finding keeps only its
+ * remediation messages; the text for each message is written once into `guide`.
+ */
+function hoistRemediations(details, guide) {
+  if (!details || !Array.isArray(details.remediations)) return details;
+  const messages = [];
+  for (const r of details.remediations) {
+    const message = typeof r?.message === "string" ? r.message : null;
+    if (!message) continue;
+    messages.push(message);
+    if (!(message in guide)) {
+      guide[message] = trimDeep({ help_text: r.help_text, remediation_tip: r.remediation_tip });
+    }
+  }
+  const { remediations, ...rest } = details;
+  return { ...rest, remediation_messages: messages };
+}
+
+function compactFinding(f, guide = {}) {
+  if (!f || typeof f !== "object") return f;
+  const out = {
+    risk_vector: f.risk_vector,
+    risk_vector_label: f.risk_vector_label,
+    severity: f.severity,
+    severity_category: f.severity_category,
+    affects_rating: f.affects_rating,
+    evidence_key: f.evidence_key,
+    first_seen: f.first_seen,
+    last_seen: f.last_seen,
+    duration: f.duration,
+    remaining_decay: f.remaining_decay,
+    remediated: f.remediated,
+    assets: Array.isArray(f.assets)
+      ? f.assets.slice(0, 5).map((a) => ({ asset: a.asset, importance: a.category, is_ip: a.is_ip, country_code: a.country_code }))
+      : f.assets,
+    details: trimDeep(stripNoise(hoistRemediations(f.details ?? {}, guide))),
+  };
+  if (Array.isArray(f.assets) && f.assets.length > 5) out.assets_total = f.assets.length;
+  if (Array.isArray(f.attributed_companies)) out.attributed_companies = f.attributed_companies.slice(0, 12);
+  if (Array.isArray(f.threat_groups) && f.threat_groups.length) out.threat_groups = trimDeep(f.threat_groups);
+  if (Array.isArray(f.related_findings) && f.related_findings.length) out.related_findings_count = f.related_findings.length;
+  for (const k of ["legacy_risk_vector", "informational_vector", "tags"]) if (f[k] !== undefined && f[k] !== null) out[k] = f[k];
+  return out;
+}
+
+function compactAsset(a) {
+  if (!a || typeof a !== "object") return a;
+  const out = {
+    asset: a.asset,
+    asset_type: a.asset_type,
+    is_ip: a.is_ip,
+    importance: a.importance,
+    importance_category: a.importance_category,
+    importance_override: a.combined_overrides?.importance ?? null,
+    country_code: a.country_code,
+    hosted_by: a.hosted_by ? { guid: a.hosted_by.guid, name: a.hosted_by.name } : null,
+    origin_subsidiary: a.origin_subsidiary ? { guid: a.origin_subsidiary.guid, name: a.origin_subsidiary.name } : null,
+    findings: a.findings,
+    threats_count: Array.isArray(a.threats?.rolledup_observation_ids) ? a.threats.rolledup_observation_ids.length : 0,
+    services: trimDeep(a.services ?? []),
+    products: Array.isArray(a.products)
+      ? a.products.slice(0, 8).map((p) => ({ product: p.product, vendor: p.vendor, version: p.version, support: p.support }))
+      : a.products,
+    tags: a.tags,
+  };
+  if (Array.isArray(a.ip_addresses) && a.ip_addresses.length && !a.is_ip) out.ip_addresses = trimDeep(a.ip_addresses);
+  if (Array.isArray(a.products) && a.products.length > 8) out.products_total = a.products.length;
+  return out;
+}
+
+/** Above this a page is cut back from the end, whatever its row count. */
+const MAX_PAGE_CHARS = 80_000;
+
+/**
+ * Drop rows from the end until the page fits, so an unusually heavy page never reaches the
+ * client's limit. The caller resumes from the returned offset, so no row is skipped.
+ */
+function fitPage(rows, build) {
+  let kept = rows.length;
+  let body = build(rows);
+  while (kept > 1 && JSON.stringify(body).length > MAX_PAGE_CHARS) {
+    kept = Math.max(1, Math.floor(kept * 0.75));
+    body = build(rows.slice(0, kept));
+  }
+  return { body, kept };
+}
+
+/** The offset to ask for next, or null when this page reached the end. */
+function nextOffset(offset, returned, count) {
+  const next = (offset ?? 0) + returned;
+  return returned > 0 && typeof count === "number" && next < count ? next : null;
+}
+
 // ---- Tool definitions -------------------------------------------------
 
 /**
@@ -513,8 +806,11 @@ function threatNameMatches(name, q) {
  * moves under it). Clients use these to decide what needs confirmation and what can safely run
  * side by side. They are hints, not guarantees — the GET-only code below is the guarantee.
  */
-/** Upper bound for fetch_all — fifty pages. Past this a single result is too large to be useful. */
-const PORTFOLIO_FETCH_ALL_CAP = 5_000;
+/**
+ * Companies per fetch_all response. A compact row is roughly 50 tokens, so 300 rows stay near
+ * 15,000 tokens; a larger portfolio comes back in chunks, each fetched server-side in full.
+ */
+const PORTFOLIO_CHUNK = 300;
 
 const readOnly = (title) => ({ title, readOnlyHint: true, idempotentHint: true, openWorldHint: true });
 
@@ -718,7 +1014,7 @@ const TOOLS = [
     name: "bitsight_get_findings",
     annotations: readOnly("Bitsight: findings"),
     description:
-      "List a company's individual open Bitsight findings — the observable attack-surface issues that make up the rating (exposed/insecure services, unpatched software, expired or weak certificates, open ports, misconfigurations, botnet/malware signals). Each finding maps to a Bitsight risk vector and severity and usually names the affected asset (host/IP/domain) and evidence. This is the primary data source for the vapt-plan and security-test-plan skills. Read-only — Bitsight observes these externally; it does not scan or exploit anything.",
+      "List a company's individual open Bitsight findings — the observable attack-surface issues that make up the rating (exposed/insecure services, unpatched software, expired or weak certificates, open ports, misconfigurations, botnet/malware signals). Each finding maps to a Bitsight risk vector and severity and usually names the affected asset (host/IP/domain) and evidence. This is the primary data source for the vapt-plan and security-test-plan skills. Read-only — Bitsight observes these externally; it does not scan or exploit anything.\n\nEach finding comes back compact so a page fits in the conversation: vector, severity, dates, up to five assets, attributed companies, and `details` with long text and long lists trimmed (marked with … or '(+N more)'). Page with `next_offset` until it is null. Each finding lists its `remediation_messages`; the help text and remediation tip for each message are given once, in `remediation_guide`. Pass `full_detail: true` (at most 5 per page) for Bitsight's untrimmed objects when one finding's raw evidence matters.",
     inputSchema: {
       type: "object",
       properties: {
@@ -738,17 +1034,19 @@ const TOOLS = [
           type: "boolean",
           description: "If true, only return findings that currently affect the rating.",
         },
-        limit: { type: "integer", minimum: 1, maximum: 100, description: "Max results per page (default 100)." },
-        offset: { type: "integer", description: "Pagination offset for subsequent pages." },
+        limit: { type: "integer", minimum: 1, maximum: 30, description: "Max results per page (default 30; at most 5 with full_detail)." },
+        offset: { type: "integer", minimum: 0, description: "Pagination offset; use `next_offset` from the previous page." },
+        full_detail: { type: "boolean", description: "Return Bitsight's untrimmed finding objects. Caps the page at 5." },
       },
       required: ["company_guid"],
     },
-    handler: async ({ company_guid, risk_vector, min_severity, severity_gte, affects_rating, limit, offset }) => {
+    handler: async ({ company_guid, risk_vector, min_severity, severity_gte, affects_rating, limit, offset, full_detail }) => {
       const path = `/v1/companies/${pathSegment(company_guid, "company_guid")}/findings`;
+      const pageSize = Math.max(1, Math.min(Number(limit) || (full_detail ? 5 : 30), full_detail ? 5 : 30));
       const base = {
         severity_category: severityCategoryFilter(min_severity, severity_gte),
         affects_rating: affects_rating === undefined ? undefined : affects_rating ? "true" : "false",
-        limit: limit ?? 100,
+        limit: pageSize,
         offset,
         expand: "attributed_companies",
       };
@@ -764,14 +1062,27 @@ const TOOLS = [
       }
 
       normalizeRiskVectorSlugs(data);
-      return textResult(data);
+      const rows = Array.isArray(data?.results) ? data.results : [];
+      const { body, kept } = fitPage(rows, (page) => {
+        if (full_detail) return { results: page };
+        const guide = {};
+        const results = page.map((f) => compactFinding(f, guide));
+        return { remediation_guide: guide, results };
+      });
+      return textResult({
+        count: data?.count,
+        limit_applied: pageSize,
+        returned: kept,
+        next_offset: nextOffset(offset, kept, data?.count),
+        ...body,
+      });
     },
   },
   {
     name: "bitsight_get_assets",
     annotations: readOnly("Bitsight: assets"),
     description:
-      "List the internet-facing assets Bitsight observes for a company (domains, subdomains, IP ranges) with their importance/criticality, running services, hosting provider and country. Use this to understand the externally visible attack surface when scoping a vulnerability assessment or security-test plan. Each asset carries an `importance_category` (low/medium/high/critical). The `importance` filter is applied by Bitsight across the whole estate, so `count` is the true number of assets at that importance and paging with limit/offset walks only those. One asset can appear once per subsidiary it is attributed through, so a row count is not a host count. Read-only observation data — it does not represent any active scan performed by this plugin.",
+      "List the internet-facing assets Bitsight observes for a company (domains, subdomains, IP ranges) with their importance/criticality, running services, hosting provider and country. Use this to understand the externally visible attack surface when scoping a vulnerability assessment or security-test plan. Each asset carries an `importance_category` (low/medium/high/critical). The `importance` filter is applied by Bitsight across the whole estate, so `count` is the true number of assets at that importance and paging with limit/offset walks only those. One asset can appear once per subsidiary it is attributed through, so a row count is not a host count. Each asset comes back compact (importance, hosting provider, attributing subsidiary, finding counts, services, up to eight products, and a count of linked threat observations); page with `next_offset` until it is null. Read-only observation data — it does not represent any active scan performed by this plugin.",
     inputSchema: {
       type: "object",
       properties: {
@@ -781,8 +1092,8 @@ const TOOLS = [
           description:
             "Only return assets at this importance: 'critical', 'high', 'medium' or 'low', or several comma-separated, e.g. 'critical,high'. Filtered server-side across all assets, so the response count covers the whole estate.",
         },
-        limit: { type: "integer", minimum: 1, maximum: 100, description: "Max results per page (default 100)." },
-        offset: { type: "integer", description: "Pagination offset for subsequent pages." },
+        limit: { type: "integer", minimum: 1, maximum: 50, description: "Max results per page (default 50)." },
+        offset: { type: "integer", minimum: 0, description: "Pagination offset; use `next_offset` from the previous page." },
       },
       required: ["company_guid"],
     },
@@ -801,17 +1112,24 @@ const TOOLS = [
       }
       const data = await bitsightGet(`/v1/companies/${pathSegment(company_guid, "company_guid")}/assets`, {
         importance_categories: importanceCategories,
-        limit: limit ?? 100,
+        limit: Math.max(1, Math.min(Number(limit) || 50, 50)),
         offset,
       });
-      return textResult(data);
+      const rows = Array.isArray(data?.results) ? data.results : [];
+      const { body, kept } = fitPage(rows, (page) => ({ results: page.map(compactAsset) }));
+      return textResult({
+        count: data?.count,
+        returned: kept,
+        next_offset: nextOffset(offset, kept, data?.count),
+        ...body,
+      });
     },
   },
   {
     name: "bitsight_get_portfolio",
     annotations: readOnly("Bitsight: portfolio"),
     description:
-      "List companies in the Bitsight portfolio (vendors, subsidiaries, or monitored third parties), optionally filtered by rating range, industry, or tier. The token scopes the portfolio — there is no portfolio ID to pass. Backs the MyPortfolio skill (GET /ratings/v2/portfolio). Use this for vendor/third-party risk monitoring across many companies at once, e.g. 'which vendors have a rating below 640'.\n\nPass `fetch_all: true` whenever the whole portfolio is needed (a full pull, a digest, a cohort): the server pages through every result itself and returns one list, so nothing stops at page one. Check `fetched_all` in the response — false means the safety cap was reached and the list is incomplete.\n\nTwo useful properties of this response: each row's `rating` is reliably populated (making it the fallback when the company object's ratings history is unavailable), and the top-level `summaries` object carries `summaries['my-company']` — the GUID of the token owner's OWN organization. Use that to resolve 'our company' without asking the user for a GUID.",
+      "List companies in the Bitsight portfolio (vendors, subsidiaries, or monitored third parties), optionally filtered by rating range, industry, or tier. The token scopes the portfolio — there is no portfolio ID to pass. Backs the MyPortfolio skill (GET /ratings/v2/portfolio). Use this for vendor/third-party risk monitoring across many companies at once, e.g. 'which vendors have a rating below 640'.\n\nPass `fetch_all: true` whenever the whole portfolio is needed (a full pull, a digest, a cohort): the server pages through Bitsight itself and returns up to " + PORTFOLIO_CHUNK + " companies per call as compact rows (`columns` names the fields of each row in `rows`). If `next_offset` is not null, call again with `fetch_all: true` and `offset: next_offset` until it is; `fetched_all: true` (with `next_offset: null`) means no chunks remain. Never build a digest or count from a partial set.\n\nTwo useful properties of this response: each row's `rating` is reliably populated (making it the fallback when the company object's ratings history is unavailable), and the top-level `summaries` object carries `summaries['my-company']` — the GUID of the token owner's OWN organization. Use that to resolve 'our company' without asking the user for a GUID.",
     inputSchema: {
       type: "object",
       properties: {
@@ -821,7 +1139,7 @@ const TOOLS = [
         industry_slug: { type: "string", description: "Filter by industry slug name, e.g. 'technology'." },
         fetch_all: {
           type: "boolean",
-          description: `Return every matching company in one result, paging server-side (up to ${PORTFOLIO_FETCH_ALL_CAP} rows). limit/offset are ignored when this is true.`,
+          description: `Return every matching company, paged server-side, ${PORTFOLIO_CHUNK} compact rows per call; follow next_offset. limit is ignored when this is true.`,
         },
         limit: { type: "integer", minimum: 1, maximum: 100, description: "Max results per page (default 100)." },
         offset: { type: "integer", description: "Pagination offset for subsequent pages." },
@@ -842,9 +1160,10 @@ const TOOLS = [
       // "Page through every result" was an instruction in three skills, and the failure it
       // guarded against — a digest built from page one — is silent. Doing it here removes a
       // round-trip per hundred companies and the chance of stopping early.
+      const start = Math.max(0, Number(offset) || 0);
       const results = [];
       let first = null;
-      for (let next = 0; results.length < PORTFOLIO_FETCH_ALL_CAP; ) {
+      for (let next = start; results.length < PORTFOLIO_CHUNK; ) {
         const page = await bitsightGet("/v2/portfolio", { ...params, limit: 100, offset: next });
         first ??= page;
         const rows = Array.isArray(page.results) ? page.results : [];
@@ -852,13 +1171,22 @@ const TOOLS = [
         next += rows.length;
         if (rows.length === 0 || !page.links?.next || next >= (page.count ?? 0)) break;
       }
-      const capped = results.length >= PORTFOLIO_FETCH_ALL_CAP && results.length < (first?.count ?? 0);
+      const chunk = results.slice(0, PORTFOLIO_CHUNK);
+      const count = first?.count ?? chunk.length;
+      const following = nextOffset(start, chunk.length, count);
+      const columns = ["guid", "name", "rating", "rating_date", "industry", "industry_slug", "tier", "tier_name", "primary_domain"];
       return textResult({
-        count: first?.count ?? results.length,
+        count,
         summaries: first?.summaries,
-        fetched_all: !capped,
-        ...(capped ? { truncated_at: results.length } : {}),
-        results: results.slice(0, PORTFOLIO_FETCH_ALL_CAP),
+        offset: start,
+        returned: chunk.length,
+        next_offset: following,
+        fetched_all: following === null,
+        columns,
+        rows: chunk.map((c) => [
+          c.guid, c.name, c.rating, c.rating_date, c.industry?.name ?? null, c.industry?.slug ?? null,
+          c.tier ?? null, c.tier_name ?? null, c.primary_domain ?? null,
+        ]),
       });
     },
   },
@@ -914,7 +1242,7 @@ const TOOLS = [
         throw new Error(`changes must be one of ${Object.keys(INSIGHT_CHANGES).join(", ")}.`);
       }
       const data = await bitsightGet("/v1/insights", {
-        company: pathSegment(company_guid, "company_guid"),
+        company: checkedId(company_guid, "company_guid"),
         start,
         end,
         score_delta_lt: INSIGHT_CHANGES[mode],
@@ -1058,6 +1386,231 @@ const TOOLS = [
       return textResult(data);
     },
   },
+  {
+    name: "bitsight_get_remediation_plan",
+    annotations: readOnly("Bitsight: risk remediation plan"),
+    description:
+      "Read Bitsight's own Risk Remediation Plan for a company and risk vector: the findings in the order Bitsight says to fix them, and which grade each run of fixes unlocks. Reads the latest completed plan Bitsight has already run; it never creates or runs a plan. Plans exist only for the user's own organisation and its subsidiaries (the SPM portfolio, `in_spm_portfolio` on the company object); for a vendor Bitsight returns 403, so use bitsight_get_findings there. Backs the remediation-plan skill (GET /ratings/v1/companies/{company_guid}/risk-remediation-plan/).\n\nPlans exist for seven vectors only: ssl_certificates, ssl_configurations, web_appsec, critical_vulnerability_management, dmarc, desktop_software, mobile_software. Omit `risk_vector` to see which of them have a completed plan, and when it was run.\n\nTwo shapes come back:\n- `shape: 'steps'` (every vector except CVM): `grade_steps` summarises the plan as runs such as 'F (Fix to obtain D)', with how many fixes each takes and `cumulative_fixes` to reach it; 'Maintain to keep A' rows are upkeep, not fixes. `items` is one page of the ordered findings (evidence_key, message or assessment, first/last seen). TLS plans can hold thousands of items, so page with limit/offset.\n- `shape: 'scenarios'` (CVM): remediation scenarios, each with the grade, score and percentile projected at 1, 30, 60 and 91 days, plus a page of the vulnerabilities behind them.\n\nA plan is Bitsight's model of the grade, not a promise of the rating. Observations must age out or be rescanned before a grade moves.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        company_guid: { type: "string", description: "The Bitsight company GUID." },
+        risk_vector: {
+          type: "string",
+          description: "One of the seven plan vectors. Omit to list which have a completed plan.",
+        },
+        plan_guid: { type: "string", description: "A specific plan run's GUID; defaults to the latest completed base plan." },
+        limit: { type: "integer", minimum: 1, maximum: 100, description: "Items per page (default 50)." },
+        offset: { type: "integer", minimum: 0, description: "Item offset for later pages." },
+      },
+      required: ["company_guid"],
+    },
+    handler: async ({ company_guid, risk_vector, plan_guid, limit, offset }) => {
+      const base = `/v1/companies/${pathSegment(company_guid, "company_guid")}/risk-remediation-plan/`;
+
+      if (!risk_vector && !plan_guid) {
+        const available = [];
+        for (const [canonical, wire] of Object.entries(RRP_VECTORS)) {
+          const page = await bitsightGet(base, { risk_vector: wire, base_plans_only: "true", limit: 5 });
+          const done = (page.results || []).filter((p) => p.status === "completed")
+            .sort((a, b) => String(b.created_date).localeCompare(String(a.created_date)))[0];
+          available.push({
+            risk_vector: canonical,
+            plan_runs: page.count ?? 0,
+            latest_completed: done ? { plan_guid: done.guid, created_date: done.created_date } : null,
+          });
+        }
+        return textResult({ company_guid, available });
+      }
+
+      if (!risk_vector) throw new Error("risk_vector is required with plan_guid, so the plan can be read in the right shape.");
+      const canonical = rrpVector(risk_vector);
+      let meta = null;
+      if (plan_guid) {
+        meta = { guid: pathSegment(plan_guid, "plan_guid") };
+      } else {
+        const page = await bitsightGet(base, { risk_vector: RRP_VECTORS[canonical], base_plans_only: "true", limit: 10 });
+        meta = (page.results || []).filter((p) => p.status === "completed")
+          .sort((a, b) => String(b.created_date).localeCompare(String(a.created_date)))[0];
+        if (!meta) {
+          return textResult({
+            company_guid,
+            risk_vector: canonical,
+            available: false,
+            message: "Bitsight has no completed remediation plan for this company and vector. That is not a clean result: use bitsight_get_findings for the vector instead.",
+          });
+        }
+      }
+
+      const body = await bitsightGet(`${base}${meta.guid}`);
+      const lim = Math.max(1, Math.min(Number(limit) || 50, 100));
+      const off = Math.max(0, Number(offset) || 0);
+      const header = {
+        company_guid,
+        risk_vector: canonical,
+        plan_guid: meta.guid,
+        created_date: meta.created_date,
+        scheduled: meta.scheduled,
+      };
+
+      if (canonical === CVM) {
+        return textResult({ ...header, ...summariseCvmPlan(body, lim, off) });
+      }
+
+      const items = Array.isArray(body.items) ? body.items : [];
+      return textResult({
+        ...header,
+        shape: "steps",
+        start_date: body.start_date,
+        end_date: body.end_date,
+        findings: body.findings,
+        observations: body.observations,
+        grade_steps: summariseGradeSteps(items),
+        items_total: items.length,
+        items: items.slice(off, off + lim).map(({ rolledup_observation_id, item_type, ...rest }) => rest),
+        next_offset: off + lim < items.length ? off + lim : null,
+      });
+    },
+  },
+  {
+    name: "bitsight_get_exposed_credentials",
+    annotations: readOnly("Bitsight: exposed credentials"),
+    description:
+      "Credential leaks Bitsight has tied to companies in the portfolio: which breach or dump, when it happened, when Bitsight added it, what data types leaked, and how many records and domains of each company appear in it. No credential values are ever returned, only leak metadata and counts. Backs the credential-exposure skill (GET /ratings/v1/exposed-credentials/affected-companies and /leaks).\n\nWithout `company_guid`: one row per affected company with leak count, record count and the latest date added, sorted by records. With `company_guid`: that company's leaks, newest first, with each leak's name, leak_date and data_types_leaked, paged with limit/offset.\n\nBitsight's API ignores a company filter on this endpoint, so the server reads every row and filters itself; `complete: false` means the safety cap was reached. Many leaks are old public dumps (e.g. a 2013 breach added in 2017): judge urgency by leak_date, date_added and the data types, not by the count alone.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        company_guid: { type: "string", description: "Limit to one company and list its leaks." },
+        date_added_gte: { type: "string", description: "Only leaks Bitsight added on or after this date, YYYY-MM-DD. Use for 'what's new since the last review'." },
+        limit: { type: "integer", minimum: 1, maximum: 100, description: "Leaks per page when company_guid is given (default 50)." },
+        offset: { type: "integer", minimum: 0, description: "Leak offset for later pages." },
+      },
+    },
+    handler: async ({ company_guid, date_added_gte, limit, offset }) => {
+      if (date_added_gte && !/^\d{4}-\d{2}-\d{2}$/.test(String(date_added_gte))) {
+        throw new Error("date_added_gte must be YYYY-MM-DD.");
+      }
+      const guid = company_guid ? checkedId(company_guid, "company_guid") : undefined;
+      const { rows, count, complete } = await fetchAllPages(
+        "/v1/exposed-credentials/affected-companies",
+        { date_added_gte },
+        EXPOSED_CREDS_ROW_CAP
+      );
+
+      if (!guid) {
+        const byCompany = new Map();
+        for (const r of rows) {
+          const c = byCompany.get(r.company_guid) ?? {
+            company_guid: r.company_guid, company_name: r.company_name, leaks: 0, records: 0, latest_date_added: null,
+          };
+          c.leaks += 1;
+          c.records += Number(r.record_count) || 0;
+          if (!c.latest_date_added || String(r.date_added) > c.latest_date_added) c.latest_date_added = r.date_added;
+          byCompany.set(r.company_guid, c);
+        }
+        return textResult({
+          rows_read: rows.length,
+          rows_total: count,
+          complete,
+          date_added_gte: date_added_gte ?? null,
+          companies: [...byCompany.values()].sort((a, b) => b.records - a.records),
+        });
+      }
+
+      const mine = rows.filter((r) => r.company_guid === guid);
+      const leaks = new Map();
+      if (mine.length) {
+        const all = await fetchAllPages("/v1/exposed-credentials/leaks", {}, EXPOSED_CREDS_ROW_CAP);
+        for (const l of all.rows) leaks.set(l.guid, l);
+      }
+      const lim = Math.max(1, Math.min(Number(limit) || 50, 100));
+      const off = Math.max(0, Number(offset) || 0);
+      const detailed = mine
+        .map((r) => {
+          const l = leaks.get(r.leak_guid);
+          return {
+            leak_name: l?.name ?? null,
+            leak_date: l?.leak_date ?? null,
+            date_added: r.date_added,
+            records: r.record_count,
+            unique_domains: r.unique_domain_count,
+            data_types_leaked: Array.isArray(l?.data_types_leaked) ? l.data_types_leaked.map((d) => d?.name ?? d) : [],
+            description: l?.description ? stripHtml(l.description).slice(0, 280) : null,
+            leak_guid: r.leak_guid,
+          };
+        })
+        .sort((a, b) => String(b.date_added).localeCompare(String(a.date_added)));
+      return textResult({
+        company_guid: guid,
+        company_name: mine[0]?.company_name ?? null,
+        complete,
+        date_added_gte: date_added_gte ?? null,
+        leaks_total: detailed.length,
+        records_total: detailed.reduce((n, d) => n + (Number(d.records) || 0), 0),
+        leaks: detailed.slice(off, off + lim),
+        next_offset: off + lim < detailed.length ? off + lim : null,
+      });
+    },
+  },
+  {
+    name: "bitsight_get_threat_attestations",
+    annotations: readOnly("Bitsight: threat attestations"),
+    description:
+      "Read threat attestations: a company's own statement about whether a threat (CVE or vulnerability group) affects it — UNREVIEWED, UNDER_REVIEW, NOT_VULNERABLE or RISK_ACCEPTED. Use with bitsight_get_threat_companies to see which exposed companies have said what. Read-only: this tool never records or changes an attestation. Backs the threat-attestation skill (GET /ratings/v1/threats/attestations/).\n\n`scope: 'spm'` is the user's own organisation and subsidiaries; `scope: 'tprm'` is portfolio companies, which shows only what they have made public. Returns `by_attestation` counts over every row, plus one page of rows (threat, attestation, company, created_time), newest first; follow `next_offset`. A company or threat with no row has made no attestation, which is not the same as UNREVIEWED.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        company_guid: { type: "string", description: "Only this company's attestations." },
+        threat_guid: { type: "string", description: "Only attestations for this threat GUID (from bitsight_list_threats)." },
+        attestation: {
+          type: "string",
+          description: `Only these statuses, comma-separated: ${ATTESTATION_SLUGS.join(", ")}.`,
+        },
+        scope: { type: "string", enum: ["spm", "tprm"], description: "'spm' = own organisation; 'tprm' = portfolio companies. Omit for both." },
+        limit: { type: "integer", minimum: 1, maximum: 200, description: "Rows per page (default 100). by_attestation always counts every row." },
+        offset: { type: "integer", minimum: 0, description: "Row offset; use `next_offset` from the previous page." },
+      },
+    },
+    handler: async ({ company_guid, threat_guid, attestation, scope, limit, offset }) => {
+      let slugs;
+      if (attestation !== undefined && attestation !== null && attestation !== "") {
+        const wanted = String(attestation).split(",").map((s) => s.trim().toUpperCase()).filter(Boolean);
+        const bad = wanted.filter((w) => !ATTESTATION_SLUGS.includes(w));
+        if (bad.length || !wanted.length) {
+          throw new Error(`attestation must be one or more of ${ATTESTATION_SLUGS.join(", ")}, comma-separated.`);
+        }
+        slugs = wanted.join(",");
+      }
+      if (scope !== undefined && scope !== null && scope !== "" && !["spm", "tprm"].includes(scope)) {
+        throw new Error("scope must be 'spm' or 'tprm', or omitted.");
+      }
+      const { rows, count, complete } = await fetchAllPages(
+        "/v1/threats/attestations/",
+        {
+          "company.guid": company_guid ? checkedId(company_guid, "company_guid") : undefined,
+          "threat.guid": threat_guid ? checkedId(threat_guid, "threat_guid") : undefined,
+          "attestation.slug": slugs,
+          scope: scope || undefined,
+        },
+        ATTESTATION_ROW_CAP
+      );
+      const byAttestation = {};
+      for (const r of rows) {
+        const k = r?.attestation?.slug ?? "UNKNOWN";
+        byAttestation[k] = (byAttestation[k] ?? 0) + 1;
+      }
+      rows.sort((a, b) => String(b?.created_time).localeCompare(String(a?.created_time)));
+      const lim = Math.max(1, Math.min(Number(limit) || 100, 200));
+      const off = Math.max(0, Number(offset) || 0);
+      return textResult({
+        count: count ?? rows.length,
+        complete,
+        by_attestation: byAttestation,
+        next_offset: off + lim < rows.length ? off + lim : null,
+        results: rows.slice(off, off + lim),
+      });
+    },
+  },
 ];
 
 const TOOLS_BY_NAME = new Map(TOOLS.map((t) => [t.name, t]));
@@ -1072,7 +1625,7 @@ const SUPPORTED_PROTOCOL_VERSIONS = ["2025-06-18", "2025-03-26", "2024-11-05"];
 
 /**
  * Sent once at initialize, so the rules every tool shares are stated once rather than repeated
- * in fifteen descriptions. The skills' global rules remain the full statement; this is the part
+ * in every tool description. The skills' global rules remain the full statement; this is the part
  * that has to hold even when no skill is loaded — a user calling the tools directly.
  */
 const SERVER_INSTRUCTIONS = [
