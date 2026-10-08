@@ -79,7 +79,7 @@ document attached to a bid.
      they answer. **This informs the answers; it does not go into the pack.**
    - `bitsight_get_industry_benchmark` on the industry slug — so the rating is quoted against its
      sector rather than in a vacuum.
-   - `bitsight_get_findings` with `affects_rating: true` and **`severity_gte: 8`** only where the user
+   - `bitsight_get_findings` with `affects_rating: true` and **`min_severity: "material"`** only where the user
      needs to know what a specific answer is exposed on. Global rules §3a for thresholds. Again — for
      their eyes, not the counterparty's.
 

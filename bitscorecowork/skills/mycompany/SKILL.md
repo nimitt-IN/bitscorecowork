@@ -51,8 +51,8 @@ handling, no discrimination, India context). The steps below assume those rules 
    - `bitsight_get_company_details` with `include_industry_comparison: true`.
    - `bitsight_get_findings_summary` for the same GUID — the authoritative categorical counts. If
      the user wants the findings behind a category, fetch them with `bitsight_get_findings` and a
-     numeric `severity_gte` (9 severe, 8 material and above), never a category word: the API rejects
-     `severity=severe` outright. See global rules §3a.
+     `min_severity` (`"severe"`, or `"material"` for material and above), which filters on
+     Bitsight's own categories. See global rules §3a.
    - If the 1-year history shows a notable recent move (~10+ points either way), also call
      `bitsight_get_rating_change_insights` to explain the driver.
 

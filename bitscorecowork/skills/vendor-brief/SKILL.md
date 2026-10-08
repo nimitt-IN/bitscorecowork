@@ -52,9 +52,9 @@ contractual and financial due diligence).
      1-year history (read the **trend**, not just today's number), risk-vector grades, percentile.
    - `bitsight_get_findings_summary` — issue counts by risk vector and severity, and the
      authoritative source for the categorical counts you quote.
-   - `bitsight_get_findings` with `affects_rating: true` and **`severity_gte: 8`** — material and
+   - `bitsight_get_findings` with `affects_rating: true` and **`min_severity: "material"`** — material and
      severe only. A due-diligence brief is a decision document; the minor findings are noise in it,
-     and on a large vendor they are tens of thousands of rows. Drop to `severity_gte: 6` only if the
+     and on a large vendor they are tens of thousands of rows. Drop to `min_severity: "moderate"` only if the
      material-and-above set comes back thin. See global rules §3a for the thresholds.
      Page through rather than reporting only the first page.
    - `bitsight_get_alerts` for this company over the last 90 days — recent deterioration.

@@ -66,7 +66,7 @@ If an artefact would be convincing, it needs the stamp most.
      per-vector grades. **The weakest vectors are the scenario's entry point**; a scenario built on
      what is actually weak is the whole point of this skill.
    - `bitsight_get_findings_summary` — where the open issues concentrate.
-   - `bitsight_get_findings` with `affects_rating: true` and **`severity_gte: 8`** for the weak
+   - `bitsight_get_findings` with `affects_rating: true` and **`min_severity: "material"`** for the weak
      vectors, to name concrete, real issues in the injects. See global rules §3a.
    - `bitsight_get_assets`, if entitled, to name real systems. If it 403s, take asset names from the
      findings instead and carry on — the exercise doesn't need a complete inventory.

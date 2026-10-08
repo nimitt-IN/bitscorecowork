@@ -148,22 +148,25 @@ suspect and cross-check against `bitsight_get_findings_summary` before reporting
 `affects_rating: false`. The server marks it `informational`. Never grade, weight or prioritise
 it as part of the rating, and never call Web Application Security by the Headers name.
 
-**Filter severity with `severity_gte`, always.** It takes a **number**, not a category word — the
-API rejects `severity=severe` with HTTP 422. Verified thresholds:
+**Filter severity with `min_severity`, always.** It takes a Bitsight severity **category**, and
+the server sends it as Bitsight's own `severity_category` filter, so the findings returned match
+the `bitsight_get_findings_summary` counts exactly. Never pass a numeric threshold. The category
+bands are severe ≥ 9, material ≥ 7 and moderate ≥ 4, so the old `severity_gte: 8` for "material and
+above" silently dropped every material finding scored 7.x.
 
-| To include | Pass | Note |
-| --- | --- | --- |
-| Severe only | `severity_gte: 9` | Matches the `severe` count exactly |
-| Material and above | `severity_gte: 8` | Material + severe |
-| Moderate and above | `severity_gte: 6` | Can differ by a few findings at the boundary |
-| Everything | `severity_gte: 1` | Matches the total exactly |
+| To include | Pass |
+| --- | --- |
+| Severe only | `min_severity: "severe"` |
+| Material and above | `min_severity: "material"` |
+| Moderate and above | `min_severity: "moderate"` |
+| Everything | omit it |
 
-Where a skill needs *categorical* counts, take them from `bitsight_get_findings_summary`, which is
-authoritative. Use `severity_gte` to fetch the individual findings behind those counts. Never filter
+Where a skill needs *categorical* counts, take them from `bitsight_get_findings_summary`. Use
+`min_severity` to fetch the individual findings behind those counts. Never filter
 severity client-side by pulling everything and discarding — on a large estate that is tens of
 thousands of findings, and it will time out or truncate before it is wrong.
 
-Pair `severity_gte` with `affects_rating: true` whenever the question is "what is holding the rating
+Pair `min_severity` with `affects_rating: true` whenever the question is "what is holding the rating
 down", and leave it off when the question is "what is exposed" — findings that don't currently move
 the rating can still matter operationally.
 

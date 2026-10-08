@@ -43,8 +43,8 @@ Section 5 (the **authorization gate**) and Section 7 (IT Act, 2000) are mandator
    - `bitsight_get_assets` — the internet-facing asset inventory (domains, IP ranges, importance).
    - `bitsight_get_findings` — individual findings (exposed/insecure services, unpatched software,
      weak TLS, open ports, misconfigurations) with affected assets and evidence. Page through
-     results; filter by `risk_vector`, `severity_gte`, or `affects_rating` as scope dictates.
-     **`severity_gte` takes a number, never a category word** — start at `severity_gte: 8` for the
+     results; filter by `risk_vector`, `min_severity`, or `affects_rating` as scope dictates.
+     **`min_severity` takes a Bitsight category** — start at `min_severity: "material"` for the
      material-and-severe worklist and widen only if it comes back thin. Global rules §3a has the
      thresholds. For vulnerability findings the vector is `critical_vulnerability_management`.
    - `bitsight_get_findings_summary` for the risk-vector/severity rollup — the authoritative

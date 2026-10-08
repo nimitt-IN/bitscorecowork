@@ -623,7 +623,7 @@ out separately by BitScore's licensed testers under the signed RoE.
 | **Rate limited (429)** | Too many calls too fast. The server has already retried with backoff; if it still appears, wait a minute and run it again. The skill names what it couldn't fetch. |
 | **Empty result** | No matching data — the skills say so rather than inventing numbers. |
 | **A vector shows zero findings but a poor grade** | Shouldn't happen from 0.3.0 on: the server resolves the Critical Vulnerability Management slug against whichever name the API currently answers. If you see it on another vector, the slug is being rejected silently (Bitsight returns 200 with an empty set, not an error) — cross-check `bitsight_get_findings_summary`, which is authoritative. |
-| **"Input should be a valid number" (422)** | A severity category word was passed where a number belongs. Severity filters use `severity_gte`: 9 severe, 8 material and above, 6 moderate and above, 1 everything. |
+| **"min_severity must be one of…"** | Severity filters take a Bitsight category: `severe`, `material`, `moderate` or `minor`, each meaning that category and above. |
 | **Server won't start** | Ensure Node.js 18+ is available. No `npm install` is required — the server uses only Node built-ins. |
 
 ---
