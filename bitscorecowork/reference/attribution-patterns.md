@@ -294,11 +294,11 @@ pending, and Bitsight may decline. A disputed asset is not a removed asset.
 
 - `bitsight_get_assets` returns, per asset: `asset`, `asset_type` (IP / Domain), **`hosted_by`**
   (`{guid, name}` — read this first, and often null), **`origin_subsidiary`** (`{guid, name}` — the
-  entity the attribution came through; read this second), `country` and `country_code`, `services`,
-  `findings` (with `counts_by_severity`), `tags`, `importance` (a float from 0 to 1),
+  entity the attribution came through; read this second), `country_code`, `services`, `products`,
+  `findings` (with `counts_by_severity`), `threats_count`, `tags`, `importance` (a float from 0 to 1),
   **`importance_category`** (the string `low`/`medium`/`high`/`critical` the `importance` filter
-  matches on) and `combined_overrides.importance`. **Page through it fully** — a footprint review on
-  the first page is not a footprint review.
+  matches on) and `importance_override` (a user-assigned importance, if any). **Page through it
+  fully** with `next_offset` — a footprint review on the first page is not a footprint review.
 - **Deduplicate before quoting any total.** Rows repeat per `origin_subsidiary`, so `count` is a row
   count, not a host count. Report both, and say which is which.
 - Results come back roughly **importance-descending**, so `critical` assets cluster on the early

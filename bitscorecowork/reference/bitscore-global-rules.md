@@ -156,6 +156,14 @@ it. **Mobile Software** (`mobile_software`) is a different vector and is still g
 `risk_vector_slug` and `risk_vector_name` the server adds to each reason, never the raw id. The tool
 returns rises and drops alike unless asked otherwise.
 
+**Paging: follow `next_offset`, always.** List tools return compact rows sized to fit in the
+conversation, and say where the next page starts. `bitsight_get_findings` returns at most 30 per page,
+`bitsight_get_assets` 50, and `bitsight_get_portfolio` with `fetch_all: true` 300 companies per call.
+Keep calling with `offset: next_offset` until it is null; never step the offset by your own `limit`,
+because the server may have applied a smaller one. Findings come back with long text trimmed (marked
+`…` or `(+N more)`); pass `full_detail: true` (at most 5 per page) when one finding's raw
+evidence matters.
+
 **Filter severity with `min_severity`, always.** It takes a Bitsight severity **category**, and
 the server sends it as Bitsight's own `severity_category` filter, so the findings returned match
 the `bitsight_get_findings_summary` counts exactly. Never pass a numeric threshold. The category
