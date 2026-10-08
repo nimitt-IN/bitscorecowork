@@ -82,14 +82,14 @@ Article 21(2) lists ten measures, (a) to (j). Bitsight evidences the external su
 | --- | --- |
 | Critical Vulnerability Management | (e) security in acquisition, development and maintenance, **including vulnerability handling** |
 | Server Software · Desktop / Mobile Software · Insecure Systems | (e) maintenance; (g) basic cyber hygiene |
-| Web Application Security · Mobile Application Security | (e) acquisition, development and maintenance |
+| Web Application Security | (e) acquisition, development and maintenance |
 | TLS/SSL Certificates · TLS/SSL Configurations | (h) cryptography and, where appropriate, encryption |
 | Open Ports | (i) access control policies and asset management |
 | DNSSEC | (g) basic cyber hygiene |
 | Exposed Credentials | (i) access control; (j) multi-factor authentication |
 | File Sharing | (g) basic cyber hygiene and training |
 | Botnet Infections · Malware Servers · Spam Propagation · Unsolicited Communications · Potentially Exploited | (b) incident handling |
-| Domain Squatting | (a) risk analysis |
+| Domain Squatting (Bitsight module; does not affect the rating) | (a) risk analysis |
 | Security Incidents (public disclosure) | (b) incident handling |
 | **Portfolio monitoring of suppliers** | **(d) supply chain security**, including the security of relationships with each direct supplier and service provider |
 

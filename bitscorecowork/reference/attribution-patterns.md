@@ -305,10 +305,10 @@ pending, and Bitsight may decline. A disputed asset is not a removed asset.
   pages. Useful for triage — and a reason not to mistake page one for a representative sample.
 - On a very large estate a full pass is hundreds of sequential calls. If you sample instead, **say so,
   give the sample size and the offsets**, and do not present the result as a complete inventory.
-- The tool's `importance` filter is applied **client-side to the fetched page** and keys off
-  `importance_category`. Verified working on 4 August 2026; an empty result means no asset on that
-  page carried the category, not that the filter is broken. Page through rather than concluding from
-  one call.
+- The tool's `importance` filter is applied **by Bitsight across the whole estate** (its
+  `importance_categories` parameter) and takes one category or several, e.g. `critical,high`. So
+  `count` is the true number of rows at that importance. Verified on 8 October 2026: critical, high,
+  medium and low counts summed exactly to the unfiltered total. Rows still repeat per subsidiary.
 - `bitsight_get_assets` is one of the endpoints most often **gated by subscription (403)**. When it
   is, reconstruct a partial footprint from the asset names carried on individual findings via
   `bitsight_get_findings` — each finding's `assets` array carries `asset`, `asset_type`, `category`,

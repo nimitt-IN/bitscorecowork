@@ -148,6 +148,14 @@ suspect and cross-check against `bitsight_get_findings_summary` before reporting
 `affects_rating: false`. The server marks it `informational`. Never grade, weight or prioritise
 it as part of the rating, and never call Web Application Security by the Headers name.
 
+**Mobile Application Security no longer exists.** Bitsight retired it on 16 August 2026 and removed
+its grades and findings; it never affected the rating. Don't list it as a vector or map evidence to
+it. **Mobile Software** (`mobile_software`) is a different vector and is still graded.
+
+**Rating-change insights name vectors by an internal id** (`pc`, `torrent`, `endpoint_pc`). Use the
+`risk_vector_slug` and `risk_vector_name` the server adds to each reason, never the raw id. The tool
+returns rises and drops alike unless asked otherwise.
+
 **Filter severity with `min_severity`, always.** It takes a Bitsight severity **category**, and
 the server sends it as Bitsight's own `severity_category` filter, so the findings returned match
 the `bitsight_get_findings_summary` counts exactly. Never pass a numeric threshold. The category
@@ -426,7 +434,7 @@ so a reader can't tell which is which.
 | `bitsight_get_assets` | Internet-facing assets (domains, IP ranges) with importance. |
 | `bitsight_get_portfolio` | List/filter monitored companies by rating, tier, or industry. `GET /ratings/v2/portfolio` (paginated). |
 | `bitsight_get_alerts` | Recent rating changes and risk events across the portfolio. |
-| `bitsight_get_rating_change_insights` | Explanation of what drove a significant rating change. |
+| `bitsight_get_rating_change_insights` | Explanation of what drove each rating change, rises and drops. |
 | `bitsight_get_industry_benchmark` | Industry ratings — all industries, or one industry's 1-year history with percentile bands. `GET /ratings/v1/industries[/{slug}]`. |
 | `bitsight_list_threats` | Bitsight's catalog of threats (CVEs and vulnerability groups); resolve a CVE to its threat GUID. `GET /ratings/v2/threats`. |
 | `bitsight_get_threat_companies` | Portfolio companies observably affected by a given threat. `GET /ratings/v2/threats/{threat_guid}/companies`. |
