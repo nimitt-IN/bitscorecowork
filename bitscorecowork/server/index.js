@@ -618,8 +618,15 @@ function summariseCvmPlan(body, limit, offset) {
 
 const EXPOSED_CREDS_ROW_CAP = 10_000;
 
+/**
+ * Leak descriptions arrive as HTML. The result is read as plain text, never rendered, but one
+ * tag-stripping pass can leave a fragment such as "<script" behind, so drop every angle bracket
+ * that survives it as well.
+ */
 function stripHtml(s) {
-  return typeof s === "string" ? s.replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim() : s;
+  return typeof s === "string"
+    ? s.replace(/<[^>]*>/g, "").replace(/[<>]/g, "").replace(/\s+/g, " ").trim()
+    : s;
 }
 
 /** Follow `offset` paging to the end (or the cap). Returns { rows, count, complete }. */
