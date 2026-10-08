@@ -48,6 +48,10 @@ its band is not news. Treat it as such, and say so.
    - **If there is none, say so plainly and run a baseline pass instead.** Report current state, write
      the snapshot, and tell the user the next run will show movement. **Never present a first run as
      though nothing changed** — no baseline means no delta, not a quiet week.
+   - **Keep a first run cheap.** Don't reconstruct the week by calling
+     `bitsight_get_rating_change_insights` for every company; on a large portfolio that is hundreds of
+     calls. Call it only for the critical companies (step 3) and for any company with an alert in the
+     window, and say the rest were not checked for movement.
    - If the baseline is old, say how old. A "weekly" digest against a six-week-old snapshot is a
      six-week digest, and the reader should know that.
 

@@ -207,13 +207,19 @@ Bitsight gates endpoints by subscription. A token that works perfectly for `/v2/
 `/v2/threats` may still return **403** on `findings/summaries`, `assets`, or `insights`. This is
 observed behaviour on real subscriptions, not an edge case.
 
+**A 403 is often about one company, not the whole account.** Entitlement follows each company's
+subscription type in the portfolio, so the same endpoint can answer for nine vendors and refuse the
+tenth. Name the gap at the level it occurred — *"finding summaries aren't available for PanAmerican
+Trust Group"* — and only say a source is missing from the subscription when it failed for every
+company you asked about.
+
 Treating that as an authentication failure is a bug: it sends the user off to rotate a credential
 that was never the problem, and abandons a workflow that could have completed. So when a single
 call 403s:
 
 1. **Keep going.** Complete every part of the skill that doesn't depend on that call.
-2. **Say what's missing and why**, once, in plain language — *"finding summaries aren't included in
-   this Bitsight subscription, so severity is counted from the individual findings instead"* — not
+2. **Say what's missing and why**, once, in plain language — *"finding summaries aren't available for
+   this company, so severity is counted from the individual findings instead"* — not
    as an error dump.
 3. **Substitute where an honest substitute exists.** `bitsight_get_findings` can be aggregated when
    `bitsight_get_findings_summary` is unavailable; company details carry rating history when
@@ -275,7 +281,9 @@ specific duty on the user's behalf:
   within **6 hours** of noticing them, and to retain logs. Fast-moving, material risk changes may
   need faster internal escalation.
 - **DPDP Act, 2023** — if outputs touch personal data of data principals, handle it under the
-  Digital Personal Data Protection Act (purpose limitation, minimisation, breach notification).
+  Digital Personal Data Protection Act (purpose limitation, minimisation). Its **breach duties
+  (section 8 and Rule 7) do not commence until 13 May 2027**: never say a DPDP breach notification
+  or penalty applies to an incident today. Mention it only as something to plan for.
 - Sectoral third-party/vendor-risk regimes may also apply (e.g. **RBI** outsourcing/IT norms,
   **SEBI** cybersecurity framework, **IRDAI** guidelines). The RBI Cybersecurity, Technology: Risk,
   Resilience and Assurance Framework Directions, 2026 — all issued 31 July 2026, in force immediately

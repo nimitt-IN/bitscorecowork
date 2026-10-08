@@ -83,6 +83,14 @@ still want the indicative version.
    a rising finding count push likelihood up; an Advanced rating with a flat trend pushes it down.
    State the modifier and its basis explicitly.
 
+   **Regulatory costs must follow the law as it stands on the date of the estimate.** In India the
+   DPDP Act's breach duties (section 8 and Rule 7) **do not commence until 13 May 2027**, so a DPDP
+   breach-notification duty or penalty is not a cost of an incident today. Model it, if at all, as a
+   separate, labelled line for incidents on or after that date, and never quote a DPDP penalty amount
+   you have not read from the Act in this session. CERT-In's six-hour reporting applies now; see
+   [`../../reference/incident-reporting-map.md`](../../reference/incident-reporting-map.md) for each
+   clock and whether it is live.
+
    **Anchor the modifier to the published multiples rather than inventing one** (global rules §3).
    Bitsight's own comparative figures: Intermediate entities are on average **1.5–2×** more likely to
    be breached than Advanced; Basic entities **2–3×** more likely than Intermediate; entities rated
