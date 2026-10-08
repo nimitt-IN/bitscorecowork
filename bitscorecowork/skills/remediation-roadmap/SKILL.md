@@ -70,7 +70,7 @@ honest one isn't available, and give them the sequence and the reasoning instead
 4. **Prioritize.** Rank each candidate fix on four axes, and show the ranking, not just the result:
    - **Gap size** — how far below the industry benchmark this vector sits.
    - **Volume × severity** — how many findings, how bad, and on how important an asset.
-   - **Effort** — from configuration changes (certificates, TLS settings, security headers, closing
+   - **Effort** — from configuration changes (certificates, TLS settings, web-application settings, closing
      an exposed service) through to programme work (server and endpoint software currency, asset
      inventory hygiene — process problems that move slowly).
    - **Durability** — whether the fix holds. Closing one exposed port is a task; fixing the process

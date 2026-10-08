@@ -82,7 +82,7 @@ Article 21(2) lists ten measures, (a) to (j). Bitsight evidences the external su
 | --- | --- |
 | Critical Vulnerability Management | (e) security in acquisition, development and maintenance, **including vulnerability handling** |
 | Server Software · Desktop / Mobile Software · Insecure Systems | (e) maintenance; (g) basic cyber hygiene |
-| Web Application Headers · Mobile Application Security | (e) acquisition, development and maintenance |
+| Web Application Security · Mobile Application Security | (e) acquisition, development and maintenance |
 | TLS/SSL Certificates · TLS/SSL Configurations | (h) cryptography and, where appropriate, encryption |
 | Open Ports | (i) access control policies and asset management |
 | DNSSEC | (g) basic cyber hygiene |

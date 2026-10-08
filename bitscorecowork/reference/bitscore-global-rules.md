@@ -142,6 +142,12 @@ company having no findings. Verified on 3 August 2026 against a company graded *
 vector with 210 open findings. If you ever hand-roll a vector filter and get zero back, treat it as
 suspect and cross-check against `bitsight_get_findings_summary` before reporting a clean result.
 
+**Web Application Security is `web_appsec`.** Bitsight's 10 July 2025 algorithm update gave it the
+5% weight that **Web Application Headers** used to carry. Headers is still served under the slug
+`application_security`, but only as an informational vector: grade N/A, findings with
+`affects_rating: false`. The server marks it `informational`. Never grade, weight or prioritise
+it as part of the rating, and never call Web Application Security by the Headers name.
+
 **Filter severity with `severity_gte`, always.** It takes a **number**, not a category word — the
 API rejects `severity=severe` with HTTP 422. Verified thresholds:
 

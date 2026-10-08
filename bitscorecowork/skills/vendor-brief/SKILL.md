@@ -76,8 +76,8 @@ contractual and financial due diligence).
      high-severity findings directly on the risk vectors this engagement depends on.
 
    Weight the vectors by what the vendor will actually do: exposed credentials and Critical
-   Vulnerability Management matter more for a vendor with production access; TLS and web-application
-   headers matter more for one hosting a customer-facing portal. Say which vectors you weighted and
+   Vulnerability Management matter more for a vendor with production access; TLS and Web Application
+   Security matter more for one hosting a customer-facing portal. Say which vectors you weighted and
    why.
 
 6. **Write the brief.** Keep it to one or two pages — this gets read by a procurement or business

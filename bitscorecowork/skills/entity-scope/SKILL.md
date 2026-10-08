@@ -139,7 +139,7 @@ be told otherwise by their own rating tomorrow.
    credible, and it is the one most likely to be unwelcome:
    - A **cloud PaaS hostname is not evidence of anything.** Who deployed the workload decides
      ownership, and under every shared-responsibility model the customer owns its configuration.
-   - A **CDN edge address** may be disputable while the **TLS or header configuration on it is the
+   - A **CDN edge address** may be disputable while the **TLS or web-application configuration on it is the
      entity's own** and entirely within its control.
    - An **acquired entity's estate is the group's estate.** Not yet integrated is a plan, not a
      dispute.
