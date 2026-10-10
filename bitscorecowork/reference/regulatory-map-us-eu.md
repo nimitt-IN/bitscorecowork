@@ -85,9 +85,9 @@ Article 21(2) lists ten measures, (a) to (j). Bitsight evidences the external su
 | Web Application Security | (e) acquisition, development and maintenance |
 | TLS/SSL Certificates · TLS/SSL Configurations | (h) cryptography and, where appropriate, encryption |
 | Open Ports | (i) access control policies and asset management |
-| DNSSEC | (g) basic cyber hygiene |
+| DNSSEC (beta; does not affect the rating) | (g) basic cyber hygiene |
 | SPF · DKIM · DMARC | (g) basic cyber hygiene, against spoofed mail and phishing |
-| Exposed Credentials | (i) access control; (j) multi-factor authentication |
+| Exposed Credentials (informational; does not affect the rating) | (i) access control; (j) multi-factor authentication |
 | File Sharing | (g) basic cyber hygiene and training |
 | Botnet Infections · Malware Servers · Spam Propagation · Unsolicited Communications · Potentially Exploited | (b) incident handling |
 | Domain Squatting (Bitsight module; does not affect the rating) | (a) risk analysis |
@@ -111,7 +111,7 @@ say so.
 | Evidence | Section |
 | --- | --- |
 | Portfolio monitoring of third-party service providers | **500.11(a)** — identification and risk assessment, minimum practices, due diligence, and **periodic assessment** based on risk and continued adequacy |
-| Exposed Credentials | 500.12 — multi-factor authentication (external evidence of exposure only; enforcement is internal) |
+| Exposed Credentials (informational; does not affect the rating) | 500.12 — multi-factor authentication (external evidence of exposure only; enforcement is internal) |
 | TLS/SSL vectors | 500.15 — encryption of nonpublic information in transit (external surface only) |
 
 ### SEC — Regulation S-K, Item 106

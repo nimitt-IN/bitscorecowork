@@ -103,6 +103,15 @@ DKIM now grade N/A rather than punitively for an entity with no domains. Source:
 Base, *How are Bitsight Security Ratings Calculated?* and *Ratings Algorithm Update (RAU26) — July
 16, 2026*, both read 24 September 2026.
 
+**Nineteen vectors move the rating; a few more are shown and don't.** DNSSEC and Web Application
+Headers are in beta — Bitsight still grades them, and the server marks them `informational` — and
+Domain Squatting, Exposed Credentials and Other Disclosures are informational. Map them to controls
+where they are evidence (exposed credentials certainly are), but never count a beta or informational
+grade towards the rating, rank it as a score-moving fix, or name it among the vectors a rating is
+calculated from. User Behavior's 2.5% is File Sharing alone. Source: Bitsight KB, *A Guide to
+Navigating and Prioritizing Bitsight Risk Categories & Risk Vectors* (RAU26 revision), read 10
+October 2026, and `rating_details[].beta` on the live API the same day.
+
 **The band-to-band breach multiples, for use in `quantify`.** These are Bitsight's own published
 comparative figures, and they are what the evidence will bear:
 
