@@ -199,8 +199,8 @@ output — an auditor can work with it, and it doesn't assert something the data
      Titled an advisory; seven of its eleven Annexure A items say *shall*, and two more wrap a *shall* inside an encouragement. Two speak to observed evidence
      — §1 (assume exploitation within hours) maps to Critical Vulnerability Management, §7 (critical
      service providers must furnish evidence of preparedness) maps to portfolio monitoring. The other
-     four *shall* items — SBOM, API inventory, board-level AI scenario, human oversight of AI-generated
-     code — are entirely internal. Name them as out of scope rather than gesturing at them.
+     five *shall* items — SBOM, API inventory, board-level AI scenario, monitoring for attack sequences
+     beyond human-operated timelines, human oversight of AI-generated code — are entirely internal. Name them as out of scope rather than gesturing at them.
 
    Map using the vector tables in [`regulatory-map.md`](../../reference/regulatory-map.md).
 

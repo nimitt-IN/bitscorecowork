@@ -353,9 +353,10 @@ worth mapping rather than summarising:
 | **§1** — presume newly disclosed critical vulnerabilities are exploitable **within hours**, and prepare for patch waves | Critical Vulnerability Management | Observed remediation latency against disclosed vulnerabilities, weighted by severity — the closest external proxy there is for whether an RE could survive a compressed window | Whether the RE has *planned* for a patch wave. The plan is internal |
 | **§7** — require **critical service providers** to assess frontier-AI risk and furnish evidence of preparedness | Portfolio monitoring (`watchtower`, `myportfolio`, `vendor-brief`) | That the RE monitors those providers' external posture, dated. Evidence the RE performed oversight | Whether the provider actually assessed frontier-AI risk. That is a document the provider furnishes, not an observable |
 
-The remaining four *shall* items — SBOM coverage, the API inventory with rate-limiting and whitelist,
+The remaining five *shall* items — SBOM coverage, the API inventory with rate-limiting and whitelist,
 frontier AI as a **board-level named risk scenario** (the Standing Committee on Technology at an MII),
-and human oversight of AI-generated remediation code — are **entirely internal**. A pack that gestures
+monitoring tuned for attack sequences beyond human-operated timelines, and human oversight of
+AI-generated remediation code — are **entirely internal**. A pack that gestures
 at them is overclaiming. Name them as out of scope and say who holds the evidence.
 
 **One thing worth telling a client**, because it is true and few know it: this is, as far as this
