@@ -106,7 +106,8 @@ If an artefact would be convincing, it needs the stamp most.
      running today is not.
    - **SEBI LODR Reg. 30(6)** if listed — the materiality decision, under time pressure, with
      incomplete facts. This one reliably surprises boards, and the deadline surprises them twice:
-     **twelve hours**, not twenty-four, because the event emanates from within the entity. Run it as a
+     plan on **twelve hours**, not twenty-four — SEBI has not ruled which limb applies, and treating the
+     event as emanating from within the entity is the conservative reading. Run it as a
      hard inject — it can fall due before some of the technical filings.
 
    - **For an IFSCA entity, run the tail.** Six hours to `cyber-incidents@ifsca.gov.in`, then an

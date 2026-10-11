@@ -239,7 +239,7 @@ CSCRF.
 | --- | --- | --- |
 | **Reg. 21(4)** | The Risk Management Committee's role shall *"specifically cover cyber security"* | Dated external-posture packs and trend put in front of the RMC (`boardpack`, `watchtower`) evidence the **committee having cyber material to review** — not that the committee exists or met |
 | **Reg. 27(2)(ba)** | Details of **cyber security incidents or breaches or loss of data or documents** disclosed with the **quarterly corporate governance report** — **no materiality test** | **Nothing.** Bitsight does not observe incidents. Say so plainly; this comes from the entity's own incident register |
-| **Reg. 30(6)** | Market disclosure of material events — **12 hours** for an event emanating from within the entity | **Nothing directly.** Ratings are not a disclosure trigger and must never be presented as one |
+| **Reg. 30(6)** | Market disclosure of material events — **12 hours** for an event emanating from within the entity, 24 for one arising outside it. SEBI has not said which a cyber incident is; plan on 12 (BitScore's conservative reading) | **Nothing directly.** Ratings are not a disclosure trigger and must never be presented as one |
 
 **Care point, and it is the important one for this section.** Two of these three rows are *"Bitsight
 evidences nothing"*, and that is the correct output. The temptation is to map a rating movement onto
@@ -344,8 +344,8 @@ ratings pack can honestly claim:
 
 ### The frontier-AI advisory, and the two items a ratings pack actually speaks to
 
-The advisory of 4 June 2026 is drafted as an advisory and reads as an instrument: six of its eleven
-Annexure A items say *shall*. Two of those six are unusually close to what Bitsight observes, and are
+The advisory of 4 June 2026 is drafted as an advisory and reads as an instrument: seven of its eleven
+Annexure A items say *shall*. Two of those seven are unusually close to what Bitsight observes, and are
 worth mapping rather than summarising:
 
 | Annexure A item | Risk vector | What the evidence shows | What it cannot show |
