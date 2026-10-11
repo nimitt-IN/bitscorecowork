@@ -340,8 +340,8 @@ IST deadlines, a fact-gathering checklist, per-instrument drafts and a timeline 
 
 > ⚠️ **The clock runs from noticing, not from confirming.** "We're still investigating" does not pause
 > six hours. And a listed entity owes **SEBI LODR Reg. 30(6)** disclosure to the exchanges *in
-> parallel* with its technical filings — **within twelve hours**, not the twenty-four usually quoted,
-> because a cyber incident emanates from within the entity. On a twelve-hour limb it can fall due
+> parallel* with its technical filings — plan on **twelve hours**, not the twenty-four usually quoted,
+> on the reading that a cyber incident emanates from within the entity. On a twelve-hour limb it can fall due
 > before some of the technical filings. Reg. 27(2)(ba) then puts the incident in the **quarterly**
 > corporate governance report regardless of materiality.
 
