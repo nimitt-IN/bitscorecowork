@@ -452,8 +452,8 @@ corrections are baked in. "RBI requires 2–6 hour reporting for banks and NBFCs
 that no longer travel together — there are **seven parallel 2026 Directions, one per entity class**,
 each setting six hours to **DAKSH**, and an NBFC files under 461 rather than the 2023 Master
 Direction. A **listed** entity owes SEBI LODR disclosure to the exchanges in parallel with its
-technical filings — **twelve hours**, not the twenty-four usually quoted, because a cyber incident
-emanates from within the entity — plus a standing quarterly obligation under Reg. 27(2)(ba) that
+technical filings — plan on **twelve hours**, not the twenty-four usually quoted, on the reading that
+a cyber incident emanates from within the entity — plus a standing quarterly obligation under Reg. 27(2)(ba) that
 carries no materiality test at all. And the **DPDP breach duties do not commence until 13 May 2027**,
 so no DPDP clock runs on an incident today. The skill will not decide whether an
 incident is reportable, whether an instrument applies, or whether an event is material — and it will

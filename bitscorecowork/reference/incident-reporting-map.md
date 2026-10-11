@@ -47,7 +47,7 @@ continues past the first filing, to seven days for the fix and thirty for root c
 Earlier corrections, retained because the wrong versions still circulate: the RBI family is **seven
 instruments**, not one; IRDAI's **2026** Guidelines replaced the 2023 ones and carry **no 24-hour step**;
 CSCRF is **three filings**, not one; the DPDP breach obligations are **not in force until 13 May 2027**;
-and SEBI LODR's cyber disclosure is **twelve hours, not twenty-four**. See the change note at the end.
+and for SEBI LODR's cyber disclosure, **plan on twelve hours, not twenty-four**. See the change note at the end.
 
 ---
 
@@ -420,12 +420,13 @@ reasonably possible and in any case not later than the following:"*
 | **(ii)** | **twelve hours** from occurrence | Event **emanating from within** the listed entity |
 | **(iii)** | **twenty-four hours** from occurrence | Event **not** emanating from within the listed entity |
 
-> ### ⚠️ A cyber incident is almost always limb (ii) — **twelve hours, not twenty-four**
+> ### ⚠️ Plan on limb (ii) — **twelve hours, not twenty-four**
 >
-> This corrects the industry shorthand *and* what this reference said until 13 August 2026. A
-> ransomware event, data breach, customer-data leak or IT outage **originates within the listed
-> entity**, so it falls in limb (ii). Quoting "24 hours" — the figure most commonly repeated, and the
-> one this file previously carried — puts the disclosure **twelve hours late**.
+> SEBI has not said which limb a cyber incident falls in, and LODR has no cyber-specific item. BitScore's
+> reading is that a ransomware event, data breach, customer-data leak or IT outage **originates within
+> the listed entity**, so it falls in limb (ii). Present that as the conservative reading, never as
+> settled law: planning on "24 hours" — the figure most commonly repeated, and the one this file
+> carried until 13 August 2026 — risks a late disclosure if the shorter limb applies.
 >
 > Note also that limb (i) is **thirty minutes**, not twelve hours. This reference previously
 > attributed twelve hours to board decisions. Both limbs were wrong, in opposite directions.
@@ -794,7 +795,7 @@ says REs are *"encouraged to comply"* with Annexure A and *"shall come into forc
 effect"*, and it states expressly that it *"does not dilute any obligation"* under the Guidelines it
 sits alongside.
 
-**Read the annexure, not the covering page.** Of its eleven items, **six are drafted with *shall***:
+**Read the annexure, not the covering page.** Of its eleven items, **seven are drafted with *shall*** (two more wrap a *shall* inside an encouragement):
 presume newly disclosed critical vulnerabilities are exploitable **within hours**; carry frontier AI as
 a **defined scenario** in the cyber risk assessment, reviewed periodically and placed **before the
 Board — before the Standing Committee on Technology at an MII**; maintain an **SBOM** covering

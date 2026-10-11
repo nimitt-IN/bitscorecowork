@@ -51,7 +51,7 @@ year's numbers.
 | Circular | Reference | Issued | What it did |
 | --- | --- | --- | --- |
 | **CSCRF v1.0** | SEBI/HO/ITD-1/ITD_CSC_EXT/P/CIR/2024/113 | 20 Aug 2024 | The framework, and the original thresholds |
-| Clarifications | SEBI/HO/ITD-1/ITD_CSC_EXT/P/CIR/2024/184 | 31 Dec 2024 | First round of queries answered |
+| **Clarifications** | SEBI/HO/ITD-1/ITD_CSC_EXT/P/CIR/2024/184 | 31 Dec 2024 | First round of queries answered; **forbearance to 31 Mar 2025** for all REs; **KRAs and DPs moved from 1 Jan to 1 Apr 2025**; data localisation (PR.DS.S2) held in abeyance |
 | **First extension** | SEBI/HO/ITD-1/ITD_CSC_EXT/P/CIR/2025/45 | 28 Mar 2025 | Timelines to 30 June 2025 — **except MIIs, KRAs and QRTAs** |
 | **April 2025 clarification** | SEBI/HO/ITD-1/ITD_CSC_EXT/P/CIR/2025/60 | 30 Apr 2025 | **Replaced the categorisation criteria** for brokers, DPs, IAs, RAs, KRAs, AIFs/VCFs and PMs |
 | **Second extension** | SEBI/HO/ITD-1/ITD_CSC_EXT/P/CIR/2025/96 | 30 Jun 2025 | Timelines to **31 Aug 2025** — again **except MIIs, KRAs and QRTAs** |
@@ -60,8 +60,10 @@ year's numbers.
 SEBI's own FAQ, 11 June 2025: https://www.sebi.gov.in/sebi_data/faqfiles/jun-2025/1749647139924.pdf
 
 > **The deadline everyone quotes has a carve-out everyone forgets.** "CSCRF was due 31 August 2025" is
-> true only for the REs the two extensions covered. **MIIs, KRAs and QRTAs were excluded from both**,
-> so their original deadline never moved. Never tell one of those three that it had until August 2025.
+> true only for the REs the two extensions covered. **MIIs, KRAs and QRTAs were excluded from both.**
+> Their own dates differ: MIIs and QRTAs stayed on **1 January 2025** (with the forbearance to 31 March
+> 2025 that applied to everyone); KRAs were moved once, to **1 April 2025**, by the December 2024
+> clarifications, and no further. Never tell one of those three that it had until August 2025.
 
 ---
 
@@ -229,7 +231,7 @@ No RTA is a Qualified RE: the table runs Small-size, Mid-size, then straight to 
 
 **Category: Qualified RE** — stated outright for the class, with no threshold to compute.
 
-KRAs were excluded from both compliance extensions, so their original deadline never moved.
+KRAs were excluded from both compliance extensions. Their date moved only once, from 1 January to 1 April 2025, under the December 2024 clarifications.
 
 > ⚠️ **Superseded version still in circulation.** CSCRF v1.0 treated KRAs at par with MIIs. April 2025 re-categorised them as Qualified REs.
 
@@ -311,7 +313,7 @@ which obligations bind. These are the graded ones most often asked about.
 | Obligation | Binds | Detail |
 | --- | --- | --- |
 | **Cyber Capability Index** | MII, Qualified RE | MIIs conduct a third-party assessment of their cyber resilience using the CCI half-yearly. Qualified REs self-assess yearly. The two carry different evidential weight — a third-party assessment and a self-report are not interchangeable. |
-| **ISO 27001 certification** | MII, Qualified RE | ISO/IEC 27001 certification is mandatory for MIIs and Qualified REs. |
+| **ISO 27001 certification** | MII (mandatory); Qualified RE (recommended) | ISO/IEC 27001 certification is mandatory for MIIs. v1.0 also made it mandatory for Qualified REs; the August 2025 technical clarification (6.11) reduced that to "encouraged and recommended (not mandatory)". |
 | **Cyber risk management framework** | MII, Qualified RE, Mid-size RE | A documented framework for identifying, analysing, evaluating, prioritising, responding to and monitoring cyber risks on a continuous basis. |
 | **IT Committee including an external cyber security expert** | MII, Qualified RE, Mid-size RE | An IT Committee that mandatorily includes at least one external independent expert on cyber security matters. For Small-size and Self-certification REs a committee is desirable but not mandatory; in its absence, CSCRF compliance is reviewed and approved by the MD, CEO, a Board member, the partners or the proprietor. |
 | **Red teaming exercise** | MII, Qualified RE | Red teaming is conducted as part of the cyber security framework. |

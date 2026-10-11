@@ -239,7 +239,7 @@ CSCRF.
 | --- | --- | --- |
 | **Reg. 21(4)** | The Risk Management Committee's role shall *"specifically cover cyber security"* | Dated external-posture packs and trend put in front of the RMC (`boardpack`, `watchtower`) evidence the **committee having cyber material to review** — not that the committee exists or met |
 | **Reg. 27(2)(ba)** | Details of **cyber security incidents or breaches or loss of data or documents** disclosed with the **quarterly corporate governance report** — **no materiality test** | **Nothing.** Bitsight does not observe incidents. Say so plainly; this comes from the entity's own incident register |
-| **Reg. 30(6)** | Market disclosure of material events — **12 hours** for an event emanating from within the entity | **Nothing directly.** Ratings are not a disclosure trigger and must never be presented as one |
+| **Reg. 30(6)** | Market disclosure of material events — **12 hours** for an event emanating from within the entity, 24 for one arising outside it. SEBI has not said which a cyber incident is; plan on 12 (BitScore's conservative reading) | **Nothing directly.** Ratings are not a disclosure trigger and must never be presented as one |
 
 **Care point, and it is the important one for this section.** Two of these three rows are *"Bitsight
 evidences nothing"*, and that is the correct output. The temptation is to map a rating movement onto
@@ -344,8 +344,8 @@ ratings pack can honestly claim:
 
 ### The frontier-AI advisory, and the two items a ratings pack actually speaks to
 
-The advisory of 4 June 2026 is drafted as an advisory and reads as an instrument: six of its eleven
-Annexure A items say *shall*. Two of those six are unusually close to what Bitsight observes, and are
+The advisory of 4 June 2026 is drafted as an advisory and reads as an instrument: seven of its eleven
+Annexure A items say *shall*. Two of those seven are unusually close to what Bitsight observes, and are
 worth mapping rather than summarising:
 
 | Annexure A item | Risk vector | What the evidence shows | What it cannot show |
@@ -353,9 +353,10 @@ worth mapping rather than summarising:
 | **§1** — presume newly disclosed critical vulnerabilities are exploitable **within hours**, and prepare for patch waves | Critical Vulnerability Management | Observed remediation latency against disclosed vulnerabilities, weighted by severity — the closest external proxy there is for whether an RE could survive a compressed window | Whether the RE has *planned* for a patch wave. The plan is internal |
 | **§7** — require **critical service providers** to assess frontier-AI risk and furnish evidence of preparedness | Portfolio monitoring (`watchtower`, `myportfolio`, `vendor-brief`) | That the RE monitors those providers' external posture, dated. Evidence the RE performed oversight | Whether the provider actually assessed frontier-AI risk. That is a document the provider furnishes, not an observable |
 
-The remaining four *shall* items — SBOM coverage, the API inventory with rate-limiting and whitelist,
+The remaining five *shall* items — SBOM coverage, the API inventory with rate-limiting and whitelist,
 frontier AI as a **board-level named risk scenario** (the Standing Committee on Technology at an MII),
-and human oversight of AI-generated remediation code — are **entirely internal**. A pack that gestures
+monitoring tuned for attack sequences beyond human-operated timelines, and human oversight of
+AI-generated remediation code — are **entirely internal**. A pack that gestures
 at them is overclaiming. Name them as out of scope and say who holds the evidence.
 
 **One thing worth telling a client**, because it is true and few know it: this is, as far as this

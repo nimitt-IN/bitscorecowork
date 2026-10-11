@@ -190,8 +190,10 @@ determinations to make.
      CERT-In, details to the SEBI Incident Reporting Portal within 24 hours, and for stock brokers and
      depository participants a further six-hour leg to the exchanges/depositories.
    - **LODR Reg. 30** if listed — separate from CSCRF, different audience, different standard, written
-     for the market. **A cyber incident is limb (ii) — twelve hours, not the twenty-four everyone
-     quotes** — because it emanates from within the listed entity. On a twelve-hour clock this can
+     for the market. **Plan on limb (ii) — twelve hours, not the twenty-four everyone quotes.** SEBI
+     has not said which limb a cyber incident falls in; BitScore's reading is that it emanates from
+     within the listed entity, and twelve hours is the conservative choice. Say it is a reading, not
+     settled law. On a twelve-hour clock this can
      fall due *before* some of the technical filings, so put it in the matrix early.
    - **LODR Reg. 27(2)(ba)** if listed — cyber incidents, breaches and data loss go into the
      **quarterly corporate governance report**, with **no materiality test**. An incident correctly
