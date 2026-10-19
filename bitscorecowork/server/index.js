@@ -8,6 +8,9 @@
  * threat (CVE) exposure and attestations across the portfolio, exposed credentials,
  * and Bitsight's own risk remediation plans.
  *
+ * One tool is not Bitsight's: `bitscore_cyber_weather_today` reads BitScore's public daily
+ * Cyber Weather feed from bitscore.in. It needs no token and sends nothing about the user.
+ *
  * Every tool is read-only: this server issues GET requests only and cannot modify
  * a Bitsight portfolio, and nothing here performs an active scan.
  *
@@ -675,6 +678,68 @@ async function fetchAllPages(path, params, cap) {
 
 const ATTESTATION_SLUGS = ["UNREVIEWED", "UNDER_REVIEW", "NOT_VULNERABLE", "RISK_ACCEPTED"];
 const ATTESTATION_ROW_CAP = 2_000;
+
+// ---- Cyber Weather (bitscore.in) -------------------------------------------
+//
+// BitScore's public daily threat forecast, read from the site's own feed so the plugin and
+// the page cannot disagree. Not Bitsight data: no token, no Authorization header, no
+// parameters — nothing about the user, their company or their portfolio leaves the machine.
+//
+// The feed refreshes at 07:30 IST with a catch-up at 08:30, and has no SLA: a failed refresh
+// keeps the previous reading and marks it `stale` after 26 hours. Schema 1.x only adds
+// fields; a new major renames or removes them, so it is refused rather than misread.
+
+const CYBER_WEATHER_URL = "https://www.bitscore.in/api/connector/cyber_weather_today";
+const CYBER_WEATHER_SCHEMA_MAJOR = "1";
+const CYBER_WEATHER_TIMEOUT_MS = 15_000;
+const CYBER_WEATHER_RETRY_MS = 3_000;
+
+async function fetchCyberWeather() {
+  let res;
+  let lastError;
+  // One retry, 3 s later, on a network error or 5xx — the feed's own policy. A 4xx is an answer.
+  for (let attempt = 1; attempt <= 2; attempt++) {
+    try {
+      res = await fetch(CYBER_WEATHER_URL, {
+        headers: { Accept: "application/json", "User-Agent": `bitscorecowork/${SERVER_VERSION}` },
+        signal: AbortSignal.timeout(CYBER_WEATHER_TIMEOUT_MS),
+      });
+      if (res.status < 500 || attempt === 2) break;
+      await res.body?.cancel();
+    } catch (err) {
+      lastError = err;
+      res = undefined;
+      if (attempt === 2) break;
+    }
+    await sleep(CYBER_WEATHER_RETRY_MS);
+  }
+
+  if (!res) {
+    throw new Error(
+      `Cyber Weather could not be reached (${lastError?.message || "network error"}). It is BitScore's feed, not Bitsight's, so any Bitsight work can continue. Tell the user today's reading is unavailable and link https://www.bitscore.in/cyber-weather — do not reconstruct a reading.`
+    );
+  }
+  if (!res.ok) {
+    throw new Error(
+      `Cyber Weather answered HTTP ${res.status}. Tell the user today's reading is unavailable and link https://www.bitscore.in/cyber-weather — do not reconstruct a reading.`
+    );
+  }
+
+  let body;
+  try {
+    body = await res.json();
+  } catch {
+    throw new Error("Cyber Weather returned something that is not JSON. Treat today's reading as unavailable.");
+  }
+  const data = body?.data;
+  const major = String(data?.schema_version ?? "").split(".")[0];
+  if (!data || major !== CYBER_WEATHER_SCHEMA_MAJOR) {
+    throw new Error(
+      `Cyber Weather schema ${data?.schema_version ?? "(missing)"} is not one this plugin reads (${CYBER_WEATHER_SCHEMA_MAJOR}.x). Update BitScoreCoWork; meanwhile link https://www.bitscore.in/cyber-weather and do not guess at the fields.`
+    );
+  }
+  return data;
+}
 
 // ---- Keeping results inside the client's limit ---------------------------
 //
@@ -1629,6 +1694,14 @@ const TOOLS = [
       });
     },
   },
+  {
+    name: "bitscore_cyber_weather_today",
+    annotations: { title: "BitScore: Cyber Weather today", readOnlyHint: true, idempotentHint: true, openWorldHint: true },
+    description:
+      "Today's BitScore Cyber Weather: a daily global threat forecast from public feeds — the condition (clear to severe) and points, five instruments (CISA KEV additions, critical CVEs published, SANS ISC attack traffic, abuse.ch URLhaus malware links, SANS Infocon), CVEs CISA added to KEV in the last seven days (`kev_7d`), EPSS risers and the not-yet-in-KEV `watch_list`, the chance CISA adds to KEV today and tomorrow, top scanned ports, the patch calendar, internet outages and the day's suggested actions. Backs the cyber-weather skill.\n\nNot Bitsight data, and needs no Bitsight token: it is a plain GET to https://www.bitscore.in/api/connector/cyber_weather_today with no parameters, so nothing about the user, their company or their portfolio is sent. Refreshed daily at 07:30 IST; when `stale` is true or `missing` lists feeds, say so before the reading. Every field names its source in `field_sources` and every source its licence in `sources`: SANS ISC fields are CC BY-NC-SA 4.0 and Cloudflare Radar fields CC BY-NC 4.0 (non-commercial), so name the licence wherever those fields are shown. Keep `attribution`, `disclaimer` and `page_url` with any reading you present. Indicative, not a measure of any organisation's risk.",
+    inputSchema: { type: "object", properties: {} },
+    handler: async () => textResult(await fetchCyberWeather()),
+  },
 ];
 
 const TOOLS_BY_NAME = new Map(TOOLS.map((t) => [t.name, t]));
@@ -1648,6 +1721,7 @@ const SUPPORTED_PROTOCOL_VERSIONS = ["2025-06-18", "2025-03-26", "2024-11-05"];
  */
 const SERVER_INSTRUCTIONS = [
   "Read-only access to the Bitsight Security Ratings API. Nothing here scans, exploits or changes a portfolio.",
+  "bitscore_cyber_weather_today is BitScore's public daily threat forecast, not Bitsight data. It needs no token — call it without checking auth — and sends nothing about the user.",
   "Auth: call bitsight_auth_status first. If authenticated=false, ask the user for their Bitsight API token and pass it to bitsight_set_token. Never repeat a token back.",
   "HTTP 401 means the token is bad — ask for a new one. HTTP 403 means the token is valid but the endpoint isn't in this subscription — do not ask for the token again; continue without that source and say what is missing.",
   "HTTP 429 has already been retried by this server with backoff. If it still surfaces, report the gap rather than retrying at once.",

@@ -1,6 +1,6 @@
 # BitScoreCoWork — Global Rules (apply to every skill)
 
-These rules are binding for **all sixteen** BitScoreCoWork skills. Each `SKILL.md` links here
+These rules are binding for **every** BitScoreCoWork skill. Each `SKILL.md` links here
 instead of repeating them. If anything in a skill appears to conflict with a rule below,
 the rule below wins.
 
@@ -20,7 +20,9 @@ No skill pulls Bitsight data until a valid API token is available. There are two
 - **Paste-in, every session.** Where no configured token exists, the plugin holds **no token at
   startup** and asks for one **every time it starts**.
 
-So this is the first thing every skill does:
+So this is the first thing every skill does — with one exception. `cyber-weather` reads BitScore's
+public feed (`bitscore_cyber_weather_today`), which needs no token, so it gives the day's reading
+first and runs this flow only when the user wants the Bitsight exposure check.
 
 1. **Call `bitsight_auth_status`.** If `authenticated` is `true`, proceed.
 2. If `authenticated` is `false`, **ask the user to paste their Bitsight API token.** Explain it is
@@ -471,6 +473,7 @@ so a reader can't tell which is which.
 | `bitsight_get_remediation_plan` | Bitsight's own Risk Remediation Plan: fix order and grade steps (or CVM scenarios) for seven vectors; own organisation and subsidiaries only. `GET /ratings/v1/companies/{guid}/risk-remediation-plan/`. |
 | `bitsight_get_exposed_credentials` | Credential leaks tied to portfolio companies: leak, dates, data types, record counts; never credential values. `GET /ratings/v1/exposed-credentials/*`. |
 | `bitsight_get_threat_attestations` | Companies' statements about threats (Unreviewed, Under review, Not vulnerable, Risk accepted). `GET /ratings/v1/threats/attestations/`. |
+| `bitscore_cyber_weather_today` | BitScore's daily Cyber Weather — not Bitsight data, no token needed. KEV additions, EPSS watch list, attack traffic, patch calendar, outages, with each field's source and licence. `GET https://www.bitscore.in/api/connector/cyber_weather_today`. |
 
 All tools are **read-only** — nothing in this plugin can modify a Bitsight portfolio, tiers, or
 subscriptions, and nothing performs an active scan.

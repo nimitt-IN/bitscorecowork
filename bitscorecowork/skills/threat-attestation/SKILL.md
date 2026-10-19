@@ -9,7 +9,7 @@ description: >
   vendors said about CVE-XXXX", "who still needs chasing after the sweep", "our
   attestation backlog", or follows a cve-sweep.
 metadata:
-  version: "0.8.0"
+  version: "0.9.0"
 ---
 
 # threat-attestation: who has said what about a threat

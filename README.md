@@ -4,18 +4,18 @@ A Claude Cowork plugin for **Bitsight Security Ratings**, by
 **BitScore Cybertech LLP** — [bitscore.in](https://bitscore.in), an authorised [Bitsight](https://www.bitsight.com/)
 partner.
 
-**Latest release: [v0.8.0](https://github.com/nimitt-IN/bitscorecowork/releases/tag/v0.8.0)** —
-nineteen skills and 18 tools (all read-only against Bitsight), verified against the live Bitsight API. 0.8.0 adds
-three skills on Bitsight data the plugin didn't read before: **`remediation-plan`** (Bitsight's own
-fix order, grade by grade), **`credential-exposure`** (leaked credentials across the portfolio, triaged)
-and **`threat-attestation`** (who has said what about a CVE, set against the observed exposure).
+**Latest release: [v0.9.0](https://github.com/nimitt-IN/bitscorecowork/releases/tag/v0.9.0)** —
+twenty skills and 19 tools (all read-only), verified against the live Bitsight API. 0.9.0 adds
+**`cyber-weather`**: BitScore's daily threat forecast — what attackers began exploiting this week,
+what is likely next, what to patch — with this week's exploited CVEs checked against your own company
+and portfolio in Bitsight. The forecast needs no token, so it works from the first minute.
 [All releases →](https://github.com/nimitt-IN/bitscorecowork/releases)
 
 Pull and analyze Bitsight Security Ratings from inside Claude, then turn them into executive-ready
 reporting, vendor decisions, remediation plans, audit evidence, footprint validation, regulatory
 incident notifications, crisis simulations, and scoped, authorization-gated security-testing plans.
 It ships a zero-dependency MCP server (Node.js 18+) wrapping the Bitsight REST API as 18 read-only
-tools, plus nineteen skills:
+tools, plus one that reads BitScore's public Cyber Weather feed, and twenty skills:
 
 | Skill | What it produces |
 | --- | --- |
@@ -27,6 +27,7 @@ tools, plus nineteen skills:
 | `vendor-brief` | Due-diligence brief with a go / no-go recommendation |
 | `remediation-roadmap` | Prioritized 30/60/90-day fix plan |
 | `remediation-plan` | Bitsight's own fix order and grade steps for your organisation (CVM: 30/60/90-day grade scenarios) |
+| `cyber-weather` | Today's threat weather, with this week's exploited CVEs checked against your estate |
 | `cve-sweep` | Portfolio exposure to a named CVE, with evidence |
 | `threat-attestation` | Who has stated what about a threat, against observed exposure — your backlog or a vendor chase list |
 | `credential-exposure` | Leaked credentials across the portfolio, triaged into act now / review / background |
@@ -48,7 +49,7 @@ usage and troubleshooting).
 | Path | What it is |
 | --- | --- |
 | [`bitscorecowork/`](bitscorecowork/) | The plugin source tree — edit here |
-| `bitscorecowork-0.7.0.plugin` | The current built, installable plugin (a zip of `bitscorecowork/`) |
+| `bitscorecowork-0.9.0.plugin` | The current built, installable plugin (a zip of `bitscorecowork/`) |
 | [`.claude-plugin/marketplace.json`](.claude-plugin/marketplace.json) | Marketplace manifest, so the repo URL installs the plugin |
 | [`.claude-plugin/plugin.json`](.claude-plugin/plugin.json) | Root plugin manifest for tools that read only the repo root, such as the Claude directory. Points into `bitscorecowork/`; `check-version` keeps it identical to the inner one |
 | [`LICENSE`](LICENSE) | MIT License |
@@ -86,6 +87,18 @@ entity to the 2023 IT Governance Master Direction — there are in fact **seven 
 one per entity class — and still cite the IRDAI 2023 Guidelines, replaced in April 2026.
 
 ## Current release
+
+**v0.9.0** — 20 skills, 19 tools (all read-only), seven bundled references.
+
+**Cyber Weather, new in 0.9.0.** `cyber-weather` gives BitScore's daily global threat forecast — the
+CVEs CISA added to its Known Exploited Vulnerabilities catalogue this week, the EPSS watch list,
+attack traffic, the patch calendar and the day's actions — with every field's source and licence.
+With a Bitsight token it then checks each of those CVEs against your own company and portfolio, and
+names the ones Bitsight doesn't catalogue. The forecast comes from a new tool,
+`bitscore_cyber_weather_today`, which needs no token and sends nothing about you. Details in
+[`bitscorecowork/README.md`](bitscorecowork/README.md#whats-new-in-090--cyber-weather).
+
+### Carried from 0.8.0
 
 **v0.8.0** — 19 skills, 18 tools (all read-only against Bitsight), seven bundled references.
 
