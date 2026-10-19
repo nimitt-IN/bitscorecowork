@@ -1,6 +1,6 @@
 # BitScoreCoWork — Help Guide
 
-How to trigger each of the nineteen skills, what to have ready, and how to read API errors.
+How to trigger each of the twenty skills, what to have ready, and how to read API errors.
 
 An asset by **BitScore Cybertech LLP** — [bitscore.in](https://bitscore.in).
 
@@ -527,6 +527,31 @@ accepted*), plus draft chase notes. **Drafts only, nothing is sent.**
 
 ---
 
+## Skill 20 — `cyber-weather`
+
+**Use it for:** a two-minute morning read of the threat landscape, and whether this week's exploited
+flaws touch your company or your vendors.
+
+**Trigger phrases**
+- "What's today's cyber weather?"
+- "Morning security stand-up."
+- "What's being exploited this week — are we exposed?"
+
+**Example prompt**
+> "Give me today's cyber weather, then check this week's KEV additions against us and our critical
+> vendors."
+
+**Expected inputs:** nothing. The forecast needs no token. For the exposure check, a Bitsight API
+token; the skill offers the check and asks for one only if you want it. You get the day's brief with
+sources and licences, then an exposure table, own organisation first, plus a list of CVEs Bitsight
+doesn't catalogue.
+
+> ⚠️ **The weather is about the internet, not about you.** "Clear" is never a reason to stand down,
+> and a CVE with no exposed companies is not an all-clear — Bitsight reports what it observes
+> externally. SANS ISC and Cloudflare Radar fields carry non-commercial licences; the brief names them.
+
+---
+
 ## API-error troubleshooting
 
 | What you see | HTTP | Meaning | What to do |
@@ -546,6 +571,7 @@ accepted*), plus draft chase notes. **Drafts only, nothing is sent.**
 
 ## Quick reference — which skill do I want?
 
+- What's the threat weather today, and does it touch us? → **`cyber-weather`**
 - One company (usually *ours*) → **`mycompany`**
 - Everyone we monitor → **`myportfolio`**
 - Only what changed since last time → **`watchtower`**
@@ -577,6 +603,10 @@ anything it puts in *act now*. `boardpack` → `peer-index`, because "how do we 
 first question. `tabletop` → `incident-notify`, so the notification drafts exist before the real
 incident rather than being improvised during it. `assurance-pack` → `remediation-roadmap` for whatever
 the customer's questionnaire exposed.
+
+**Chains through `cyber-weather`.** `cyber-weather` each morning → `cve-sweep` on any CVE that hits →
+`threat-attestation` for the vendors it lists. Run `watchtower` weekly alongside it: the weather is
+what changed on the internet, `watchtower` is what changed in your portfolio.
 
 **Chains through the 0.8.0 skills.** `cve-sweep` → `threat-attestation` → chase notes, so a sweep ends
 in follow-up rather than a list. `remediation-roadmap` → `remediation-plan` for Bitsight's own item

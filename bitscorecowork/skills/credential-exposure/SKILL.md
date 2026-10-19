@@ -10,7 +10,7 @@ description: >
   credentials report", "new leaks since last month", or names a breach in the news
   and asks who is affected.
 metadata:
-  version: "0.8.0"
+  version: "0.9.0"
 ---
 
 # credential-exposure: leaked accounts, triaged into action

@@ -1,4 +1,4 @@
-# BitScoreCoWork — v0.8.0
+# BitScoreCoWork — v0.9.0
 
 An asset by **BitScore Cybertech LLP** — [bitscore.in](https://bitscore.in), an authorised
 [Bitsight](https://www.bitsight.com/) partner.
@@ -9,6 +9,7 @@ without leaving Claude.
 
 Built for BitScore's enterprise customers who are Bitsight subscribers: quick rating lookups for
 your own organization, portfolio-wide vendor/third-party monitoring, recurring change digests,
+a daily cyber weather brief checked against your estate,
 footprint validation and attribution disputes, vendor due-diligence briefs, remediation roadmaps
 and Bitsight's own remediation plans, CVE exposure sweeps and vendor attestation tracking, exposed-credential
 triage, framework evidence packs, customer questionnaire responses, sector benchmarking,
@@ -41,8 +42,10 @@ Security Ratings REST API (`https://api.bitsighttech.com/ratings`) as read-only 
 | `bitsight_get_threat_attestations` | What companies have stated about a threat: unreviewed, under review, not vulnerable, risk accepted |
 | `bitsight_get_remediation_plan` | Bitsight's Risk Remediation Plan for your organisation: fix order and grade steps |
 | `bitsight_get_exposed_credentials` | Credential leaks tied to portfolio companies (leak metadata and counts, never credentials) |
+| `bitscore_cyber_weather_today` | BitScore's daily Cyber Weather — not Bitsight data, no token needed, nothing about you sent |
 
 Everything is **read-only** — nothing here can modify your Bitsight portfolio or run an active scan.
+The Cyber Weather tool is a plain GET to bitscore.in with no parameters.
 
 **Skills**
 
@@ -54,6 +57,7 @@ Everything is **read-only** — nothing here can modify your Bitsight portfolio 
 | **vendor-brief** | "should we onboard this vendor?" | Due-diligence brief, go/no-go call, contract clauses, re-review date |
 | **remediation-roadmap** | "how do we get from 690 to 740?" | Prioritized 30/60/90-day fix plan with owners and effort |
 | **remediation-plan** | "what does Bitsight say we should fix first?" | Bitsight's own fix order and fixes-per-grade-step; CVM grade scenarios at 30/60/90 days |
+| **cyber-weather** | "what's today's cyber weather?" | Daily threat forecast; this week's exploited CVEs checked against your company and portfolio |
 | **cve-sweep** | "who's exposed to CVE-XXXX?" | Portfolio exposure list, evidence, triage order, outreach drafts |
 | **threat-attestation** | "which vendors haven't answered on CVE-XXXX?" | Statements set against observed exposure; your review backlog or a vendor chase list |
 | **credential-exposure** | "are our credentials in any breaches?" | Leaks by company, triaged act now / review / background, with actions |
@@ -71,12 +75,35 @@ Everything is **read-only** — nothing here can modify your Bitsight portfolio 
 See [`HELP_GUIDE.md`](HELP_GUIDE.md) for example prompts, expected inputs, and troubleshooting.
 
 **Bundled references** — the skills read these rather than repeating them:
-[`bitscore-global-rules.md`](reference/bitscore-global-rules.md) (binding on all sixteen),
+[`bitscore-global-rules.md`](reference/bitscore-global-rules.md) (binding on every skill),
 [`regulatory-map.md`](reference/regulatory-map.md) (risk vector → framework control areas),
 [`incident-reporting-map.md`](reference/incident-reporting-map.md) (source-cited notification clocks),
 [`cscrf-categories.md`](reference/cscrf-categories.md) (SEBI CSCRF categorisation at its current
 thresholds), and [`attribution-patterns.md`](reference/attribution-patterns.md) (why an asset is
 attributed, and what a dispute needs).
+
+---
+
+## What's new in 0.9.0 — Cyber Weather
+
+**A daily reason to open the plugin, and the first skill that works before a token is set.**
+
+**`cyber-weather`** gives BitScore's daily global threat forecast, the same reading as
+[bitscore.in/cyber-weather](https://www.bitscore.in/cyber-weather): the condition for the day, five
+instruments, the CVEs CISA added to its Known Exploited Vulnerabilities catalogue in the last seven
+days, the EPSS watch list (flaws whose chance of exploitation jumped and aren't in KEV yet), the
+chance CISA adds to KEV today and tomorrow, the most-scanned ports, the patch calendar, internet
+outages and the day's actions. Every field names its source and licence. SANS ISC and Cloudflare
+Radar fields are non-commercial licences, and the skill says so wherever they appear.
+
+With a Bitsight token, the skill then checks each of the week's exploited and watch-list CVEs against
+Bitsight's threat catalogue and lists the companies — your own first — where Bitsight observes
+exposure. CVEs Bitsight doesn't catalogue are named, not skipped, and a miss is never an all-clear.
+Anything that hits hands off to `cve-sweep` and `threat-attestation`.
+
+**One new tool** backs it: `bitscore_cyber_weather_today`, a plain GET to bitscore.in with no token
+and no parameters, so nothing about you, your company or your portfolio is sent. The forecast is
+refreshed daily at 07:30 IST; when the day's refresh hasn't landed, the skill says so.
 
 ---
 
@@ -416,7 +443,10 @@ Skills, tools and the taxonomy are otherwise unchanged from 0.4.0.
 
 ---
 
-## The nineteen skills
+## The twenty skills
+
+**`cyber-weather` arrived in 0.9.0, taking the plugin to twenty**, described under
+[What's new in 0.9.0](#whats-new-in-090--cyber-weather).
 
 **Three skills arrived in 0.8.0, taking the plugin from sixteen to nineteen:** `remediation-plan`,
 `credential-exposure` and `threat-attestation`, described under [What's new in 0.8.0](#whats-new-in-080--three-new-skills).

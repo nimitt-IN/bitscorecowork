@@ -9,7 +9,7 @@ description: >
   a B", "show our remediation plan", "what's the fastest way to lift our web app
   grade", or wants Bitsight's fix order alongside a roadmap.
 metadata:
-  version: "0.8.0"
+  version: "0.9.0"
 ---
 
 # remediation-plan: Bitsight's own fix order, grade by grade
