@@ -56,6 +56,13 @@ token only when the user wants the exposure check.
      `outages`, only where they say something. Skip a quiet section rather than padding it.
    - **What to do today** — the feed's `actions`, in its order, with their links.
 
+   **Reading the change fields.** `traffic.change_vs_weekday`, the `wind` and `smog` values and
+   `outages.ddos_change` are fractions, not percentages or multiples: `-0.0241` is 2.4% below,
+   `2.369` is 237% above. Traffic compares with the same weekday over the previous eight weeks;
+   malware links and DDoS compare with the median of the previous four weeks. Give them as
+   percentages, and call out a large DDoS rise — it is one of the few signals here a network
+   team can act on today.
+
 3. **Carry the sources and licences.** Every field names its source in `field_sources`, and every
    source its licence in `sources`.
    - **SANS ISC fields** (`parts.wind`, `parts.pressure`, `traffic`) are **CC BY-NC-SA 4.0**, and
