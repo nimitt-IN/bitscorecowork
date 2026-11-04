@@ -220,6 +220,14 @@ recipient and channel come from national transposing law).
 - **Goes to** the CSIRT designated as coordinator and ENISA, through ENISA's single reporting platform.
 - **Source.** https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R2847 · **Primary** (as
   carried on bitscore.in's CRA article, verified at source)
+- **What happens after filing — Commission Delegated Regulation (EU) 2026/881** of 11 December 2025
+  (OJ L 2026/881, 20 April 2026; in force on the twentieth day after) sets the terms on which the CSIRT
+  that first receives a notification may **delay passing it to the other CSIRTs concerned**, on
+  cybersecurity grounds and, in particular, at the manufacturer's request. It binds the **CSIRT**, not
+  the manufacturer: the 24-hour, 72-hour and final-report clocks above are unchanged. Never present it
+  as a way to file later. Source:
+  https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32026R0881 · **Primary** (Official Journal
+  text read 4 November 2026)
 
 ---
 

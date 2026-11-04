@@ -256,7 +256,7 @@ who decides.
 ## IFSCA — GIFT City, where a rating pack maps unusually well
 
 **Guidelines on Cyber Security and Cyber Resilience for Regulated Entities in IFSCs** — the baseline,
-and **one of four IFSCA cyber instruments**. Verified at source 7 September 2026.
+and **one of five IFSCA cyber instruments**. Verified at source 7 September 2026.
 
 | | |
 | --- | --- |
@@ -417,6 +417,14 @@ Short, non-exhaustive context. Applicability is always entity-specific.
     Clocks and detail in [`incident-reporting-map.md`](incident-reporting-map.md).
 - **IRDAI** — Information and Cyber Security Guidelines, **2026** (IRDAI/GA&HR/CIR/MISC/51/4/2026,
   6 April 2026), which replaced the 2023 Guidelines, including outsourcing risk.
+- **PFRDA** — Information and Cyber Security Policy Guidelines – 2024 for Intermediaries/Regulated
+  Entities (PFRDA/2024/14/ICS/01, 1 August 2024), for the National Pension System's intermediaries, with
+  a classification circular (PFRDA/2025/05/ICS/01, 4 September 2025) beside it. **Category I** — CRAs
+  and pension funds — takes the whole instrument. **Category II** — Points of Presence, the trustee
+  bank, the custodian, non-individual retirement advisers — may rely on its principal regulator's
+  equivalent, but only if it still meets section 4.5, the reporting section. So a bank that is also a
+  PoP is mapped to the RBI for its controls and to PFRDA for its incident reporting. Read at source
+  4 November 2026; clocks in [`incident-reporting-map.md`](incident-reporting-map.md).
 - **IFSCA — and it displaces the three above.** Guidelines on Cyber Security and Cyber Resilience for
   Regulated Entities in IFSCs (IFSCA-CSD0MSC/13/2025-DCS, 10 March 2025, in force 1 April 2025) bind
   *"any entity which is licensed, recognised, registered or authorised by IFSCA"* — the GIFT City IFSC.
@@ -427,13 +435,15 @@ Short, non-exhaustive context. Applicability is always entity-specific.
   is worth saying in a pack rather than presenting a flat checklist. CERT-In binds an IFSC entity either
   way.
 
-  **IFSCA is four instruments.** An amendment of 10 March 2026 restructured the exemptions into **two
+  **IFSCA is five instruments.** An amendment of 10 March 2026 restructured the exemptions into **two
   tiers** — para 21 for REs that lean on a parent (branches, group-only GICs, under ten employees), para
   23 for those with none (foreign universities, newly incorporated standalone REs, **Credit Rating
   Agencies**) — and added an **annual cyber security audit report** to the para 21 conditions. MII
   Guidelines of 20 April 2026 layer a prescriptive regime on IFSC exchanges, clearing corporations and
   depositories, in force **1 April 2026, twenty days before they were issued**. A frontier-AI advisory
-  of 4 June 2026 reaches every RE. Do not state the pre-2026 "four exemptions at para 21" — it is wrong
+  of 4 June 2026 reaches every RE, and a certification circular of 27 October 2026
+  (IFSCA-CSD/MSC/4/2026-DCS) requires the Designated Officer — the CISO at an MII — to hold both
+  NISM-IFSCA cyber certificates and named staff the Basic, **exempt REs included**. Do not state the pre-2026 "four exemptions at para 21" — it is wrong
   about the count, the paragraph and the conditions. Detail and clocks in
   [`incident-reporting-map.md`](incident-reporting-map.md).
 

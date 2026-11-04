@@ -3,7 +3,7 @@ name: incident-notify
 description: >
   Draft the time-bound regulatory notifications an entity owes after a cyber
   incident, in India, the US and the EU — CERT-In's 6-hour report, RBI, SEBI CSCRF
-  and LODR, IRDAI, IFSCA and DPDP in India; SEC Form 8-K/6-K, NYDFS Part 500, the
+  and LODR, IRDAI, PFRDA, IFSCA and DPDP in India; SEC Form 8-K/6-K, NYDFS Part 500, the
   US bank 36-hour rule, HIPAA and the FTC Safeguards Rule in the US; NIS2, DORA,
   GDPR and the Cyber Resilience Act in the EU. Use when the user says "we've had an
   incident", "draft our CERT-In report", "what do we have to report and by when",
@@ -104,7 +104,11 @@ determinations to make.
      draft filed under an instrument that does not bind it. **CERT-In binds it either way.**
    - **Entity type** — commercial bank, Small Finance / Payments / Local Area Bank, co-operative bank,
      NBFC (and which Scale-Based Regulation layer), SEBI-regulated intermediary or MII, insurer or
-     insurance intermediary, IFSCA-regulated IFSC entity, or none of these.
+     insurance intermediary, NPS intermediary under PFRDA, IFSCA-regulated IFSC entity, or none of these.
+   - **Ask about PFRDA even when the answer was "bank".** A bank, insurer or broker that is also an NPS
+     **Point of Presence** (or the trustee bank or custodian) owes PFRDA a six-hour report on top of its
+     own regulator's. And if it is PFRDA-regulated, ask whether it is **Category I** (a CRA or a pension
+     fund) or **Category II** (everyone else) — only Category I owes the 48-hour and quarterly reports.
    - **If IFSCA — ask whether it is an MII before anything else.** An IFSC **stock exchange
      (including the bullion exchange), clearing corporation or depository** reads the MII Guidelines of
      20 April 2026 **on top of** the 2025 baseline, and its clock is not the baseline's: six hours on a
@@ -201,6 +205,13 @@ determinations to make.
      the post-incident checklist, and say so even though it is not a first-day clock.
    - **IRDAI** — six hours to CERT-In with a copy to IRDAI. **There is no 24-hour step in the 2026
      Guidelines**; do not carry one over from the 2023 text.
+   - **PFRDA** for an NPS intermediary — six hours from noticing to **CERT-In and PFRDA**, the PFRDA
+     report made by the compliance officer. It **adds to** the principal regulator's filing; it never
+     replaces it. **Category I** (CRAs, pension funds) also owes a specific report **within 48 hours of
+     the incident's occurrence** where, in its own view, subscribers or other stakeholders are affected
+     — a clock that may already be running when the incident is found — and puts every CERT-In-reported
+     incident into the **quarterly** return to PFRDA. An outage that disrupts service delivery must be
+     classified **High or Critical** (PFRDA/2025/05/ICS/01, para 6).
    - **IFSCA** if the entity is licensed in the IFSC — **and this replaces the RBI, SEBI or IRDAI
      filing rather than adding to it.** Four steps: particulars to `cyber-incidents@ifsca.gov.in` with
      a copy to the CISO, IFSCA within **6 hours**; interim report at **3 days**; **mitigation measures

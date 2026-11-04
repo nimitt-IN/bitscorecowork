@@ -45,19 +45,42 @@ token only when the user wants the exposure check.
 
 2. **Present the brief.** Short enough to read standing up. In this order:
    - **Headline** — `issued_for`, `condition_label`, `points` of `max_points`, and the `summary`.
+   - **Advisories** — only when `advisories` is non-empty, straight after the headline: each one's
+     `title`, `summary` and `sources`. An advisory is an event the instruments cannot see; it set the
+     condition to at least its `floor`, where the instruments alone gave `model_condition`. Say that
+     much and no more.
    - **Instruments** — the five `parts`: label, observed value with unit, points of max. A `null`
      value means that feed could not be read today; say so, don't show zero.
    - **Exploited this week** — every `kev_7d` row: CVE, vendor, product, date added, and the
      ransomware flag when true. Note CISA's `due_date` for federal agencies only as context.
+   - **Evidence per CVE** — `evidence` is keyed by every CVE id in the feed: `in_kev`,
+     `public_exploit` (Exploit-DB), `epss`, and CISA's SSVC `cisa_exploitation` (`none`, `poc`,
+     `active`) and `automatable`. Add these beside each CVE you list, where they say something. They
+     are separate facts from separate sources, not a score: never combine them into one.
+   - **Public exploits** — `exploits_7d`: CVE ids, title, date, platform and type of exploits
+     published on Exploit-DB this week. Ids, titles and dates only — the feed carries no exploit code
+     and no link to it, and neither should the brief. Context, not a scored signal.
    - **Watch list** — `watch_list` CVEs: EPSS from → to, not yet in KEV. These are the early warning.
    - **Outlook** — the chance CISA adds to KEV today and tomorrow.
    - **Patch calendar** — `patch_calendar.next`, plus the next Microsoft Patch Tuesday and Oracle CPU.
-   - **Traffic and outages** — `traffic` (change vs the same weekday, Infocon, top ports) and
-     `outages`, only where they say something. Skip a quiet section rather than padding it.
+     Then `patch_calendar.edge`: Fortinet, Palo Alto Networks and Cisco advisories this week, with the
+     latest one's id, title and link. Lead with any vendor whose `critical_7d` is above zero — edge
+     devices are where this week's exploitation usually lands.
+   - **Supply chain** — `supply_chain`: malicious packages GitHub published advisories for this week,
+     the total and the ecosystems. Mention a day that stands out in `daily`.
+   - **Traffic, routing and outages** — `traffic` (change vs the same weekday, Infocon, top ports);
+     `outages.verified` (Cloudflare Radar) and `outages.detected` (IODA); `routing` (BGP hijacks and
+     route leaks this week, the countries hijacks targeted, and the India counts); `attack_targets`
+     (the locations most targeted by application-layer attacks); `cloud_status` (incidents this week
+     and open now at Google Cloud, Microsoft Azure and AWS). Only where they say something. Skip a
+     quiet section rather than padding it.
+   - **On the radar** — `on_the_radar`: CISA alerts and joint advisories from the last fourteen days
+     that the rest of the feed does not already carry, with title, date and link.
    - **What to do today** — the feed's `actions`, in its order, with their links.
 
    **Reading the change fields.** `traffic.change_vs_weekday`, the `wind` and `smog` values and
-   `outages.ddos_change` are fractions, not percentages or multiples: `-0.0241` is 2.4% below,
+   `outages.ddos_change` are fractions, not percentages or multiples, and so is `attack_targets`
+   `share` (`0.55` is 55% of attacks): `-0.0241` is 2.4% below,
    `2.369` is 237% above. Traffic compares with the same weekday over the previous eight weeks;
    malware links and DDoS compare with the median of the previous four weeks. Give them as
    percentages, and call out a large DDoS rise — it is one of the few signals here a network
@@ -66,9 +89,14 @@ token only when the user wants the exposure check.
 3. **Carry the sources and licences.** Every field names its source in `field_sources`, and every
    source its licence in `sources`.
    - **SANS ISC fields** (`parts.wind`, `parts.pressure`, `traffic`) are **CC BY-NC-SA 4.0**, and
-     **Cloudflare Radar fields** (`outages.verified`, `outages.ddos_change`) are **CC BY-NC 4.0**.
-     Both are non-commercial. Wherever those fields appear, name the licence beside them, and tell
-     the user once that reuse in a commercial product is their call to clear with the source.
+     **Cloudflare Radar fields** (`outages.verified`, `outages.ddos_change`, `routing`,
+     `attack_targets`) are **CC BY-NC 4.0**. Both are non-commercial. Wherever those fields appear,
+     name the licence beside them, and tell the user once that reuse in a commercial product is their
+     call to clear with the source.
+   - **Read the licence from the feed, not from this list.** New fields arrive without a schema
+     change, so when a field you show is not named above, look up its source in `field_sources` and
+     that source's licence in `sources`. IODA (`outages.detected`) is research data used with credit:
+     credit it. Exploit-DB is ids, dates and titles only.
    - End every brief with the feed's `attribution`, `disclaimer` and `page_url`, exactly as given.
 
 4. **Results, not method.** Report the condition, points and values the feed gives. Do not explain,

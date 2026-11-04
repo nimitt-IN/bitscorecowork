@@ -30,7 +30,14 @@ here is **Primary**. Two sections are
 declaration rather than from a general instrument, and the **RBI IT Governance Master Direction, 2023**,
 retained only as a historical pointer.
 
-**The gap this edition closes: IFSCA is four instruments, not one.** The 2025 Guidelines were amended on
+**4 November 2026: a seventh regulator, and a fifth IFSCA instrument.** PFRDA's Information and Cyber
+Security Policy Guidelines, 2024 put the National Pension System's intermediaries on a **six-hour clock
+to CERT-In *and* PFRDA**, with a 48-hour subscriber-impact report and a quarterly return for Category I.
+This file did not carry PFRDA at all until now. IFSCA's certification circular of 27 October 2026 adds
+no clock but binds every IFSC RE, exempt or not. Both were read at source on 4 November 2026; see
+[the PFRDA section](#pfrda--nps-intermediaries) and the certification circular in the IFSCA section.
+
+**The gap the 7 September edition closed: IFSCA is several instruments, not one.** The 2025 Guidelines were amended on
 10 March 2026 and a second, heavier regime for **IFSC market infrastructure institutions** landed on
 20 April 2026, followed by a frontier-AI advisory on 4 June 2026. This file carried only the 2025 text
 until 7 September 2026, which made two of its statements wrong rather than merely incomplete: the
@@ -72,6 +79,7 @@ and for SEBI LODR's cyber disclosure, **plan on twelve hours, not twenty-four**.
 | SEBI LODR, Reg. 30(6) (listed entities) | **12 hours** for a cyber incident (30 min for board decisions; 24h only if the event arises *outside* the entity) | Occurrence of a *material* event | Stock exchanges |
 | SEBI LODR, Reg. 27(2)(ba) (listed entities) | Next **quarterly** CG report — no materiality test | Any cyber incident, breach or data loss | Stock exchanges |
 | IRDAI Cyber Guidelines, **2026** (replaced the 2023 Guidelines) | **6 hours** — *no 24-hour step in the 2026 text* | Noticing, or being brought to notice | CERT-In, copied to IRDAI |
+| PFRDA Cyber Guidelines, 2024 — NPS intermediaries (CRAs, pension funds, PoPs, trustee bank, custodian, non-individual RAs) | **6 hours** to both; Category I adds a **48-hour** subscriber-impact report and a **quarterly** return | Noticing, or being brought to notice — but the 48-hour report runs from **occurrence** | CERT-In **and** PFRDA (the PFRDA report through the compliance officer) |
 | IFSCA Cyber Security Guidelines, 2025 (as amended 10 Mar 2026) — **GIFT City, and it replaces the mainland filing** | **6 hours**, then **3 days**, then **7 days** to mitigate, then **30 days** | Detection | `cyber-incidents@ifsca.gov.in`, copied to the CISO, IFSCA |
 | IFSCA **MII** Guidelines, 2026 — IFSC exchanges, clearing corporations, depositories | Same four steps — but the trigger is **wider** and the first filing has **two recipients** | Noticing/detecting, **or being brought to notice** | IFSCA (`cyber-incidents@ifsca.gov.in`) **and** CERT-In; NCIIPC too for Protected Systems |
 | DPDP — Data Principals | ⚠️ **Not in force until 13 May 2027** | — | Each affected Data Principal |
@@ -604,13 +612,68 @@ Kendra among the external parties an incident-notification process must identify
 
 ---
 
+## PFRDA — NPS intermediaries
+
+**Confidence: Primary.** Both instruments read from PFRDA's own PDFs on 4 November 2026. Every clause
+below is quoted verbatim.
+
+| | |
+| --- | --- |
+| **Instrument** | Information and Cyber Security Policy Guidelines – 2024 for Intermediaries/Regulated Entities |
+| **Reference** | PFRDA/2024/14/ICS/01, dated 1 August 2024 |
+| **Binds** | Every regulated entity and intermediary under the PFRDA Act, 2013, in two categories (para 2.2) |
+| **Source** | https://www.pfrda.org.in/documents/33652/198544/18+PFRDA202414ICS01.pdf |
+| **Companion** | Guidelines on Classification of Cybersecurity Incidents, PFRDA/2025/05/ICS/01, 4 September 2025 — https://www.pfrda.org.in/documents/33652/311487/Cybersecurity+Circular+-+04092025.pdf |
+
+**The reference-number trap.** The PDF on pfrda.org.in is the Guidelines themselves and prints no
+reference of its own. The reference and date come from PFRDA's 2025 circular, which opens *"with
+reference to the circular no PFRDA/24/14/ICS/01 dated 01.08.2024"*, and from the PDF's filename
+(`PFRDA202414ICS01`). Treat `PFRDA/24/14/` and `PFRDA/2024/14/` as the same instrument.
+
+**The category decides everything after the first six hours.**
+- **Category I** — Central Recordkeeping Agencies and pension funds, including pension funds also
+  registered as Points of Presence. The whole Guidelines apply.
+- **Category II** — Points of Presence (including APY service providers), the trustee bank, the
+  custodian and retirement advisers other than individuals. Deemed compliant where a principal
+  regulator's equivalent covers them (RBI, SEBI, IRDAI, NHB) and they certify compliance with it —
+  *"provided they also comply with Sec 4.5 of these Guidelines"*, the reporting section.
+
+**The clocks — section 4.5.**
+
+| Step | Clock | Starts from | Goes to | Who owes it |
+| --- | --- | --- | --- | --- |
+| Report the incident | **6 hours** | Noticing, or being brought to notice | CERT-In **and** PFRDA — to PFRDA through the compliance officer, to the supervisory department dealing with the RE | Both categories |
+| Specific report on incidents that, in the RE's opinion, affect subscribers and other stakeholders | **48 hours** | **Occurrence** of the incident | PFRDA | Category I |
+| Every incident reported to CERT-In, with the remedial actions taken | **Quarterly** | — | PFRDA | Category I |
+| Annual compliance report, with the Board-approved policy | **30 days** after the financial year closes | — | PFRDA | Both; Category II's carries the compliance officer's certification that the principal regulator was notified of incidents |
+
+Verbatim: *"shall mandatorily report cyber incidents as mentioned below to CERT-In and PFRDA within 6
+hours of noticing such incidents or being brought to notice about such incidents"*, and the Category I
+report *"shall be made to PFRDA within 48 hours of occurrence of any such incident"*.
+
+**Three things to get right.**
+1. **A bank acting as a Point of Presence adds PFRDA; it does not swap.** Category II's deeming is
+   conditional on section 4.5, so a commercial bank that is also an NPS PoP files with PFRDA within six
+   hours as well as with the RBI on DAKSH and with CERT-In. PFRDA is not displaced by the principal
+   regulator — the opposite of IFSCA, which displaces the mainland one.
+2. **The 48-hour clock runs from occurrence, not noticing.** Part of it can be spent before anyone
+   finds the incident. Whether the report is owed turns on the RE's own view of subscriber impact; once
+   it is owed, the clock does not wait for that view. Write "within 48 hours", never "two days".
+3. **An outage is High or Critical by rule.** The 2025 circular is mostly advisory — REs *"may"*
+   classify incidents as Critical, High, Medium or Low — but one line is drafted as an obligation:
+   *"Any cyber incident that results in disruption, stoppage or variance in the normal functions/
+   operations of systems of the entity thereby impacting normal/ regular service delivery and
+   functioning of the entity, must be classified as High or Critical incident."*
+
+---
+
 ## IFSCA — GIFT City IFSC entities
 
 **Confidence: Primary.** All four instruments read directly from the published PDFs — the 2025
-Guidelines on 18 August 2026, the three 2026 instruments on **7 September 2026**. Every clause below is
-quoted verbatim.
+Guidelines on 18 August 2026, the three 2026 instruments of March–June on **7 September 2026**, and the
+certification circular of 27 October 2026 on **4 November 2026**. Every clause below is quoted verbatim.
 
-### IFSCA is four instruments, and which ones you read depends on the entity
+### IFSCA is five instruments, and which ones you read depends on the entity
 
 | # | Instrument | Reference | Issued | Who reads it |
 | --- | --- | --- | --- | --- |
@@ -618,6 +681,7 @@ quoted verbatim.
 | 2 | Amendment to those Guidelines | IFSCA-CSD0MSC/1/2026-DCS | 10 Mar 2026, immediate effect | Every IFSC RE — it **substitutes** para 21 and **inserts** para 23 |
 | 3 | Guidelines on Cyber Security and Cyber Resilience for **MIIs** in IFSC | IFSCA-CSD/MSC/2/2026-DCS | 20 Apr 2026, in force **1 Apr 2026** | IFSC stock exchanges incl. the bullion exchange, clearing corporations, depositories — **on top of** #1 |
 | 4 | Advisory on Heightened Cyber Security Risks arising from Frontier AI Models | IFSCA-CSD/MSC/3/2026-DCS | 4 Jun 2026, immediate effect | Every IFSC RE — it "does not dilute any obligation" under #1–#3 |
+| 5 | Certification on Cyber Security and Cyber Resilience for Designated Officers and other specified employees of REs in the IFSCs | IFSCA-CSD/MSC/4/2026-DCS | 27 Oct 2026, immediate effect | **Every** IFSC RE, **exempt or not** — named roles must certify |
 
 **Retrieval note, because it defeats the obvious approach.** The 2026 documents are not at the
 `/Document/Legal/*.pdf` path the 2025 Guidelines use and cannot be reached by guessing a URL. Find them
@@ -815,6 +879,32 @@ service providers** — the third-party direction in the "one incident, many clo
 
 ---
 
+### The certification circular — 27 October 2026, and the exemptions do not reach it
+
+**Confidence: Primary.** IFSCA-CSD/MSC/4/2026-DCS read from the published PDF on 4 November 2026.
+Source: https://ifsca.gov.in/CommonDirect/ViewFile?id=850da50e42b9c192894a42a7d2a1cd1d&fileName=Circular_DCS_Mandating_IFSCA_NISM_Cyber_Security_Certification_F_20261027_0536.pdf
+
+It sets **no notification clock**, so it belongs in no incident timeline. It is here because it is a
+people obligation on every IFSC RE, and a post-incident review will ask whether the people named in it
+held the certificate.
+
+- The **Designated Officer** (para 6 of the baseline Guidelines) — at an MII, the **CISO** appointed
+  under para 7 of Annexure A to the MII Guidelines — must hold **both** NISM-IFSCA-02A (Basic) and
+  NISM-IFSCA-02B (Advanced).
+- The **Compliance Officer**, and employees *"responsible for IT operations or information security, or
+  having privileged access to the critical systems"*, must hold the Basic.
+- **Six months** from the examination going live — Basic on **18 November 2026**, Advanced on
+  **30 December 2026** — or from appointment to the role, whichever is later, and held *"at all times"*
+  while in the role (para 8). For people already in post that is **18 May 2027** and **30 June 2027**:
+  derived from the circular, not printed in it.
+- The RE keeps records of the certificates and produces them to IFSCA when asked (para 9).
+- Addressed to *"All Regulated Entities in the International Financial Services Centres"*, with no
+  carve-out, under sections 12 and 13 of the IFSCA Act and with immediate effect. **An RE exempt under
+  para 21 or para 23 still has a Designated Officer, and that officer must certify.** Do not extend the
+  exemptions to this circular.
+
+---
+
 ## NCIIPC — protected systems and critical information infrastructure
 
 **Confidence: Secondary.** If the entity operates a declared protected system, its specific
@@ -976,6 +1066,19 @@ changed since August?" rather than "what does the regulator's own index list tod
 a client-rendered POST search that returns nothing to `curl`, so the instruments were invisible to the
 method being used. **Re-verification has to enumerate the regulator's index, not diff against the last
 reading** — the retrieval note in the IFSCA section records how.
+
+---
+
+## Change note — 4 November 2026
+
+PFRDA was missing from this file entirely, and IFSCA issued a fifth instrument on 27 October 2026.
+Both were read at source on 4 November 2026, not copied from the counterpart registry. The rest of the
+file was not re-read; its verification dates stand.
+
+| What was wrong or missing | What it now says | How it was verified |
+| --- | --- | --- |
+| **PFRDA absent.** An NPS intermediary — or a bank acting as an NPS Point of Presence — got no PFRDA filing in its draft | A PFRDA section and a row in the clocks table: **six hours to CERT-In and PFRDA** for both categories; for Category I a **48-hour** subscriber-impact report from **occurrence**, a quarterly return and an annual compliance report. Category II's deeming is conditional on the reporting section, so a bank PoP adds PFRDA rather than swapping | **Primary** — PFRDA/2024/14/ICS/01 section 4.5 and para 2.2, and PFRDA/2025/05/ICS/01 para 6, quoted |
+| IFSCA presented as four instruments | **Five**: the certification circular IFSCA-CSD/MSC/4/2026-DCS of 27 October 2026 — no clock, but the Designated Officer (CISO at an MII) needs both NISM-IFSCA certificates and named staff the Basic, **exempt REs included** | **Primary** — IFSCA-CSD/MSC/4/2026-DCS paras 5–9 quoted |
 
 ---
 
