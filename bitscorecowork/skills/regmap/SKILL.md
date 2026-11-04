@@ -54,7 +54,7 @@ output — an auditor can work with it, and it doesn't assert something the data
 2. **Establish the scope.**
    - **Subject** — the user's own organization, one third party, or the portfolio as a whole (for
      evidencing third-party monitoring as a control activity in its own right).
-   - **Framework(s)** — NIST CSF 2.0, ISO/IEC 27001:2022, an Indian regime (RBI, SEBI, IRDAI,
+   - **Framework(s)** — NIST CSF 2.0, ISO/IEC 27001:2022, an Indian regime (RBI, SEBI, IRDAI, PFRDA,
      **IFSCA**, CERT-In, DPDP), and/or a US or EU regime (NIS2, DORA, NYDFS Part 500, SEC Item 106).
      Mapping to two frameworks at once is normal; more than that produces an unreadable table, so ask
      which matter. **If RBI is one of them, go to step 3 before pulling any data. If SEBI, go to step
@@ -185,7 +185,7 @@ output — an auditor can work with it, and it doesn't assert something the data
    above.
 
 3b. **If IFSCA was chosen — establish whether the RE is an MII, then map to the components.**
-   IFSCA is **four instruments**, and which ones the pack is built on changes its structure:
+   IFSCA is **five instruments**, and which ones the pack is built on changes its structure:
    - **Every IFSC RE** reads the baseline Guidelines (IFSCA-CSD0MSC/13/2025-DCS, 10 March 2025, in
      force 1 April 2025) **as amended on 10 March 2026**, organised as **I** Governance · **II** Cyber
      security and cyber resilience framework · **III** Third party risk management · **IV**
@@ -201,6 +201,11 @@ output — an auditor can work with it, and it doesn't assert something the data
      service providers must furnish evidence of preparedness) maps to portfolio monitoring. The other
      five *shall* items — SBOM, API inventory, board-level AI scenario, monitoring for attack sequences
      beyond human-operated timelines, human oversight of AI-generated code — are entirely internal. Name them as out of scope rather than gesturing at them.
+   - **Every IFSC RE, exempt or not,** reads the **certification circular** (IFSCA-CSD/MSC/4/2026-DCS,
+     27 October 2026): the Designated Officer — the CISO at an MII — holds both NISM-IFSCA certificates,
+     and the Compliance Officer and IT/security staff with privileged access hold the Basic. Nothing
+     Bitsight observes evidences it; list it as out of scope in the governance rows rather than leaving
+     it off.
 
    Map using the vector tables in [`regulatory-map.md`](../../reference/regulatory-map.md).
 
