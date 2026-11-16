@@ -30,6 +30,13 @@ here is **Primary**. Two sections are
 declaration rather than from a general instrument, and the **RBI IT Governance Master Direction, 2023**,
 retained only as a historical pointer.
 
+**16 November 2026: the payment system operators, and a full index walk.** The RBI's non-bank PSO cyber
+Master Directions (RBI/DPSS/2026-27/475, 5 November 2026) put payment aggregators, card networks, NPCI,
+PPI issuers and the rest on a **six-hour clock from detection** to the RBI, plus CERT-In; see
+[the PSO section](#rbi-non-bank-pso-cyber-master-directions-2026--payment-system-operators). The same
+day every regulator's own index was walked again — RBI, SEBI, IRDAI, IFSCA, PFRDA and CERT-In — and
+the 2025 RBI outsourcing pair was corrected to the **family of nine** it is. See the change note at the end.
+
 **4 November 2026: a seventh regulator, and a fifth IFSCA instrument.** PFRDA's Information and Cyber
 Security Policy Guidelines, 2024 put the National Pension System's intermediaries on a **six-hour clock
 to CERT-In *and* PFRDA**, with a 48-hour subscriber-impact report and a quarterly return for Category I.
@@ -74,6 +81,7 @@ and for SEBI LODR's cyber disclosure, **plan on twelve hours, not twenty-four**.
 | --- | --- | --- | --- |
 | CERT-In Directions, 2022 | **6 hours** | Noticing, or being brought to notice | CERT-In |
 | RBI Cyber Directions, 2026 — **seven instruments, one per entity class** | **6 hours** | Detection | DAKSH, plus CERT-In |
+| RBI non-bank PSO Master Directions, 2026 — payment aggregators, card networks, NPCI, PPI issuers, WLAOs and others (small PSOs from 1 Apr 2028) | **6 hours** — and the trigger includes outages and settlement delays, not only cyber | Detection | RBI, in the Annex 1 format (no portal named), plus CERT-In |
 | RBI IT Governance MD, 2023 | Superseded for the classes covered above — **check before using** | Detection | RBI, plus CERT-In |
 | SEBI CSCRF | **6 hours**, then **24 hours** — and the 24-hour filing is **staged**, not final | Noticing/detecting, or being brought to notice | `mkt_incidents@sebi.gov.in` + CERT-In; then the SEBI Incident Reporting Portal at `https://siportal.sebi.gov.in` |
 | SEBI LODR, Reg. 30(6) (listed entities) | **12 hours** for a cyber incident (30 min for board decisions; 24h only if the event arises *outside* the entity) | Occurrence of a *material* event | Stock exchanges |
@@ -200,6 +208,11 @@ banks 182, SFBs and Payments Banks 181, UCBs 88. Quote the number from the entit
 
 URL pattern: `https://rbi.org.in/scripts/NotificationUser.aspx?Mode=0&Id=<Id>`
 
+**410, 419 and 428 now read "Updated as on October 01, 2026".** Re-read 16 November 2026: each carries
+one substitution, w.e.f. 1 October 2026, consequent to that class's *Governance* Amendment Directions —
+the board's annual review of policies (para 8 in 410). Nothing in the applicability or the reporting
+paragraph moved; the other four instruments are unchanged.
+
 **The clock — the same in every one of them.** Six hours from **detection**, on the **DAKSH** platform
 (https://daksh.rbi.org.in), plus proactive notification to **CERT-In**. The RBI filing does not
 discharge the CERT-In obligation. Verbatim from 410, para 182: *"The bank shall report cyber incidents
@@ -246,19 +259,74 @@ duty immediately before para 141. The Directions do not set a separate deadline 
 report; expect the supervisor to ask, and build the timeline from the start.
 
 **Care point:** these Directions do **not** absorb outsourcing governance. Vendor oversight sits in a
-separate 2025 pair, which the 2026 cyber Directions expressly preserve and carve around:
+separate 2025 family — **nine Directions, one per entity class** (this file carried only the first two
+until 16 November 2026) — which the 2026 cyber Directions expressly preserve and carve around. Regional
+Rural Banks have none. All nine references re-read at the RBI on 16 November 2026:
 
 | Instrument | Reference | Source |
 | --- | --- | --- |
 | RBI (**Commercial Banks** – Managing Risks in Outsourcing) Directions, 2025 | RBI/DOR/2025-26/**171** | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13139 |
 | RBI (**Non-Banking Financial Companies** – Managing Risks in Outsourcing) Directions, 2025 | RBI/DOR/2025-26/**363** | https://www.rbi.org.in/scripts/BS_ViewMasDirections.aspx?id=12941 |
+| RBI (**Small Finance Banks** – …) | RBI/DOR/2025-26/**202** | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13107 |
+| RBI (**Payments Banks** – …) | RBI/DOR/2025-26/**220** | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13088 |
+| RBI (**Local Area Banks** – …) | RBI/DOR/2025-26/**245** | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13062 |
+| RBI (**Urban Co-operative Banks** – …) | RBI/DOR/2025-26/**293** | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13012 |
+| RBI (**Rural Co-operative Banks** – …) | RBI/DOR/2025-26/**318** | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=12986 |
+| RBI (**All India Financial Institutions** – …) | RBI/DOR/2025-26/**337** | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=12967 |
+| RBI (**Credit Information Companies** – …) | RBI/DoR/2025-26/**379** | https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=12925 |
 
-Both issued 28 November 2025, both with existing IT outsourcing agreements to comply by 10 April 2026.
+The commercial-bank and NBFC instruments were both issued 28 November 2025, both with existing IT
+outsourcing agreements to comply by 10 April 2026; for the other seven, read the entity's own text.
 The NBFC instrument reaches HFCs, CICs, standalone primary dealers and the account aggregator and P2P
 categories as well, and grades by scale-based layer — Base Layer takes the general outsourcing
 provisions only, Middle Layer and above pick up the IT-specific ones. If the incident originated at a
 service provider, the applicable outsourcing instrument's notification and oversight terms are in play
 alongside the cyber Directions' reporting paragraph — see `regulatory-map.md`.
+
+---
+
+## RBI non-bank PSO cyber Master Directions, 2026 — payment system operators
+
+**Confidence: Primary.** Read from the RBI's published text on 16 November 2026 (notification Id
+13751). This file did not carry it before: it was issued on 5 November 2026, the day after the
+previous edition.
+
+| | |
+| --- | --- |
+| **Instrument** | Reserve Bank of India (Cyber Resilience and Digital Payment Security Controls for non-bank PSOs) Master Directions, 2026 |
+| **Reference** | RBI/DPSS/2026-27/475 · CO.DPSS.CSD.No.S825/01-01-078/2026-2027 |
+| **Issued** | 5 November 2026, Department of Payment and Settlement Systems, under section 10(2) read with section 18 of the PSS Act, 2007 |
+| **In force** | On the day of issue for **large** and **medium** non-bank PSOs; **1 April 2028** for **small** ones (para 3) |
+| **Source** | https://rbi.org.in/scripts/NotificationUser.aspx?Mode=0&Id=13751 |
+
+**Who it covers** (para 4 and footnotes 1–3) — every authorised non-bank payment system operator:
+
+| Tier | Entities | In force |
+| --- | --- | --- |
+| Large | CCIL, NPCI, NPCI Bharat BillPay, card payment networks, non-bank ATM networks, White Label ATM Operators, large PPI issuers, TReDS operators, Bharat Bill Payment Operating Units, payment aggregators | 5 Nov 2026 |
+| Medium | Inbound cross-border Money Transfer Service Scheme operators, medium PPI issuers | 5 Nov 2026 |
+| Small | Small PPI issuers, Instant Money Transfer Operators | **1 Apr 2028** |
+
+**The clock.** Para 22(d): incidents — *"cyber-attacks, outage of critical system / infrastructure,
+internal fraud, settlement delay, etc."* — are reported to the RBI *"in the Incident Reporting Format
+(Annex 1) within 6 hours of detection"*, and *"any cyber security incident shall also be reported to
+CERT-In"*. The trigger is **wider than cyber**: an outage or a settlement delay is reportable. The text
+names a format, not a portal — **do not route it to DAKSH by analogy with the bank Directions**; say
+the channel is the RBI's to specify.
+
+**What it is.** A consolidation of the 2024 PSO cyber Master Directions, not a new regime, which also
+folds in system audit (Section V) and cyber controls for third-party ATM switch application service
+providers (Section VI). It repeals six older circulars, among them the 2019 ATM-switch ASP controls and
+the 2009–2020 system-audit instructions.
+
+**Care points.**
+
+1. **The bank Directions do not reach a PSO, and this does not reach a bank.** A payment aggregator that
+   is not a bank files under 475; the 31 July 2026 family above binds banks, NBFCs, AIFIs and CICs.
+2. **Para 5 pushes the Directions down the chain** — payment gateways, vendors and ATM switch ASPs
+   "subject to mutual agreement", under a Board-approved policy. Vendor evidence goes against para 5.
+3. **The 2025 outsourcing family does not cover PSOs** either; their outsourcing framework is separate
+   and is not in this file.
 
 ---
 
@@ -486,7 +554,9 @@ name who decides, and stop there.
 ## DPDP Act, 2023 and the DPDP Rules — personal data breach
 
 **Confidence: Primary.** Both gazette notifications read directly on 13 August 2026; the commencement
-provisions and Rule 7 are quoted verbatim below.
+provisions and Rule 7 are quoted verbatim below. On 16 November 2026 MeitY's data-protection pages
+rendered empty in a browser, so MeitY's own listing could **not** be walked for an amending notification
+that day — confirm none has issued before relying on the dates below.
 
 | | |
 | --- | --- |
@@ -1080,6 +1150,28 @@ file was not re-read; its verification dates stand.
 | **PFRDA absent.** An NPS intermediary — or a bank acting as an NPS Point of Presence — got no PFRDA filing in its draft | A PFRDA section and a row in the clocks table: **six hours to CERT-In and PFRDA** for both categories; for Category I a **48-hour** subscriber-impact report from **occurrence**, a quarterly return and an annual compliance report. Category II's deeming is conditional on the reporting section, so a bank PoP adds PFRDA rather than swapping | **Primary** — PFRDA/2024/14/ICS/01 section 4.5 and para 2.2, and PFRDA/2025/05/ICS/01 para 6, quoted |
 | IFSCA presented as four instruments | **Five**: the certification circular IFSCA-CSD/MSC/4/2026-DCS of 27 October 2026 — no clock, but the Designated Officer (CISO at an MII) needs both NISM-IFSCA certificates and named staff the Basic, **exempt REs included** | **Primary** — IFSCA-CSD/MSC/4/2026-DCS paras 5–9 quoted |
 
+## Change note — 16 November 2026
+
+Every regulator's own index was walked on 16 November 2026 rather than diffed against the last reading:
+RBI notifications (searches for "cybersecurity", **"cyber resilience"** and "managing risks in
+outsourcing"), SEBI circulars and master circulars, IRDAI circulars and guidelines, IFSCA Legal ›
+Circular, PFRDA circulars and guidelines, and CERT-In's section 70B page.
+
+| What was wrong or missing | What it now says | How it was verified |
+| --- | --- | --- |
+| **RBI non-bank PSO Master Directions absent.** A payment aggregator or card network got no RBI filing in its draft | A PSO section and a clocks-table row: **six hours from detection** to the RBI in the Annex 1 format, plus CERT-In; outages and settlement delays included; small PSOs from **1 April 2028** | **Primary** — RBI/DPSS/2026-27/475 paras 3, 4, 5 and 22(d) and footnotes 1–3, read at the RBI |
+| RBI outsourcing presented as **a pair** (171, 363) | **A family of nine**, one per entity class, with references and sources; RRBs none | **Primary** — all nine Master Direction pages, reference and title read |
+| Silent on the **1 October 2026 consolidations** of 410, 419 and 428 | One governance substitution each; applicability and the reporting paragraph unchanged | **Primary** — the footnotes in each published text |
+| DPDP's currency not checked | Says MeitY's listing could not be walked on 16 November 2026 | — |
+
+Found and left as they are: SEBI has issued nothing on cyber since the two circulars of 24 August
+2026; IRDAI's only cyber item since April is a 15 October 2026 circular on National Cyber Security
+Awareness Month (read from the listing, not the PDF); IFSCA still lists exactly five; PFRDA's 2024
+Guidelines are still its only cyber instrument; CERT-In's Directions page is unchanged.
+
+**A method note for the next review.** The RBI search the README names — "cybersecurity" — does not
+surface the PSO Directions, whose title says "Cyber Resilience". Search both.
+
 ---
 
 © 2026 BitScore Cybertech LLP. "Bitsight" is a registered trademark of Bitsight Technologies, Inc.;
@@ -1089,6 +1181,6 @@ user's compliance and legal team.
 
 <!-- provenance
 mirrors: bitscore.in lib/incident-clocks.ts, lib/regulations.ts
-verified: 2026-09-07
-next-review: 2026-12-07
+verified: 2026-11-16
+next-review: 2027-02-16
 -->

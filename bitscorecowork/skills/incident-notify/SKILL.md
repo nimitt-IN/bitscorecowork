@@ -104,7 +104,9 @@ determinations to make.
      draft filed under an instrument that does not bind it. **CERT-In binds it either way.**
    - **Entity type** — commercial bank, Small Finance / Payments / Local Area Bank, co-operative bank,
      NBFC (and which Scale-Based Regulation layer), SEBI-regulated intermediary or MII, insurer or
-     insurance intermediary, NPS intermediary under PFRDA, IFSCA-regulated IFSC entity, or none of these.
+     insurance intermediary, NPS intermediary under PFRDA, **non-bank payment system operator**
+     (payment aggregator, card network, PPI issuer, WLAO, BBPOU, TReDS, NPCI, CCIL, MTSS or Instant
+     Money Transfer operator), IFSCA-regulated IFSC entity, or none of these.
    - **Ask about PFRDA even when the answer was "bank".** A bank, insurer or broker that is also an NPS
      **Point of Presence** (or the trustee bank or custodian) owes PFRDA a six-hour report on top of its
      own regulator's. And if it is PFRDA-regulated, ask whether it is **Category I** (a CRA or a pension
@@ -190,6 +192,13 @@ determinations to make.
    - **RBI** — DAKSH within six hours, under **the instrument for that entity class** (one of seven;
      see the reference). Name which instrument you drafted against and label the assumption if
      applicability was not confirmed.
+   - **RBI, for a non-bank payment system operator** — a different instrument and a different channel:
+     the non-bank PSO Master Directions (RBI/DPSS/2026-27/475), para 22(d), **six hours from
+     detection** to the RBI in the **Annex 1 format**, plus CERT-In. The trigger is wider than cyber —
+     outages of critical systems, internal fraud and settlement delays are reportable too. The text
+     names no portal: do **not** send it to DAKSH by analogy with the bank Directions; say the channel
+     is the RBI's to specify. Small PPI issuers and Instant Money Transfer Operators are not bound until
+     **1 April 2028** — say so rather than drafting a filing they do not yet owe.
    - **SEBI CSCRF** — three filings, not one: six hours to `mkt_incidents@sebi.gov.in` **and**
      CERT-In, details to the SEBI Incident Reporting Portal within 24 hours, and for stock brokers and
      depository participants a further six-hour leg to the exchanges/depositories.

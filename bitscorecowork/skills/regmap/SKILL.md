@@ -107,10 +107,18 @@ output — an auditor can work with it, and it doesn't assert something the data
    their stated entity type, label the assumption at the top of the pack, and tell them to have
    compliance confirm it.
 
+   **A payment system operator is not in this family.** A non-bank payment aggregator, card network,
+   PPI issuer, WLAO, BBPOU, TReDS operator, NPCI or CCIL maps to the **non-bank PSO cyber Master
+   Directions, RBI/DPSS/2026-27/475** (5 November 2026; Id 13751) — small PPI issuers and Instant
+   Money Transfer Operators from 1 April 2028. Its para 5 carries vendor evidence: the PSO must push
+   the Directions down to its gateways, vendors and ATM switch providers.
+
    **And ask whether the pack is really about outsourcing**, because that is a different instrument.
    Vendor due diligence, monitoring, audit rights and exit sit in the **RBI (Commercial Banks –
    Managing Risks in Outsourcing) Directions, 2025** (28 November 2025), which repealed the 2023
-   IT-outsourcing Master Direction for those banks; NBFCs have a parallel 2025 instrument. The 2026
+   IT-outsourcing Master Direction for those banks. It is one of **nine** 2025 outsourcing Directions,
+   one per entity class (SFBs 202, Payments Banks 220, LABs 245, UCBs 293, rural co-operative banks
+   318, AIFIs 337, NBFCs 363, CICs 379); RRBs and PSOs have none in it. The 2026
    cyber Directions **preserve** that regime and carve around it — their third-party provisions
    reach only IT/cyber arrangements falling outside it. A pack about vendor oversight filed against
    Chapter IV of the cyber Directions is filed against the wrong instrument. If the subject is
