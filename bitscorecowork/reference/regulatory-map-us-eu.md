@@ -21,7 +21,10 @@ apply here unchanged.
 >   text by the user's compliance team.
 
 **Verified on 25 September 2026** against EUR-Lex (GDPR, NIS2, DORA, Commission Recommendation
-2003/361/EC), sec.gov, dfs.ny.gov, the eCFR and occ.gov. Every row is **Primary**.
+2003/361/EC), sec.gov, dfs.ny.gov, the eCFR and occ.gov, and **re-verified 16 November 2026**: nothing
+in force changed. Every row is **Primary**. Two Commission proposals would amend GDPR and NIS2 — COM(2025)
+837 and COM(2026) 13 — and neither is adopted; see `incident-reporting-map-us-eu.md` before mapping to
+anything they would change.
 
 ---
 
@@ -114,6 +117,10 @@ say so.
 | Exposed Credentials (informational; does not affect the rating) | 500.12 — multi-factor authentication (external evidence of exposure only; enforcement is internal) |
 | TLS/SSL vectors | 500.15 — encryption of nonpublic information in transit (external surface only) |
 
+DFS's guidance of 10 September 2026 on conducting and using the **risk assessments** Part 500 requires
+(500.9) is guidance, not an amendment; external posture data is an input to a risk assessment, never the
+assessment.
+
 ### SEC — Regulation S-K, Item 106
 
 | Evidence | Paragraph |
@@ -135,6 +142,6 @@ and "commensurate with the bank's risk profile and complexity".
 
 <!-- provenance
 mirrors: bitscore.in lib/tools/global-regulation-finder.ts
-verified: 2026-09-25
-next-review: 2026-12-25
+verified: 2026-11-16
+next-review: 2027-02-16
 -->
