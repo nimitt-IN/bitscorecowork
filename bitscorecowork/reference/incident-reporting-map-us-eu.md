@@ -21,11 +21,30 @@ jurisdiction reads both.
 > - **Verify every citation against the published text before a notification is filed.**
 > - Nothing here certifies compliance, and no draft produced from it has been filed or sent.
 
-**Verified on 25 September 2026.** Every row is **Primary**: read from the issuing body's own text on
+**Verified on 25 September 2026; re-verified 16 November 2026.** No instrument in force here changed in
+between. The re-read used the eCFR's version history for 12 CFR 53, 225 and 304, 16 CFR 314, 45 CFR 164
+and 17 CFR 229.106; the Federal Register for anything proposed or final since; the SEC's form files
+(Form 8-K last changed 25 August 2026, Form 6-K 30 September 2025, both before the last reading);
+NYDFS's guidance and industry letters; CISA's CIRCIA page; and EUR-Lex's amendment record for GDPR,
+NIS2, DORA, RTS 2025/301, the CRA and 2026/881. Every row is **Primary**: read from the issuing body's own text on
 EUR-Lex, sec.gov, dfs.ny.gov, the eCFR and cisa.gov. Two things are deliberately **not** covered, and the
 skill must say so rather than imply otherwise: **US state breach-notification laws** (every state has
 one, with its own thresholds and windows) and **Member State additions to NIS2** (a directive, so the
 recipient and channel come from national transposing law).
+
+> ## Proposed, not law — do not draft against these
+>
+> Two European Commission proposals would change clocks in this file. **Neither has been adopted**
+> (EUR-Lex, 16 November 2026), so the rows above and below are the law in force.
+>
+> - **Digital omnibus, COM(2025) 837** (19 November 2025, procedure 2025/0360/COD). Would amend GDPR
+>   Art. 33(1) so that a breach is notified to the authority **only where it is likely to result in a
+>   high risk**, within **96 hours** of becoming aware, through a **single entry point** to be set up
+>   under a new NIS2 Art. 23a; the same entry point would carry NIS2, DORA, eIDAS and CER reports.
+> - **NIS2 simplification, COM(2026) 13** (20 January 2026, procedure 2026/0012/COD), proposed alongside
+>   a Cybersecurity Act 2.
+>
+> If a user cites "96 hours" for GDPR, say it is a proposal and keep the 72-hour clock in the matrix.
 
 ---
 
@@ -145,7 +164,9 @@ recipient and channel come from national transposing law).
 - CISA's factsheet: CIRCIA requires CISA to issue regulations requiring covered entities to report
   covered cyber incidents "within 72 hours from the time the entity reasonably believes the incident
   occurred". CISA's CIRCIA page: "Until the effective date of the final rule, organizations are not
-  required to submit covered cyber incident or ransom payment reports under CIRCIA."
+  required to submit covered cyber incident or ransom payment reports under CIRCIA." Re-read 16 November
+  2026: still no final rule — CISA is reviewing NPRM comments and held four town halls on 15–18 June
+  2026.
 - **Never put a CIRCIA deadline in the matrix as though one were running.** The ransom-payment timing
   was not confirmed from a primary source and is not stated here.
 - **Source.** https://www.cisa.gov/topics/cyber-threats-and-advisories/information-sharing/cyber-incident-reporting-critical-infrastructure-act-2022-circia ·
@@ -217,7 +238,9 @@ recipient and channel come from national transposing law).
   hours** from becoming aware; notification **72 hours** from becoming aware; final report **14 days after
   a corrective or mitigating measure is available** (vulnerability) or **one month after the 72-hour
   notification** (incident).
-- **Goes to** the CSIRT designated as coordinator and ENISA, through ENISA's single reporting platform.
+- **Goes to** the CSIRT designated as coordinator and ENISA, through ENISA's **Single Reporting
+  Platform**, which ENISA launched at initial operating capability on **11 September 2026** — the day
+  Article 14 began to apply (ENISA's SRP page, read 16 November 2026).
 - **Source.** https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R2847 · **Primary** (as
   carried on bitscore.in's CRA article, verified at source)
 - **What happens after filing — Commission Delegated Regulation (EU) 2026/881** of 11 December 2025
@@ -248,6 +271,6 @@ recipient and channel come from national transposing law).
 
 <!-- provenance
 mirrors: bitscore.in lib/incident-clocks-us-eu.ts
-verified: 2026-09-25
-next-review: 2026-12-25
+verified: 2026-11-16
+next-review: 2027-02-16
 -->
