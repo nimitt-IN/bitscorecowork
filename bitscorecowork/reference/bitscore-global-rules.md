@@ -102,8 +102,9 @@ open ports, software currency, vulnerability remediation — so a first remediat
 configuration work. Within it, **DMARC became rating-impacting on 16 July 2026** at a 1% vector
 weight (like SPF and DKIM), which is why the split moved from 70.5 / 27 to 71.5 / 26; and SPF and
 DKIM now grade N/A rather than punitively for an entity with no domains. Source: Bitsight Knowledge
-Base, *How are Bitsight Security Ratings Calculated?* and *Ratings Algorithm Update (RAU26) — July
-16, 2026*, both read 24 September 2026.
+Base, *How does Bitsight calculate Security Ratings?* (formerly *How are Bitsight Security Ratings
+Calculated?*) and *Ratings Algorithm Update (RAU26) — July 16, 2026*, both read 24 September 2026
+and re-read 16 November 2026. No later algorithm update had been published by then.
 
 **Nineteen vectors move the rating; a few more are shown and don't.** DNSSEC and Web Application
 Headers are in beta — Bitsight still grades them, and the server marks them `informational` — and
@@ -112,7 +113,8 @@ where they are evidence (exposed credentials certainly are), but never count a b
 grade towards the rating, rank it as a score-moving fix, or name it among the vectors a rating is
 calculated from. User Behavior's 2.5% is File Sharing alone. Source: Bitsight KB, *A Guide to
 Navigating and Prioritizing Bitsight Risk Categories & Risk Vectors* (RAU26 revision), read 10
-October 2026, and `rating_details[].beta` on the live API the same day.
+October 2026, and `rating_details[].beta` on the live API the same day; both re-read 16 November
+2026.
 
 **The band-to-band breach multiples, for use in `quantify`.** These are Bitsight's own published
 comparative figures, and they are what the evidence will bear:
@@ -131,8 +133,9 @@ as comparative, and attribute them to Bitsight.
 **Where the rating actually lives (verified against the live API).** The company object from
 `bitsight_get_company_details` has **no top-level `rating` scalar** — reading one gives you
 `undefined`, not a score. The current rating is the **first entry of the `ratings` array**
-(newest-first daily history): `ratings[0].rating`, with `ratings[0].rating_date`, plus `range` (the
-tier name) and `rating_color` already supplied by Bitsight. If `ratings` is empty, fall back to the
+(newest-first daily history): `ratings[0].rating`, with `ratings[0].rating_date`, plus `ratings[0].range` (the
+tier name) and `ratings[0].rating_color` already supplied by Bitsight — the company object itself has
+no top-level `range` or `rating_color` (re-checked 16 November 2026). If `ratings` is empty, fall back to the
 company's row from `bitsight_get_portfolio`, where `rating` is reliably populated. And note that
 `rating_details` — the per-risk-vector grades — comes back **null** on subscriptions that don't
 include it: report the vectors as unavailable rather than as absent or as zero.
@@ -150,7 +153,7 @@ returns results tagged with the canonical name.
 Why this is a rule rather than a preference: an unrecognised `risk_vector` slug does **not** produce
 an error. Bitsight returns **HTTP 200 with an empty result set**, which is indistinguishable from a
 company having no findings. Verified on 3 August 2026 against a company graded **F** on that very
-vector with 210 open findings. If you ever hand-roll a vector filter and get zero back, treat it as
+vector with 210 open findings, and still true on 16 November 2026. If you ever hand-roll a vector filter and get zero back, treat it as
 suspect and cross-check against `bitsight_get_findings_summary` before reporting a clean result.
 
 **Web Application Security is `web_appsec`.** Bitsight's 10 July 2025 algorithm update gave it the
@@ -485,6 +488,6 @@ this plugin is an independent integration and is not published by Bitsight.
 
 <!-- provenance
 mirrors: bitscore.in lib/bitsight-rating.ts (scale facts and breach multiples)
-verified: 2026-08-18
-next-review: 2026-11-18
+verified: 2026-11-16
+next-review: 2027-02-16
 -->

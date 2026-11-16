@@ -22,14 +22,15 @@ evidence, and what a dispute submission has to contain to succeed.
 >   dispute endpoint. Submissions are filed by the customer through the Bitsight platform or their
 >   account team, and the rating does not move until Bitsight adjudicates.
 
-**Verified against the live Bitsight API on 4 August 2026, and extended from a second live estate on 13 August 2026.**
+**Verified against the live Bitsight API on 4 August 2026, extended from a second live estate on 13 August 2026, and re-read against the live API on 16 November 2026.**
 
 ---
 
 ## Three signals the API gives you directly
 
-Before reaching for hostname patterns, use the fields Bitsight already provides. The first two were
-confirmed live on 4 August 2026; the third on 13 August 2026.
+Before reaching for hostname patterns, use the fields Bitsight already provides. `hosted_by` and
+`attributed_companies` were confirmed live on 4 August 2026 and `origin_subsidiary` on 13 August
+2026; all three were re-read live on 16 November 2026 and behave as described below.
 
 ### `hosted_by` on every asset — the hosting organisation, named
 
@@ -59,7 +60,8 @@ explains the *size* of an estate.
 
 **The same IP is returned as a separate row for every subsidiary it maps through.** Verified live on
 13 August 2026: one address appeared **six times** in a single page, once each for six differently
-named entities within the same organisation. Whole pages ran **100 rows to 18 unique IPs**.
+named entities within the same organisation. Whole pages ran **100 rows to 18 unique IPs**. Re-read on 16 November 2026, deep pages of the same
+estate ran 100 rows to 15, with one address seven times.
 
 **So never quote a Bitsight asset total as a host count.** Deduplicate first —
 `[.results[].asset] | unique | length` — and report both numbers. An estate described as "21,000
@@ -78,7 +80,8 @@ Assets additionally carry `tags` (free-text, user-set — useful context, not ev
 
 `bitsight_get_findings` expands **`attributed_companies`**, and an asset attributed to more than one
 company is a genuine signal — on the verified sample, 42 of 100 findings carried multiple
-attributions (histogram: 58 single, 20 double, 9 quadruple, 8 quintuple, 5 with eleven).
+attributions (histogram: 58 single, 20 double, 9 quadruple, 8 quintuple, 5 with eleven). Re-read on
+16 November 2026, 37 of 100 did (63 single, 28 double, 9 with twelve).
 
 **But multiple attribution has two completely different meanings, and the names tell you which:**
 
@@ -88,7 +91,7 @@ attributions (histogram: 58 single, 20 double, 9 quadruple, 8 quintuple, 5 with 
 | **Variations on the same organisation** | The same entity modelled several times in Bitsight | **Category 9 — entity overlap.** Not a dispute |
 
 On the verified sample the second case dominated: a single domain was attributed to eleven entities
-with names like `Saperix, Inc.`, `Saperix, Inc. - (GCP)`, `Saperix Corporate - (AWS)-DUPLICATE8` and
+(twelve by 16 November 2026) with names like `Saperix, Inc.`, `Saperix, Inc. - (GCP)`, `Saperix Corporate - (AWS)-DUPLICATE8` and
 `Saperix Corporate - (Azure)-DUPLICATE17`. That is not shared hosting and disputing it would be
 wrong — it is one organisation onboarded once per cloud account.
 
@@ -243,7 +246,7 @@ attribution dispute, and say plainly that a dispute would be the wrong instrumen
 
 **Care point:** this category is why the multi-attribution signal must never be used mechanically.
 Verified on 4 August 2026, the most heavily multi-attributed asset in the sample was attributed to
-eleven entities, all of them the same company. A rule that flagged "attributed to more than one
+eleven entities, all of them the same company; on 16 November 2026 the same domain carried twelve. A rule that flagged "attributed to more than one
 company" as shared hosting would have been wrong on every one of them.
 
 ---
@@ -333,6 +336,6 @@ determinations rest with Bitsight and with the asset owner; nothing here binds e
 
 <!-- provenance
 mirrors: the live Bitsight API — not a bitscore.in registry
-verified: 2026-08-13
-next-review: 2026-11-13
+verified: 2026-11-16
+next-review: 2027-02-16
 -->
