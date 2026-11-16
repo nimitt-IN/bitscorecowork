@@ -383,8 +383,17 @@ Short, non-exhaustive context. Applicability is always entity-specific.
     CICs 470 — each superseding the earlier cyber/IT-governance circulars for its class. Identify
     which one binds the entity; see the
     [dedicated section above](#rbi-directions-2026--commercial-banks). Regional Rural Banks and Local
-    Area Banks have none in this family.
-  - *Outsourcing and vendor oversight.* Two parallel instruments, both issued 28 November 2025, both
+    Area Banks have none in this family. 410, 419 and 428 were consolidated "as on 1 October 2026"
+    with one governance substitution each; nothing on applicability moved.
+  - *Payment system operators.* A separate instrument, issued 5 November 2026: the **non-bank PSO
+    cyber Master Directions, RBI/DPSS/2026-27/475** — payment aggregators, card networks, NPCI, CCIL,
+    WLAOs, TReDS, BBPOUs and PPI issuers, with small PPI issuers and Instant Money Transfer Operators
+    from 1 April 2028. It does not bind banks, and the bank family does not bind PSOs. Para 5 asks the
+    PSO to push the Directions down to its gateways, vendors and ATM switch providers.
+  - *Outsourcing and vendor oversight.* **A family of nine, one per entity class** — commercial banks
+    171, SFBs 202, Payments Banks 220, LABs 245, UCBs 293, rural co-operative banks 318, AIFIs 337,
+    NBFCs 363, CICs 379 (all RBI/DOR/2025-26/; re-read 16 November 2026); Regional Rural Banks have
+    none, and PSOs sit outside it. The two most often engaged, both issued 28 November 2025, both
     with existing IT outsourcing agreements to comply by 10 April 2026: **RBI/DOR/2025-26/171** for
     commercial banks, which repealed the 2023 IT-outsourcing Master Direction for them, and
     **RBI/DOR/2025-26/363** for NBFCs, reaching HFCs, CICs, standalone primary dealers and the account
@@ -458,6 +467,6 @@ names are the property of their respective bodies; references here are indicativ
 
 <!-- provenance
 mirrors: bitscore.in lib/regulations.ts
-verified: 2026-09-07
-next-review: 2026-12-07
+verified: 2026-11-16
+next-review: 2027-02-16
 -->

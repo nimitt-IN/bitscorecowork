@@ -59,6 +59,11 @@ year's numbers.
 
 SEBI's own FAQ, 11 June 2025: https://www.sebi.gov.in/sebi_data/faqfiles/jun-2025/1749647139924.pdf
 
+**Still the complete list on 16 November 2026.** SEBI's circular and master-circular listings were
+walked that day: nothing has amended CSCRF or its categorisation since 28 August 2025. The two
+circulars of 24 August 2026 — the FIRE-aligned incident portal and the IT Resilience Index for MIIs —
+add reporting and resilience duties but leave the categories alone; see `incident-reporting-map.md`.
+
 > **The deadline everyone quotes has a carve-out everyone forgets.** "CSCRF was due 31 August 2025" is
 > true only for the REs the two extensions covered. **MIIs, KRAs and QRTAs were excluded from both.**
 > Their own dates differ: MIIs and QRTAs stayed on **1 January 2025** (with the forbearance to 31 March
@@ -349,6 +354,6 @@ user's compliance and legal team.
 
 <!-- provenance
 mirrors: bitscore.in lib/cscrf-categories.ts (verified 2026-08-14), lib/regulations.ts
-verified: 2026-09-07
-next-review: 2026-12-07
+verified: 2026-11-16
+next-review: 2027-02-16
 -->

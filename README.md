@@ -288,7 +288,8 @@ The working rule:
    previous verification date**. The check had asked what had changed since the last review rather than
    what the regulator lists today, and IFSCA's listing is a client-rendered POST search that returns an
    empty shell to `curl`, so those documents were invisible to the method in use. Walk: RBI
-   notifications (`rbi.org.in/scripts/SearchResults.aspx?search=cybersecurity`), SEBI circulars
+   notifications (`rbi.org.in/scripts/SearchResults.aspx?search=cybersecurity`, **and** `search=cyber%20resilience`
+   — the payment-system-operator Directions do not match the first), SEBI circulars
    (`sebi.gov.in/sebiweb/home/HomeAction.do?doListing=yes&sid=1&ssid=7&smid=0` — server-rendered and
    greppable, unlike the individual landing pages), IFSCA **Legal › Circular**, and IRDAI's circular
    listing.
